@@ -1,0 +1,207 @@
+﻿title;category_demande_id;jalon_id
+Plan de management de projet précisant l'équipe de l'étude d'opportunité et leur disponibilité;2;1
+Plan de management des risques;2;1
+Charte projet initialisé (QCD);2;1
+Option TTM pressentie (Full, Fast, Super-Fast Track);2;1
+Synthèse des principales échéances du projet et planning détaillé de l'étude d'opportunité et la date du T0;2;1
+"Le Contexte, Promesse, Description de l'offre / service, Description du marché actuel, Description du marché cible,";3;1
+Enjeux;3;1
+analyse du marché (taille, segments, profils clients, concurrents, positionnement externe – SWOT);3;1
+Positionnement de l'offre dans le groupe  ;3;1
+Positionnement de l'offre au regard de la concurrence  ;3;1
+description du produit/service (incl. niveau de service offert, relation avec les processus métier);3;1
+identification préliminaire des risques pour le produit ou service (HLRA);3;1
+impact roadmap & portefeuille produits ;3;1
+proposition de valeur & bénéfices client;3;1
+Politique tarifaire;3;1
+revenu estimé (business case outline);3;1
+Gains estimés sur X années;4;1
+Cout de l'étude d'opportunité;4;1
+Macro estimation des couts de la mise en œuvre;4;1
+objectifs & enjeux;5;1
+premier niveau d'évaluation de faisabilité (incl. analyse existant produits/services préconisés par le groupe pour le domaine concerné);5;1
+Les premiers éléments de solution Technique/SI/processus   ;5;1
+premier niveau d'évaluation des exigences niveau de service, sécurité, besoin des canaux, opérations versus objectifs business;5;1
+L'expression des besoin de l'étude technique /  développement SI /processus;5;1
+Les premiers indicateurs de performance;5;1
+Gains estimés sur X années;6;1
+Cout de l'étude d'opportunité;6;1
+Macro estimation des couts de la mise en œuvre;6;1
+objectifs & enjeux;7;1
+premier niveau d'évaluation de faisabilité (incl. analyse existant produits/services préconisés par le groupe pour le domaine concerné);7;1
+Les premiers éléments de solution Technique/SI/processus   ;7;1
+premier niveau d'évaluation des exigences niveau de service, sécurité, besoin des canaux, opérations versus objectifs business;7;1
+L'expression des besoin de l'étude technique /  développement SI /processus;7;1
+Les premiers indicateurs de performance;7;1
+Les premiers éléments juridiques ;6;1
+Les premiers éléments réglementaires;6;1
+preuves de responsabilité  ;6;1
+La présentation doit préciser le ou les critères concernés par RSE (de 1 à 5 critères);6;1
+Parcours clients souhaité;7;1
+"stratégie d'achats (""make or buy"", partners, Open Source), Partenaires industriels/prestataires de conseils pressentis";8;1
+Etat d'avancement des actions décidées au T-1 ;1;2
+Nouveaux éléments depuis le T-1  ;1;2
+Décisions attendues au Comité et les arbitrages souhaités en comité;1;2
+Date du lancement prévue (le T3 );1;2
+Plan de Management du Projet (groupe & pays) avec identification et allocation de l'équipe projet intégrée, définition des rôles/responsabilités et gouvernance jusqu'au T4;2;2
+Plan de Management des risques renseigné et complet;2;2
+Mise à jour du charte Projet QCD;2;2
+Indicateurs de performance projet;2;2
+Synthèse des principales échéances : planning prévisionnel des jalons TTM jusqu’au T4;2;2
+Planification détaillée des livrables de la phase suivante;2;2
+"Le Contexte, Promesse
+mise à jour des objectifs & enjeux
+mise à jour description du produit/service, ses composantes et ses caractéristiques canaux de distribution";3;2
+Le nom commercial de l’offre ;3;2
+Communication / formation souhaitée;3;2
+mise à jour proposition de valeur et bénéfices clients;3;2
+Politique tarifaire;3;2
+revenu estimé (business case outline);3;2
+mise à jour de l’analyse du marché et prévisions de croissance du service;3;2
+contrat de niveau de service (SLA);3;2
+analyse de risques (HLRA) du produit ou service (y compris sécurité des données);3;2
+positionnement dans la roadmap & dans le portefeuille de produits/services ;3;2
+Description du modèle économique (Business Plan)(cash-in cash-out et KPI);4;2
+tarification proposée;4;2
+impact comptable préliminaire;4;2
+Revenue Assurance et fraudes;4;2
+"Présentation du résultat de l’étude d’opportunité : •  Projet sans développement : Validation de l'étude d’opportunité (solution retenues) •  Projet avec développement SI/Technique: la Proposition de Solution (PS) processus & SI";5;2
+Evaluation de faisabilité / SI Identity Card (tenant compte du contexte pays);5;2
+Analyse d'impacts Techniques;5;2
+Architecture proposée;5;2
+Analyse de l’impact sur les processus et le SI;5;2
+plan de tests préalables au lancement : Customer testing, QPM, FUT, MPP, etc;5;2
+Description du plan de gestion des opérations RUN (SLR, stratégie de tests, modèle d'exploitation);5;2
+Évaluation de l'existence d'un composant graphique/logiciel certifié Orange (OMD: Orange Modular Design) ou respect des standards entreprise ;5;2
+Définition des indicateurs de performance (KPI);5;2
+Evaluation des aspects juridiques;6;2
+Evaluation des aspects réglementaires;6;2
+Promesse et preuves de responsabilité (RSE) : impact responsabilité d'entreprise protection environnementale et personnelle;6;2
+Evaluation de l’impact propriété intellectuelle;6;2
+"Description du parcours client retenu (plan d'action, incl première étude d’impact parcours client, retours clients,...) ";7;2
+"design du produit/service principes de billing macro customer experience risk assessment ";7;2
+"stratégie d'achats (""make or buy"", partners, Open Source) Partenaires industriels et prestataires de conseils identifiés et référencés et/ou appel d'offres";8;2
+Score total des livrables;8;2
+Etat d'avancement des actions décidées au T0;1;3
+Nouveaux éléments depuis le T0;1;3
+Décisions attendues au Comité : les arbitrages souhaités en comité;1;3
+Rappel de la date du lancement prévue (le T3 )  ;1;3
+Plan de Management du Projet (groupe & pays) avec identification et allocation de l'équipe projet intégrée, définition des rôles/responsabilités et gouvernance jusqu'au T4;2;3
+Plan de Management des risques renseigné et complet – FRA;2;3
+Mise à jour du charte Projet QCD;2;3
+planification des principaux jalons jusqu’au T4 (planification détaillée des livrables de la phase suivante);2;3
+Synthèse des principales échéances;2;3
+Date de lancement confirmée (PerCo) ;2;3
+Indicateurs de performance projet ;2;3
+ingénierie des exigences fonctionnelles et non fonctionnelles finalisées (plan d'ingénierie des exigences de tous les streams concernés) ;2;3
+L'offre définitive telle qu'elle va être développée;3;3
+description finalisée du produit  ;3;3
+Le nom commercial de l’offre/produit;3;3
+stratégie de lancement et Planning de déploiement du dispositif de communication (interne et externe);3;3
+positionnement dans la roadmap & dans le portefeuille de produits/services (perco, …) ;3;3
+définition des modes de distribution;3;3
+définition des principes de gestion par les services clients ;3;3
+Formation retenue ;3;3
+modèle économique finalisé business plan finalisé (cash-in / cash-out + KPI);4;3
+tarification finalisée;4;3
+impact comptable finalisé;4;3
+Revenue Assurance et fraudes;4;3
+contrôle du budget (revenu & coûts);4;3
+"Présentation de la solution technique/SI retenue Architecture (terminée) documentation de conception technique / SI";5;3
+Planning de développement et des jalons SI et techniques / chiffrage CAPEX et OPEX définitif   ;5;3
+Paramétrage SI, arbitrage catalogue à préciser si effectué ;5;3
+Solution processus ;5;3
+Solution canaux  ;5;3
+connaissance des capacités SI existantes (configuration des produits/services);5;3
+plan de tests : Présentation des tests qui vont être mis en place pour le lancement : Simplicity +, FUT, MPP, etc ;5;3
+Description du plan de gestion des opérations RUN (SLR, stratégie de tests, modèle d'exploitation);5;3
+Évaluation de l'existence d'un composant graphique/logiciel certifié Orange (OMD: Orange Modular Design) ou respect des standards entreprise ;5;3
+liste des exigences retenues (fonctionnelles et non fonctionnelles);5;3
+Indicateurs de performance : clairement définis. Engagement des contributeurs sur la fourniture des données (KPI);5;3
+Mise à jour des aspects juridiques;6;3
+mise à jour de l’analyse réglementaire;6;3
+Promesse et preuves de responsabilité (RSE) : impact responsabilité d'entreprise protection environnementale et personnelle;6;3
+Evaluation de l’impact propriété intellectuelle;6;3
+Expérience client cible finalisée (plan d'action, incl impact parcours client, retours clients,...);7;3
+Plan de tests customer experience;7;3
+design du produit/service (terminé);7;3
+principes de billing finalisés;7;3
+customer experience risk assessment ;7;3
+"Partenariat : Résultat de l'appel d'offre négociation et sélection des fournisseurs recommandation finale d'achat signature du contrat et mise en œuvre contrats fournisseurs incluant les conditions opérationnelles (RUN)";8;3
+Etat d'avancement des actions décidées au T1;1;4
+Nouveaux éléments depuis le T1;1;4
+Décisions attendues au Comité: les arbitrages souhaités en comité;1;4
+Rappel de la date du lancement prévue (le T3 )  ;1;4
+Plan de Management du Projet (groupe & pays) avec identification et allocation de l'équipe projet intégrée, définition des rôles/responsabilités et gouvernance jusqu'au T4;2;4
+Plan de Management des risques renseigné et complet;2;4
+Mise à jour du charte Projet QCD;2;4
+planification des principaux jalons jusqu’au T4 (planification détaillée des livrables de la phase suivante);2;4
+Indicateurs de performance projet  ;2;4
+principes de billing détaillés;3;4
+plan de communication (interne et externe);3;4
+outils de communication & de marketing;3;4
+finalisation des modes de distribution (incl. besoin de formations des forces de ventes si nécessaires);3;4
+principes et modes opératoires services clients finalisés;3;4
+Rappel du business plan et contrôle du budget (revenu & coûts);4;4
+Etat d'avancement lancement perco (=> point de vigilance identifié dans le DAI)  ;5;4
+design & intégration des briques fonctionnnelles (résultat du Build);5;4
+Bilan du développement technique : résultats des tests;5;4
+Bilan la solution : processus ;5;4
+résultats des tests & validation (FUT, Simplicity +  ou CTC);5;4
+résultats des tests & recette du mode opératoire;5;4
+stratégie de réception et validation opérationnelle du déploiement (RUN);5;4
+plan de gestion des opérations (tests supervision & outillages QS , transfert de compétences);5;4
+outils de formation processus et SI ;5;4
+Résultat du plan d'actions promesse et preuves de responsabilité ;6;4
+Protection de la propriété intellectuelle;6;4
+Design du produit/service;7;4
+retour clients sur l'expérience client  finalisée ( plan d'action correctif,...);7;4
+customer experience risk assessment ;8;4
+Etat d'avancement des actions décidées au T2;1;5
+Nouveaux éléments depuis le T2;1;5
+Décisions attendues au Comité: les arbitrages souhaités en comité;1;5
+Rappel de la date du lancement prévue (le T3 )  ;1;5
+Plan de Management du Projet (groupe & pays) avec identification et allocation de ressources et équipe et gouvernance jusqu'au T4;2;5
+planification T4 ;2;5
+planification de l'assessment global par le business owner du succès du projet;2;5
+Plan de Management des risques renseigné et complet;2;5
+Mise à jour du charte Projet QCD;2;5
+Indicateurs de performance projet  ;2;5
+Confirmation de l'enregistrement au catalogue;3;5
+principes de billing détaillés;3;5
+réception par marketing opérationnel;3;5
+canaux de distribution opérationnels ;3;5
+"Rappel du plan de communication (interne et externe)
+outils de communication & de marketing";3;5
+services clients opérationnels;3;5
+objectifs de vente par les canaux de distribution & commissions commerciales;4;5
+validation finale du business plan (budget et prévisions);4;5
+validation du déploiement Technique/SI/processus;5;5
+validation du dossier sécurité;5;5
+recette opérationnelle;5;5
+plan gestion des opérations (SLA & chaine de soutien final, KPI QS & capacité collectés);5;5
+validation de la facturation & du contrôle de gestion;5;5
+transfert aux équipes maintenance et opérations (état de la version livrée, compétences);5;5
+réception du services/composants par les opérations (RUN);5;5
+impact responsabilité d'entreprise (RSE);6;5
+validation des documents juridiques;6;5
+analyse réglementaire finalisée;6;5
+Protection de la propriété intellectuelle;6;5
+Retours clients et plan d’action (test clients, résultats FUT & listing des bugs, éléments clés, problèmes et risques,  Action Plan, validation du parcours client);7;5
+customer experience risk assessment;7;5
+suivi stabilité et analyse des risques fournisseurs;8;5
+assessment global par le business owner du succès du projet;1;6
+Plan de Management du Projet (groupe & pays) avec l'équipe et gouvernance;2;6
+bilan du projet avec évaluation équipe qualité projet intégrée (incl. capitalisation);2;6
+validation de la clôture du projet;2;6
+transfert aux opérations avec définition des KPI pour business performance review ;2;6
+KPI financiers (avec revue Business Plan T3);4;6
+Bilan technique / SI / Processus;5;6
+évaluation IT solutions & architecture  - IS Identity Card (capitalisation);5;6
+Tableaux de bord KPI opérationnels (QoS, capacitaire);5;6
+amélioration continue : défauts & problèmes résiduels collectés;5;6
+Bilan promesse et preuves de responsabilité RSE (le cas échéant)  ;6;6
+Bilan expérience client – Post lancement tours expérience clients & KPI expérience client (incl. canaux de distribution et services clients et évaluation exécution ingénierie des exigences fonctionnelles & non fonctionnelles);7;6
+customer experience risk assessment;7;6
+plan des actions correctives et étapes suivantes ;7;6
+évaluation de la performance des fournisseurs & plan d'amélioration ou de sortie;8;6
