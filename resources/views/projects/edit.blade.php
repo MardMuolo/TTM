@@ -73,7 +73,7 @@
                                     <input type="date" class="form-control" id="exampleInputEmail1" name="endDate"
                                         value="{{ $project->endDate }}">
                                 </div>
-                                <a class="btn btn-primary" onclick="stepper.next()">Précedent</a>
+                                <a class="btn btn-primary" onclick="stepper.next()">Suivant</a>
                             </div>
                             {{-- fin de la partie 1 --}}
 
@@ -122,9 +122,10 @@
                                         <div class="form-group">
                                             <label>{{ $item->name }}</label>
                                             <select class="form-control " name="score[]" required>
-                                                <option disabled selected>null</option>
                                                 @foreach ($item->complexityTargets as $target)
-                                                    <option value="{{ $target->value }}">{{ $target->value }} -
+                                                    <option value="{{ $target->value }}"
+                                                        {{ in_array($target->value, $item->complexityTargets->pluck('id')->toArray()) ? 'selected' : '' }}
+                                                        >{{ $target->value }} -
                                                         {{ $target->name }}</option>
                                                 @endforeach
 
@@ -146,7 +147,7 @@
                 </div>
                 <!-- /.card-body -->
                 <div class="card-footer text-black">
-                    Orange Digital Center
+                    Easy-TTM
                 </div>
 
             </div>
