@@ -8,6 +8,16 @@
 @endsection
 
 @section('content')
+    @if ($errors)
+        @foreach ($errors->all() as $error)
+            <div class="alert alert-danger alert-dismissible">
+                <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
+                <ul>
+                    <li>{{ $error }}</li>
+                </ul>
+            </div>
+        @endforeach
+    @endif
     <div class="card card-primary card-outline p-4">
         <form action="{{ route('projects.store') }}" method="post" enctype="multipart/form-data">
             @csrf

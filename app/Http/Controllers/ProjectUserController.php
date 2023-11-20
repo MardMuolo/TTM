@@ -72,10 +72,10 @@ class ProjectUserController extends Controller
             $message2 = MessageMail::Where('code_name', 'add_member_to_project')->get()->first();
             $user->notify(new EasyTtmNotification($message2, route('home'), []));
         } catch (\Exception $e) {
-            return redirect()->back();
+            return redirect()->back()->withErrors(['projet' => 'Echec d\'ajout de membre']);;
         }
 
-        return redirect()->back()->with('Done', 'contributeur ajouté avec succès');
+        return redirect()->back()->with(['message'=>'contributeur ajouté avec succès']);
     }
 
     public function edit(Project $project, $id)
@@ -111,6 +111,6 @@ class ProjectUserController extends Controller
             ->event('deleteUser')
             ->log(auth()->user()->name.' a supprimé '.$member->role.' '.$user->name);
 
-        return redirect()->back()->with('success', 'Suppression du contributeur reussie');
+            return redirect()->back()->with(['message'=>'contributeur suprimé avec succès']);
     }
 }

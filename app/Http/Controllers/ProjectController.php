@@ -143,10 +143,10 @@ class ProjectController extends Controller
         $projectOptionttmJalon = ProjectOptionttmJalon::where('project_id', $project->id)->get();
 
         $demandeByJalon = DemandeJalon::join('project_optionttm_jalon', 'demande_jalons.project_optionttm_jalon_id', '=', 'project_optionttm_jalon.id')
-        ->get();
-        $titleOfDemandes=Demande::join('demande_jalons','demande_jalons.demande_id','=','demandes.id')->get();
-          
-      
+            ->get();
+        $titleOfDemandes = Demande::join('demande_jalons', 'demande_jalons.demande_id', '=', 'demandes.id')->get();
+
+
 
 
         /*$demandeByJalon = DB::table('project_optionttm_jalon')
@@ -156,7 +156,7 @@ class ProjectController extends Controller
 
         // dd($exit);
 
-        return view('projects.single', compact('project', 'optionTtm', 'projectOptionttmJalon', 'file', 'score', 'option_ttm', 'jalons', 'options', 'jalonsProgress', 'members', 'i', 'activity', 'exit', 'demandeByJalon', 'contributeurs','titleOfDemandes', 'demandesProject', 'today', 'directions', 'users', 'complexityTargets', 'complexity_items'));
+        return view('projects.single', compact('project', 'optionTtm', 'projectOptionttmJalon', 'file', 'score', 'option_ttm', 'jalons', 'options', 'jalonsProgress', 'members', 'i', 'activity', 'exit', 'demandeByJalon', 'contributeurs', 'titleOfDemandes', 'demandesProject', 'today', 'directions', 'users', 'complexityTargets', 'complexity_items'));
     }
 
     // cette methode permet la rediction au formulaire de création projet
@@ -215,13 +215,13 @@ class ProjectController extends Controller
             if ($request->file != null) {
                 foreach ($request->file as $file) {
                     if ($request->hasFile('file')) {
-                        $namefile = substr(str_replace([' ', "'"], '', $request->name), 0, 6).''.date('ymdhis').'.'.$file->extension();
+                        $namefile = substr(str_replace([' ', "'"], '', $request->name), 0, 6) . '' . date('ymdhis') . '.' . $file->extension();
                         $fichier = $file->storeAs('documents', $namefile, 'public');
                         activity()
                             ->causedBy(auth()->user()->id)
                             ->performedOn($project)
                             ->event('add')
-                            ->log(auth()->user()->name.' a ajouté un fichier  du projet ');
+                            ->log(auth()->user()->name . ' a ajouté un fichier  du projet ');
                     } else {
                         $fichier = null;
                     }
@@ -254,14 +254,14 @@ class ProjectController extends Controller
                 ->performedOn($project)
                 ->event('create')
                 ->log(
-                    auth()->user()->name.' a crée le projet '
+                    auth()->user()->name . ' a crée le projet '
                 );
 
             return redirect()->route('projects.dates', $project->id)->with('score');
 
             // return redirect()->route('projects.show', $project->id)->with('score');
         } catch (\Throwable $th) {
-            return $th;
+            return redirect()->back()->withErrors(['projet' => 'Echec de création du projet']);;
         }
     }
 
@@ -406,8 +406,13 @@ class ProjectController extends Controller
             if ($request->file != null) {
                 foreach ($request->file as $file) {
                     if ($request->hasFile('file')) {
-                        $namefile = date('ymdhis').'.'.$file->extension();
+                        $namefile = substr(str_replace([' ', "'"], '', $request->name), 0, 6) . '' . date('ymdhis') . '.' . $file->extension();
                         $fichier = $file->storeAs('documents', $namefile, 'public');
+                        activity()
+                            ->causedBy(auth()->user()->id)
+                            ->performedOn($project)
+                            ->event('add')
+                            ->log(auth()->user()->name . ' a modifié un fichier  du projet ');
                     } else {
                         $fichier = null;
                     }
@@ -421,11 +426,11 @@ class ProjectController extends Controller
                 ->causedBy(auth()->user()->id)
                 ->performedOn($project)
                 ->event('edit')
-                ->log(auth()->user()->name.'a modifié  le projet');
+                ->log(auth()->user()->name . 'a modifié  le projet');
 
             return redirect()->route('projects.show', $project->id)->with('score');
         } catch (\Throwable $th) {
-            return view('errorsPages.error');
+            return redirect()->back()->withErrors(['projet' => 'Echec de modification du projet']);
         }
     }
 
@@ -437,7 +442,7 @@ class ProjectController extends Controller
                 ->causedBy(auth()->user()->id)
                 ->performedOn($project)
                 ->event('delete')
-                ->log(auth()->user()->name.' a supprimé le projet '.$project->name);
+                ->log(auth()->user()->name . ' a supprimé le projet ' . $project->name);
 
             return redirect()->back()->with('Sucess', 'Projet supprimé avec success');
         } catch (\Throwable $th) {
