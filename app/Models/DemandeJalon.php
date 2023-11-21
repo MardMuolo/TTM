@@ -21,7 +21,7 @@ class DemandeJalon extends Model
 
     public function projectOptionJalon()
     {
-        return $this->belongsTo(ProjectOptionJalon::class);
+        return $this->belongsTo(ProjectOptionttmJalon::class);
     }
 
     public function livrables()

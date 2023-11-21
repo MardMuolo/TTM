@@ -15,12 +15,10 @@ return new class extends Migration
             $table->id();
             $table->string('nom');
             $table->text('description');
-            $table->string('file');
-            $table->unsignedBigInteger('demande_id');
+            $table->string('fichier');
+            $table->string('status')->default('en attente');
             $table->timestamps();
             $table->softDeletes();
-
-            $table->foreign('demande_id')->references('id')->on('demandes')->onDelete('cascade');
         });
     }
 

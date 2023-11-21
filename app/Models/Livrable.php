@@ -28,4 +28,8 @@ class Livrable extends Model
     {
         return $this->hasMany(Validation::class);
     }
+    public function demandeJalon()
+    {
+        return $this->belongsTo(DemandeJalon::class);
+    }
 }

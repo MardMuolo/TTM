@@ -13,8 +13,8 @@ return new class extends Migration
     {
         Schema::create('project_users', function (Blueprint $table) {
             $table->id();
-            $table->foreignId("user_id")->constrained()->onUpdate('cascade')->onDelete('cascade');
-            $table->foreignId("project_id")->constrained()->onUpdate('cascade')->onDelete('cascade');
+            $table->foreignId("user_id")->constrained()->onDelete('cascade');
+            $table->foreignId("project_id")->constrained()->onDelete('cascade');
             $table->string('role');
             $table->string('status')->default('En Attente');
             $table->timestamps();

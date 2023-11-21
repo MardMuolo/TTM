@@ -3,8 +3,10 @@
 namespace App\Http\Controllers;
 
 use App\Models\Demande;
+use App\Models\DemandeJalon;
 use App\Models\Livrable;
 use Illuminate\Http\Request;
+use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Storage;
 
@@ -34,7 +36,7 @@ class LivrableController extends Controller
         $request->validate([
             'nom' => 'required',
             'description' => 'required',
-            'demande_id' => 'required|integer',
+            'demande_jalon_id' => 'required|integer',
         ]);
         
         $paths = [];
@@ -56,14 +58,13 @@ class LivrableController extends Controller
         }
         
         $livrable = Livrable::create([
-            'demande_id' => $request->demande_id,
+            'demande_jalon_id' => $request->demande_jalon_id,
             'nom' => $request->nom,
             'description' => $request->description,
-            'date_livraison' => $request->date_livraison,
-            'file' => implode(',', $paths),
+            'fichier' => implode(',', $paths),
         ]);
     
-        $demande = Demande::findOrFail($request->demande_id);
+        $demande = DemandeJalon::findOrFail($request->demande_jalon_id);
         $demande->status = 'En attente de validation';
         $demande->date_reelle = $livrable->created_at;
         $demande->save();
@@ -78,7 +79,7 @@ class LivrableController extends Controller
             ->event('create')
             ->log($logMessage);
     
-        return redirect()->back();
+        return redirect()->back()->with(['message'=>'livrable déposé avec succes']);
     }
     /**
      * Display the specified resource.
