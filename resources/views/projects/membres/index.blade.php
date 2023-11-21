@@ -10,20 +10,20 @@
         @endforeach
     @endif
     <div class="text-right mx-4 col">
-        @access('create', 'Project')
+        {{-- @access('create', 'Project')
             @if (auth()->user()->name == $project->projectOwner)
                 <button class="btn btn-light mx-5 my-2" data-toggle="modal" data-target="#create_modal">
                     <i class="fas fa-plus-circle"></i>
                 </button>
             @endif
-        @endaccess
+        @endaccess --}}
 
     </div>
     <section class="content p-4">
         <table class="table table-striped " id="example1">
             <thead>
                 <tr>
-                    <th>#</th>
+                    <th></th>
                     <th>Nom & Prénom</th>
                     <th class="text-center">Contribution</th>
                     <th class="text-center">Rôle</th>

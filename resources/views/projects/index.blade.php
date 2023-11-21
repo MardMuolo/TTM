@@ -23,7 +23,7 @@
             <table class="table table-striped projects" id="example1">
                 <thead class="text-left">
                     <tr>
-                        <th style="width: 1%">#</th>
+                        <th style="width: 1%"></th>
                         <th style="width: 20%">Nom</th>
                         <th style="width: 30%">Equipe</th>
                         <th>Progression</th>

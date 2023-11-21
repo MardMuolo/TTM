@@ -207,7 +207,7 @@ class ProjectController extends Controller
 
             // notication au ttmOffficer de la création du projet
             try {
-                $this->mail_to_ttmOfficer('notify_to_ttmOfficer');
+                // $this->mail_to_ttmOfficer('notify_to_ttmOfficer');
             } catch (\Throwable $th) {
                 return redirect()->back()->with('error', $th->getMessage());
             }
@@ -217,6 +217,9 @@ class ProjectController extends Controller
                     if ($request->hasFile('file')) {
                         $namefile = substr(str_replace([' ', "'"], '', $request->name), 0, 6) . '' . date('ymdhis') . '.' . $file->extension();
                         $fichier = $file->storeAs('documents', $namefile, 'public');
+                        $project->projectFile()->create([
+                            'filePath' => $fichier,
+                        ]);
                         activity()
                             ->causedBy(auth()->user()->id)
                             ->performedOn($project)
@@ -225,9 +228,7 @@ class ProjectController extends Controller
                     } else {
                         $fichier = null;
                     }
-                    $project->projectFile()->create([
-                        'filePath' => $fichier,
-                    ]);
+                    
                 }
             }
 
