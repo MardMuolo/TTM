@@ -179,18 +179,20 @@
                                         </b>
                                     </p>
                                 </div>
-                                <h5 class="mt-5 text-muted">Documents</h5>
-                                <ul class="list-unstyled">
-                                    @forelse ($file as $item)
-                                        <li><a href="{{ asset('storage/' . $item->filePath) }}"
-                                                class="btn-link text-secondary"><i
-                                                    class="far fa-fw fa-file-word"></i>{{ str_replace('documents/', '', $item->filePath) }}</a>
-                                        </li>
-                                    @empty
-                                        <li><a href="#" class="btn-link text-secondary"><i
-                                                    class="far fa-fw fa-file-pdf"></i> Aucun document soumis</a></li>
-                                    @endforelse
-                                </ul>
+                                <div class="border-bottom">
+                                    <h5 class="mt-5 text-muted">Document du projet</h5>
+                                    <ul class="list-unstyled">
+                                        @forelse ($file as $item)
+                                            <li><a href="{{ asset('storage/documents/' . basename($item->filePath)) }}" download
+                                                    class="btn-link text-secondary"><i
+                                                        class="far fa-fw fa-file-word"></i>{{ str_replace('documents/', '', $item->filePath) }}</a>
+                                            </li>
+                                        @empty
+                                            <li><a href="#" class="btn-link text-secondary"><i
+                                                        class="far fa-fw fa-file-pdf"></i> Aucun document soumis</a></li>
+                                        @endforelse
+                                    </ul>
+                                </div>
                                 <div class="text-center mt-5 mb-3 row">
                                     <div class="col-lg-5 nav-item ">
                                         <button

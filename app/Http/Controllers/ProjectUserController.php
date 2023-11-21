@@ -70,7 +70,7 @@ class ProjectUserController extends Controller
         try {
             // Requete de notification au contributeur
             $message2 = MessageMail::Where('code_name', 'add_member_to_project')->get()->first();
-            $user->notify(new EasyTtmNotification($message2, route('home'), []));
+            $user->notify(new EasyTtmNotification($message2, route('home'), $projectFiles));
         } catch (\Exception $e) {
             return redirect()->back()->withErrors(['projet' => 'Echec d\'ajout de membre']);;
         }

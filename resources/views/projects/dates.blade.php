@@ -196,37 +196,26 @@
 
 
 @push('third_party_scripts')
-    <script type="module" src="{{ Vite::asset('node_modules/admin-lte/plugins/jquery/jquery.min.js') }}"></script>
-    <script type="module" src="{{ Vite::asset('node_modules/admin-lte/plugins/sweetalert2/sweetalert2.min.js') }}">
-    </script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+    {{-- <script type="module" src="{{ Vite::asset('node_modules/admin-lte/plugins/jquery/jquery.min.js') }}"></script> --}}
+    {{-- <script type="module" src="{{ Vite::asset('node_modules/admin-lte/plugins/sweetalert2/sweetalert2.min.js') }}"></script> --}}
+    <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
 @endpush
 
 @push('page_scripts')
-    <script>
-        setTimeout(() => {
+    {{-- <script>
+         $(document).ready(function() {
            alert("bonjour")
-        }, 800)
-    </script>
+        })
+    </script> --}}
     <script>
         $(document).ready(function() {
-                (() => {
-
-                    /* inputOptions can be an object or Promise */
-                    const inputOptions = new Promise((resolve) => {
-                        setTimeout(() => {
-                            resolve({
-                                'd': 2
-                            })
-                        }, 10)
-                    })
-                    const {
-                        value: sondage
-                    } = Swal.fire({
-                        icon: 'success',
-                        title: '<h2 class="text-success">Création avec Succès</h2> ',
-                        html: 'Le score est de <span class="text-black-50 h6">{{ $score ?? 'N/A' }}</span> et le projet est retenu en mode <span class="text-black-50 h6">{{ $options->nom ?? 'N/A' }}</span><br> Veuillez préciser les dates des jalons du projet',
-                    })
-                })()
+            swal({
+                title: "Crétion de projet avec succes!",
+                text: "Veuillez signaler les dates pour chaque jalon!",
+                icon: "success",
+                button: "Continuer!",
+            });
         });
     </script>
 @endpush
