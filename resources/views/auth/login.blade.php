@@ -4,7 +4,7 @@
         <div class="login-box">
             <div class="login-logo">
                 <div class="text-center">
-                    <img class="profile-user-img img-fluid img-circle" src="{{Vite::asset('resources/images/logo.svg')}}"
+                    <img class="profile-user-img img-fluid" src="{{Vite::asset('resources/images/logo.svg')}}"
                     alt="User profile picture">
                     
                 </div>
@@ -49,11 +49,11 @@
                             <div class="col-6">
                                 <div class="icheck-primary">
                                     <input type="checkbox" id="remember">
-                                    <label for="remember" style="font-size:1.15vw;">Se souvenir de moi</label>
+                                    <label for="remember" style="font-size:0.78vw;">Se souvenir de moi</label>
                                 </div>
                             </div>
 
-                            <div class="col-6">
+                            <div class="col-6 py-4">
                                 <button type="submit" class="btn btn-primary btn-block">Se connecter</button>
                             </div>
 
