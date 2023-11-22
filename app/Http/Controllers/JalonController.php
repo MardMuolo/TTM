@@ -111,7 +111,13 @@ class JalonController extends Controller
         // $allContributeur = Http::get('http://10.143.41.70:8000/promo2/odcapi/?method=getUsers');
         $allContributeurs = User::all();
         $categoryDemandes = CategoryDemande::all();
-        $demandes = DemandeJalon::orderBy('id', 'desc')->paginate(5);
+        $projetOptionJalon = ProjectOptionttmJalon::where("jalon_id", $jalon->id)
+            ->where("option_ttm_id", $optionTtm->id)
+            ->where("project_id", $project->id)->get()->first();
+        $test = DemandeJalon::where("project_optionttm_jalon_id",$projetOptionJalon->id)->get();
+        $i=1;
+        // dd($demandeJalons);
+
         $allDemandes = Demande::whereHas('jalon', function ($query) use ($jalon) {
             $query->where('id', $jalon->id);
         })->orWhereDoesntHave('jalon')->get();
@@ -147,15 +153,14 @@ class JalonController extends Controller
             $echeance = $projectOptionttmJalon->echeance;
         }
         $historiques = HistoriqueDate::where('project_optionttm_jalon_id', $projectOptionttmJalon->id)->orderBy('date_repouser', 'desc')->get();
-
-        return view('jalons.single', compact('is_active', 'allContributeurs', 'categoryDemandes', 'allDemandes', 'jalon', 'optionTtm', 'project', 'demandes', 'users', 'option_ttm', 'debutDate', 'echeance', 'pivotId', 'historiques', 'totalDemandes', 'demandesSoumises', 'status'));
+        return view('jalons.single', compact('is_active', 'allContributeurs', 'categoryDemandes', 'allDemandes', 'jalon', 'optionTtm', 'project', 'demandes', 'users', 'option_ttm', 'debutDate', 'echeance', 'pivotId', 'historiques', 'totalDemandes', 'demandesSoumises', 'status','test','i'));
     }
 
     public function addDate(Request $request, Jalon $jalon, $option_ttm, Project $project)
     {
         // Validation des champs 'debutDate' et 'echeance' pour s'assurer qu'ils contiennent des dates valides
         $request->validate([
-            'debutDate' => 'required|date|after_or_equal:'.Carbon::today()->format('Y-m-d'),
+            'debutDate' => 'required|date|after_or_equal:' . Carbon::today()->format('Y-m-d'),
             'echeance' => 'required|date|after_or_equal:debutDate',
         ]);
 
@@ -179,7 +184,7 @@ class JalonController extends Controller
                     ->causedBy(auth()->user()->id)
                     ->performedOn($project)
                     ->event('add')
-                    ->log(auth()->user()->name.' a fixé la Date du passage pour le jalon '.$jalon->designation.', du '.$request->debutDate.' au '.$request->echeance);
+                    ->log(auth()->user()->name . ' a fixé la Date du passage pour le jalon ' . $jalon->designation . ', du ' . $request->debutDate . ' au ' . $request->echeance);
             }
 
             // Mettre à jour la date de fin du projet avec la date de fin du dernier jalon
@@ -222,7 +227,7 @@ class JalonController extends Controller
 
             // Validation du champ 'echeance' à nouveau pour s'assurer qu'il est une date postérieure à la date précédente
             $request->validate([
-                'echeance' => 'required|date|after:'.$echeanceAncienne,
+                'echeance' => 'required|date|after:' . $echeanceAncienne,
             ], [
                 'echeance.after' => 'La nouvelle échéance doit être une date ultérieure à l\'ancienne échéance.',
             ]);
@@ -242,7 +247,7 @@ class JalonController extends Controller
                     ->causedBy(auth()->user()->id)
                     ->performedOn($project)
                     ->event('updateTask')
-                    ->log(auth()->user()->name.' a repoussé la date du jalon '.$jalon->designation.' au '.$request->echeance);
+                    ->log(auth()->user()->name . ' a repoussé la date du jalon ' . $jalon->designation . ' au ' . $request->echeance);
             }
 
             // Modifier la date du jalon suivant s'il existe
@@ -287,7 +292,7 @@ class JalonController extends Controller
     {
         if ($request->hasFile('jalonPv')) {
             $jalonPvFile = $request->file('jalonPv');
-            $jalonPvFileName = substr(str_replace([' ', "'"], '', $jalonPvFile->getClientOriginalName()), 0, 6).date('ymdhis').'.'.$jalonPvFile->extension();
+            $jalonPvFileName = substr(str_replace([' ', "'"], '', $jalonPvFile->getClientOriginalName()), 0, 6) . date('ymdhis') . '.' . $jalonPvFile->extension();
             $destinationPath = 'storage/lalonPvs';
             $jalonPvFile->storeAs($destinationPath, $jalonPvFileName, 'public');
 
@@ -302,10 +307,10 @@ class JalonController extends Controller
                 $projectOptionttmJalon->jalonPv = $jalonPvFileName;
                 $projectOptionttmJalon->save();
                 activity()
-                ->causedBy(auth()->user()->id)
-                ->performedOn($project)
-                ->event('endTask')
-                ->log(auth()->user()->name.' a déclaré le jalon '.$jalon.' comme terminer');
+                    ->causedBy(auth()->user()->id)
+                    ->performedOn($project)
+                    ->event('endTask')
+                    ->log(auth()->user()->name . ' a déclaré le jalon ' . $jalon . ' comme terminer');
             }
         }
 

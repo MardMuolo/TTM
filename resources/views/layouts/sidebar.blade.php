@@ -2,7 +2,7 @@
     <a href="{{ route('home') }}" class="brand-link">
         <img src="{{Vite::asset('resources/images/logo.svg')}}"
              alt="Logo"
-             class="brand-image img-circle elevation-3">
+             class="brand-image elevation-3">
         <span class="brand-text font-weight-light">EasyTTM</span>
     </a>
 
