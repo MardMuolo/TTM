@@ -1,12 +1,9 @@
-<div class="col-lg-11">
-    <section class="content">
-        <table class="table table-striped " id="example1">
+    <section class="col-12 py-3">
+        <table class="table table-striped " id="tab_activity">
             <thead>
-                <tr>
-                    <th></th>
-                    <th colspan="7"></th>
-                    <th></th>
-                </tr>
+                <th></th>
+                <th ></th>
+                <th></th>
             </thead>
             <tbody>
                 @forelse ($activity as $activity)
@@ -15,63 +12,69 @@
                             @switch($activity->event)
                                 @case('create')
                                     <i class="fas fa-user-tie"></i>
-                                    @break
+                                @break
+
                                 @case('update')
                                     <i class="fas fa-edit"></i>
-                                    @break
+                                @break
+
                                 @case('add')
                                     <i class="fas fa-chart-line"></i>
-                                    @break
+                                @break
+
                                 @case('addUser')
                                     <i class="fas fa-user-plus"></i>
-                                    @break
+                                @break
+
                                 @case('deleteUser')
                                     <i class="fas fa-user-minus"></i>
-                                    @break
+                                @break
+
                                 @case('updateUser')
                                     <i class="fas fa-user-cog"></i>
-                                    @break
+                                @break
+
                                 @case('addFile')
                                     <i class="fas fa-file-upload"></i>
-                                    @break
+                                @break
+
                                 @case('updateDate')
                                     <i class="fas fa-clock"></i>
-                                    @break
+                                @break
+
                                 @case('addDate')
                                     <i class="fas fa-clock"></i>
-                                    @break
+                                @break
+
                                 @default
                                     <i class="fas fa-random"></i>
-                                    
                             @endswitch
                         </td>
 
-                        <td colspan="7">
+                        <td>
                             {{ $activity->description }}
                         </td>
                         <td class="text-black-50">
                             @php
-                                $diff=$today->diffInHours($activity->created_at);
+                                $diff = $today->diffInHours($activity->created_at);
                             @endphp
-                            @if ($diff >0 && $diff <24)
-                                il y a {{$today->diffInHours($activity->created_at)}}h
+                            @if ($diff > 0 && $diff < 24)
+                                il y a {{ $today->diffInHours($activity->created_at) }}h
                             @elseif($diff == 0)
-                                {{$today->diffInMinutes($activity->created_at) == 0 ? 'à l\'instant' : 'il y a '.$today->diffInMinutes($activity->created_at).'min'}}
-                            @elseif($diff > 24 && $diff<288)
-                                il y a {{$today->diffInDays($activity->created_at)}} jours
+                                {{ $today->diffInMinutes($activity->created_at) == 0 ? 'à l\'instant' : 'il y a ' . $today->diffInMinutes($activity->created_at) . 'min' }}
+                            @elseif($diff > 24 && $diff < 288)
+                                il y a {{ $today->diffInDays($activity->created_at) }} jours
                             @else
-                                {{$activity->created_at}}
+                                {{ $activity->created_at }}
                             @endif
                         </td>
                     </tr>
-                @empty
-                    <tr>
-                        <td colspan="12"> Aucune activité pour le moment</td>
-                    </tr>
-                @endforelse
-            </tbody>
-    
-        </table>
-    </section>
-    
-</div>
+                    @empty
+                        <tr>
+                            <td colspan="12"> Aucune activité pour le moment</td>
+                        </tr>
+                    @endforelse
+                </tbody>
+
+            </table>
+        </section>

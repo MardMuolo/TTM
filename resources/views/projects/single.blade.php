@@ -275,7 +275,7 @@
     </script>
     <script type="module">
         $(function() {
-            $("#example1").DataTable({
+            $("#example1,#tab_demande2,#tab_activity").DataTable({
                 "responsive": true,
                 "lengthChange": true,
                 "autoWidth": true,
@@ -286,6 +286,7 @@
             }).buttons().container().appendTo('#example1_wrapper .col-md-6:eq(0)');
         });
     </script>
+
     <script type="module">
         $(document).ready(function() {
             if (true) {

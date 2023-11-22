@@ -24,7 +24,7 @@
             <thead>
                 <tr>
                     <th></th>
-                    <th>Nom & Prénom</th>
+                    <th>Noms</th>
                     <th class="text-center">Contribution</th>
                     <th class="text-center">Rôle</th>
                     <th class="text-center">Statut</th>
