@@ -118,12 +118,13 @@
                                                     Historique des dates</button>
                                                 <div class="dropdown-menu float-right text-scroll" role="menu">
                                                     @forelse ($historiques->reverse() as $historique)
-                                                    <del>
-                                                        <a href="#" class="dropdown-item">{{ \Carbon\Carbon::parse($historique->date_initiale)->format('d/m/Y') }}</a>
-                                                    </del>
-                                                @empty
-                                                    <div class="ml-2">Date non repoussée pour le moment</div>
-                                                @endforelse
+                                                        <del>
+                                                            <a href="#"
+                                                                class="dropdown-item">{{ \Carbon\Carbon::parse($historique->date_initiale)->format('d/m/Y') }}</a>
+                                                        </del>
+                                                    @empty
+                                                        <div class="ml-2">Date non repoussée pour le moment</div>
+                                                    @endforelse
                                                 </div>
                                             </div>
                                         </div>
@@ -161,39 +162,39 @@
         </div>
         <div class="row">
             <div class="col-sm-12">
-                <table id="tab" class="table table-striped"
-                    aria-describedby="example1_info">
+                <table id="tab_demande" class="table table-striped" aria-describedby="example1_info">
                     <thead>
-                        <tr>
-                            <th style="width: 3%"></th>
-                            <th style="width: 30%">Demande</th>
-                            <th >Modèle</th>
-                            <th >Date prévue</th>
-                            <th >Retard</th>
-                            <th>Status</th>
-                            <th>Avis directeur</th>
-                        </tr>
+                        <th style="width: 3%"></th>
+                        <th style="width: 35%">Demande</th>
+                        <th>Modèle</th>
+                        <th>Date prévue</th>
+                        <th>Retard</th>
+                        <th>Status</th>
+                        <th style="width: 20%"></th>
                     </thead>
                     <tbody>
-                        @forelse ($test as $item)
-                            <tr class="odd">
-                                <td>{{$i++}}</td>
+                        @forelse ($jalonDemande as $item)
+                            <tr>
+                                <td>{{ $i++ }}</td>
 
                                 <td style="" class="dtr-control" tabindex="0">
                                     <div class="row">
                                         <div class="col">
-                                            {{$item->demande->title}}        
+                                            {{ $item->demande->title }}
                                         </div>
-                                            @php
-                                                $data = json_encode($item)
-                                            @endphp
+                                        @php
+                                            $data = json_encode($item);
+                                        @endphp
                                     </div>
                                 </td>
-                                <td style="">
-                                    <a href="{{asset("storage/demandes/".basename($item->pathTask))}}" download>{{ basename($item->pathTask) }}<i class="fas fa-download"></i></a>
-                                    
+
+                                <td class="text-center"><a
+                                        href="{{ asset('storage/demandes/' . basename($item->pathTask)) }}" download><i
+                                            class="fas fa-download"></i></a>
                                 </td>
-                                <td>{{  \Carbon\Carbon::parse($item->date_prevue)->format('d/m/Y') }} </td>
+
+                                <td>{{ \Carbon\Carbon::parse($item->date_prevue)->format('d/m/Y') }} </td>
+
                                 <td>
                                     @if ($item->date_reelle && $item->date_reelle <= $item->date_prevue)
                                         <small class="badge badge-success">Pas de retard observé</small>
@@ -209,6 +210,7 @@
                                         @endif
                                     @endif
                                 </td>
+
                                 <td>
                                     @if ($item->status === 'Soumis')
                                         <small class="badge badge-success">{{ $item->status }}</small>
@@ -223,31 +225,21 @@
 
                                 <td>
                                     <div class="row">
-                                        <a class="nav-link" data-widget="control-sidebar"
-                                            data-controlsidebar-slide="true"
-                                            data-target="#edit-{{ $item->id }}-3"
-                                            href="#edit-{{ $item->id }}-3" role="button">
+                                        <a class="btn btn-sm" href="{{ route('show_demande', $item->id) }}"
+                                            role="button">
                                             <i class="fas fa-eye"></i>
                                         </a>
-                                        @if ($status == 'Finis')
-                                            <a class="nav-link disabled" data-widget="control-sidebar"
-                                                data-controlsidebar-slide="true"
-                                                data-target="#edit-{{ $item->id }}-2"
-                                                href="#edit-{{ $item->id }}-2" role="button"
-                                                title="Ce jalon est fini">
-                                                <i class="fas fa-pen"></i>
-                                            </a>
-                                        @else
-                                            <a class="nav-link" data-widget="control-sidebar"
+
+                                        @if ($status != 'Finis')
+                                            <a class="btn btn-sm" data-widget="control-sidebar"
                                                 data-controlsidebar-slide="true"
                                                 data-target="#edit-{{ $item->id }}-2"
                                                 href="#edit-{{ $item->id }}-2" role="button">
                                                 <i class="fas fa-pen"></i>
                                             </a>
-                                            <a class="btn btn-sm" href="/"
-                                                onclick="supprimer(event)"
-                                                demande="Voulez-vous supprimer cette demande {{ $item->demande->title }}" data-toggle="modal"
-                                                data-target="#supprimer" title="archiver">
+                                            <a class="btn btn-sm bg-warning" href="/" onclick="supprimer(event)"
+                                                demande="Voulez-vous supprimer cette demande {{ $item->demande->title }}"
+                                                data-toggle="modal" data-target="#supprimer" title="archiver">
                                                 <i class="fas fa-archive"></i>
                                             </a>
                                         @endif
@@ -255,9 +247,6 @@
                                 </td>
                             </tr>
                         @empty
-                            <tr class="col-lg-12  text-center text-black-50 h5">
-                                <td colspan="6"> Aucune demande créée</td>
-                            </tr>
                         @endforelse
                     </tbody>
                 </table>
@@ -267,22 +256,22 @@
         @include('layouts.delete')
         {{-- @include('demande.delete') --}}
         {{-- @include('validation.index') --}}
-        @include('jalons.edit')
+        {{-- @include('jalons.edit') --}}
     </section>
 @endsection
 @section('scripts')
     <script>
         document.addEventListener('DOMContentLoaded', function() {
-        var jalonPvInput = document.getElementById('jalonPv');
-        var submitBtn = document.getElementById('submitBtn');
-        
-        jalonPvInput.addEventListener('change', function() {
-            if (jalonPvInput.value !== '') {
-            submitBtn.disabled = false;
-            } else {
-            submitBtn.disabled = true;
-            }
-        });
+            var jalonPvInput = document.getElementById('jalonPv');
+            var submitBtn = document.getElementById('submitBtn');
+
+            jalonPvInput.addEventListener('change', function() {
+                if (jalonPvInput.value !== '') {
+                    submitBtn.disabled = false;
+                } else {
+                    submitBtn.disabled = true;
+                }
+            });
         });
     </script>
     <script>
@@ -296,13 +285,20 @@
 
 
 @push('third_party_scripts')
-<script type='module' src="{{ Vite::asset('node_modules/admin-lte/plugins/datatables/jquery.dataTables.min.js') }}"></script>
-<script type='module' src="{{ Vite::asset('node_modules/admin-lte/plugins/datatables-buttons/js/buttons.bootstrap4.min.js') }}"></script>
-<script type="module" src="{{ Vite::asset('node_modules/admin-lte/plugins/select2/js/select2.full.min.js') }}"></script>
-<script type="module" src="{{ Vite::asset('node_modules/admin-lte/plugins/sweetalert2/sweetalert2.min.js') }}"></script>
-<script type="module" src="{{ Vite::asset('node_modules/admin-lte/plugins/datatables/jquery.dataTables.min.js') }}"></script>
-<script type="module" src="{{ Vite::asset('node_modules/admin-lte/plugins/datatables-buttons/js/dataTables.buttons.min.js') }}"></script>
-<script type="module" src="{{ Vite::asset('node_modules/admin-lte/plugins/datatables-bs4/js/dataTables.bootstrap4.min.js') }}"></script>
+    <script type='module' src="{{ Vite::asset('node_modules/admin-lte/plugins/datatables/jquery.dataTables.min.js') }}">
+    </script>
+    <script type='module'
+        src="{{ Vite::asset('node_modules/admin-lte/plugins/datatables-buttons/js/buttons.bootstrap4.min.js') }}"></script>
+    <script type="module" src="{{ Vite::asset('node_modules/admin-lte/plugins/select2/js/select2.full.min.js') }}">
+    </script>
+    <script type="module" src="{{ Vite::asset('node_modules/admin-lte/plugins/sweetalert2/sweetalert2.min.js') }}">
+    </script>
+    <script type="module" src="{{ Vite::asset('node_modules/admin-lte/plugins/datatables/jquery.dataTables.min.js') }}">
+    </script>
+    <script type="module"
+        src="{{ Vite::asset('node_modules/admin-lte/plugins/datatables-buttons/js/dataTables.buttons.min.js') }}"></script>
+    <script type="module"
+        src="{{ Vite::asset('node_modules/admin-lte/plugins/datatables-bs4/js/dataTables.bootstrap4.min.js') }}"></script>
 @endpush
 
 @push('page_css')
@@ -312,122 +308,118 @@
     @vite('node_modules/admin-lte/plugins/datatables-buttons/css/buttons.bootstrap4.min.css')
 @endpush
 @push('page_scripts')
-<script type="module">
-    $(document).ready(function() {
-        if (true) {
-            (async () => {
-    
-                /* inputOptions can be an object or Promise */
-                const inputOptions = new Promise((resolve) => {
-                    setTimeout(() => {
-                        resolve({
-                            'd': 2
-                        })
-                    }, 800)
-                })
-                const {
-                    value: sondage
-                } = await Swal.fire({
-                    icon: 'success',
-                    title: '<h2 class="text-success">Création avec Succès</h2> ',
-                    html: 'Le score est de <span class="text-black-50 h6">{{ $score ?? 'N/A' }}</span> et le projet est retenu en mode <span class="text-black-50 h6">{{ $options->nom ?? 'N/A' }}</span><br> Veuillez préciser les dates des jalons du projet',
+    <script type="module">
+        $(document).ready(function() {
+            if (true) {
+                (async () => {
+
+                    /* inputOptions can be an object or Promise */
+                    const inputOptions = new Promise((resolve) => {
+                        setTimeout(() => {
+                            resolve({
+                                'd': 2
+                            })
+                        }, 800)
                     })
-    
-      
-    
-    
-            })()
-        }
-    
-        $.ajax({
-            url: 'http://10.143.41.70:8000/promo2/odcapi/?method=getUsers',
-            dataType: 'json',
-            success: function(response) {
-    
-                if (response.success) {
-                    var data = response.users;
-    
-                    var formattedData = data.map(function(user) {
-                        return {
-                            id: user.id,
-                            username: user.username,
-                            text: user.last_name + ' ' + user.first_name,
-                            email: user.email,
-                            phone: user.phone,
-                            first_name: user.first_name,
-                            last_name: user.last_name,
-                        };
-                    });
-    
-                    // Initialiser le champ de sélection avec les options
-                    $('#user').select2({
-                        data: formattedData,
-                        minimumInputLength: 1
-                    });
-
-                    $('#manager').select2({
-                        data: formattedData,
-                        minimumInputLength: 1
-                    });
-    
-    
-                    // Événement de sélection d'utilisateur
-                    $('#user').on('select2:select', function(e) {
-                        var selectedUser = e.params.data;
-    
-                        // Mettre à jour la valeur de l'input "Email" avec l'e-mail de l'utilisateur sélectionné
-                        // $('#user').val(selectedUser.username);
-                        $('#username').val(selectedUser.username);
-                        $('#inputEmail').val(selectedUser.email);
-                        $('#name').val(selectedUser.text);
-    
-                        var fullName = selectedUser.first_name + ' ' + selectedUser
-                            .last_name;
-                        $('#name').val(fullName);
-                    });
-
-                    // Événement de sélection d'utilisateur
-                    $('#manager').on('select2:select', function(e) {
-                        var selectedUser = e.params.data;
-    
-                        // Mettre à jour la valeur de l'input "Email" avec l'e-mail de l'utilisateur sélectionné
-                        // $('#user').val(selectedUser.username);
-                        $('#username_manager').val(selectedUser.username);
-                        $('#inputEmail_manager').val(selectedUser.email);
-                        $('#name_manager').val(selectedUser.text);
-    
-                        var fullName = selectedUser.first_name + ' ' + selectedUser
-                            .last_name;
-                        $('#name').val(fullName);
-                    });
-
-                } else {
-                    console.log('Erreur: ' + response.message);
-                }
-            },
-            error: function(xhr, status, error) {
-                console.log('Erreur AJAX: ' + error);
+                    const {
+                        value: sondage
+                    } = await Swal.fire({
+                        icon: 'success',
+                        title: '<h2 class="text-success">Création avec Succès</h2> ',
+                        html: 'Le score est de <span class="text-black-50 h6">{{ $score ?? 'N/A' }}</span> et le projet est retenu en mode <span class="text-black-50 h6">{{ $options->nom ?? 'N/A' }}</span><br> Veuillez préciser les dates des jalons du projet',
+                    })
+                })()
             }
-        });
-         });
-       
-    function supprimer(event) {
-        event.preventDefault();
-        a = event.target.closest('a');
-    
-        let deleteForm = document.getElementById('deleteForm');
-        deleteForm.setAttribute('action', a.getAttribute('href'));
-    
-        let textDelete = document.getElementById('textDelete');
-        textDelete.innerHTML = a.getAttribute('item') + " ?";
-    
-        let titleDelete = document.getElementById('titleDelete');
-        titleDelete.innerHTML = "Suppression";  
-    }
-  </script>
 
-  <script>
-    function update_demande(event) {
+            $.ajax({
+                url: 'http://10.143.41.70:8000/promo2/odcapi/?method=getUsers',
+                dataType: 'json',
+                success: function(response) {
+
+                    if (response.success) {
+                        var data = response.users;
+
+                        var formattedData = data.map(function(user) {
+                            return {
+                                id: user.id,
+                                username: user.username,
+                                text: user.last_name + ' ' + user.first_name,
+                                email: user.email,
+                                phone: user.phone,
+                                first_name: user.first_name,
+                                last_name: user.last_name,
+                            };
+                        });
+
+                        // Initialiser le champ de sélection avec les options
+                        $('#user').select2({
+                            data: formattedData,
+                            minimumInputLength: 1
+                        });
+
+                        $('#manager').select2({
+                            data: formattedData,
+                            minimumInputLength: 1
+                        });
+
+
+                        // Événement de sélection d'utilisateur
+                        $('#user').on('select2:select', function(e) {
+                            var selectedUser = e.params.data;
+
+                            // Mettre à jour la valeur de l'input "Email" avec l'e-mail de l'utilisateur sélectionné
+                            // $('#user').val(selectedUser.username);
+                            $('#username').val(selectedUser.username);
+                            $('#inputEmail').val(selectedUser.email);
+                            $('#name').val(selectedUser.text);
+
+                            var fullName = selectedUser.first_name + ' ' + selectedUser
+                                .last_name;
+                            $('#name').val(fullName);
+                        });
+
+                        // Événement de sélection d'utilisateur
+                        $('#manager').on('select2:select', function(e) {
+                            var selectedUser = e.params.data;
+
+                            // Mettre à jour la valeur de l'input "Email" avec l'e-mail de l'utilisateur sélectionné
+                            // $('#user').val(selectedUser.username);
+                            $('#username_manager').val(selectedUser.username);
+                            $('#inputEmail_manager').val(selectedUser.email);
+                            $('#name_manager').val(selectedUser.text);
+
+                            var fullName = selectedUser.first_name + ' ' + selectedUser
+                                .last_name;
+                            $('#name').val(fullName);
+                        });
+
+                    } else {
+                        console.log('Erreur: ' + response.message);
+                    }
+                },
+                error: function(xhr, status, error) {
+                    console.log('Erreur AJAX: ' + error);
+                }
+            });
+        });
+
+        function supprimer(event) {
+            event.preventDefault();
+            a = event.target.closest('a');
+
+            let deleteForm = document.getElementById('deleteForm');
+            deleteForm.setAttribute('action', a.getAttribute('href'));
+
+            let textDelete = document.getElementById('textDelete');
+            textDelete.innerHTML = a.getAttribute('item') + " ?";
+
+            let titleDelete = document.getElementById('titleDelete');
+            titleDelete.innerHTML = "Suppression";
+        }
+    </script>
+
+    <script>
+        function update_demande(event) {
             var td = event.target.previousElementSibling;
             var data = JSON.parse(td.textContent);
             console.log(data);
@@ -438,24 +430,24 @@
             form_edit.deadline_unit.value = tb[1];
             form_edit.category_edit.value = data.demande.category_demande_id;
             form_edit.demande_edit.value = data.demande.id;
-            
+
             form_edit.contributeur.value = data.one_contributeur.id;
             $("#user_edit").select2();
 
-            }
-  </script>
+        }
+    </script>
 
-<script type='module'>
-    $(function() {
-        $("#tab").DataTable({
-            "responsive": true,
-            "lengthChange": true,
-            "autoWidth": false,
-            "searching": true,
-            "ordering": false,
-            "paging": true,
-            "data": "",
-        }).buttons().container().appendTo('#example1_wrapper .col-md-6:eq(0)');
-    });
-</script>
+    <script type='module'>
+        $(function() {
+            $("#tab_demande").DataTable({
+                "responsive": true,
+                "lengthChange": true,
+                "autoWidth": false,
+                "searching": true,
+                "ordering": true,
+                "paging": true,
+                "data": "",
+            }).buttons().container().appendTo('#example1_wrapper .col-md-6:eq(0)');
+        });
+    </script>
 @endpush

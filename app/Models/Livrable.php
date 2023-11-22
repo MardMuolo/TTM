@@ -17,7 +17,7 @@ class Livrable extends Model
 
 
     protected $table = 'livrables';
-    protected $fillable = ['nom', 'description','file','demande_id'];
+    protected $fillable = ['nom', 'description','fichier','demande_jalon_id'];
 
     public function demande()
     {

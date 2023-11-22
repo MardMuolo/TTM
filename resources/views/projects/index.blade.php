@@ -8,19 +8,20 @@
     <li class="breadcrumb-item"><a href="#">Projets</a></li>
 @endsection
 @section('content')
-    <section class="content card card-primary card-outline p-4">
+    <section class="content card card-orange card-outline p-4">
         @access('create', 'Project')
             <div class="text-right mx-4">
-                <a class="btn m-2 " href="{{ route('projects.create') }}"><i class="fas fa-plus-circle"></i></a>
+                <a class="btn m-2 bg-dark " href="{{ route('projects.create') }}"><i class="fas fa-plus-circle icon"></i></a>
             </div>
-        @endaccess <div class="card">
+        @endaccess
+        <div class="card">
 
             <div class="card-header">
                 <h3 class="card-title">Total:{{ count($projects) }}</h3>
             </div>
         </div>
         <div class="card-body p-0">
-            <table class="table table-striped projects" id="example1">
+            <table class="table table-striped projects" id="tab_project">
                 <thead class="text-left">
                     <tr>
                         <th style="width: 1%"></th>
@@ -134,6 +135,7 @@
     <script type='module' src="{{ Vite::asset('node_modules/admin-lte/plugins/jquery/jquery.min.js') }}"></script>
 @endpush
 @push('page_scripts')
+    {{-- @vite('resources/css/style.css') --}}
     @vite('node_modules/admin-lte/plugins/datatables-bs4/css/dataTables.bootstrap4.min.css')
     @vite('node_modules/admin-lte/plugins/datatables-responsive/css/responsive.bootstrap4.min.css')
     @vite('node_modules/admin-lte/plugins/datatables-buttons/css/buttons.bootstrap4.min.css')
@@ -156,7 +158,7 @@
         src="{{ Vite::asset('node_modules/admin-lte/plugins/datatables-buttons/js/buttons.colVis.min.js') }}"></script>
     <script type='module'>
         $(function() {
-            $("#example1").DataTable({
+            $("#tab_project").DataTable({
                 "responsive": true,
                 "lengthChange": true,
                 "autoWidth": true,
@@ -176,7 +178,7 @@
                     extend: 'print',
                     title: 'les projects  {{ $filter }}'
                 }, "colvis"]
-            }).buttons().container().appendTo('#example1_wrapper .col-md-6:eq(0)');
+            }).buttons().container().appendTo('#tab_project_wrapper .col-md-6:eq(0)');
         });
     </script>
     <script>

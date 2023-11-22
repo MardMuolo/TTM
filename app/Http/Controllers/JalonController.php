@@ -70,6 +70,16 @@ class JalonController extends Controller
     {
     }
 
+    public function show_demande($demande){
+        $demande=DemandeJalon::find($demande);
+        $livrables=$demande->livrables()->get();
+        // dd($livrables);
+        $i=1;
+        // dd($demande);
+        return view('jalons.demande',compact('demande','livrables','i'));
+    }
+
+
     /**
      * Show the form for editing the specified resource.
      */
@@ -114,7 +124,7 @@ class JalonController extends Controller
         $projetOptionJalon = ProjectOptionttmJalon::where("jalon_id", $jalon->id)
             ->where("option_ttm_id", $optionTtm->id)
             ->where("project_id", $project->id)->get()->first();
-        $test = DemandeJalon::where("project_optionttm_jalon_id",$projetOptionJalon->id)->get();
+        $jalonDemande = DemandeJalon::where("project_optionttm_jalon_id",$projetOptionJalon->id)->get();
         $i=1;
         // dd($demandeJalons);
 
@@ -153,7 +163,7 @@ class JalonController extends Controller
             $echeance = $projectOptionttmJalon->echeance;
         }
         $historiques = HistoriqueDate::where('project_optionttm_jalon_id', $projectOptionttmJalon->id)->orderBy('date_repouser', 'desc')->get();
-        return view('jalons.single', compact('is_active', 'allContributeurs', 'categoryDemandes', 'allDemandes', 'jalon', 'optionTtm', 'project', 'demandes', 'users', 'option_ttm', 'debutDate', 'echeance', 'pivotId', 'historiques', 'totalDemandes', 'demandesSoumises', 'status','test','i'));
+        return view('jalons.single', compact('is_active', 'allContributeurs', 'categoryDemandes', 'allDemandes', 'jalon', 'optionTtm', 'project', 'demandes', 'users', 'option_ttm', 'debutDate', 'echeance', 'pivotId', 'historiques', 'totalDemandes', 'demandesSoumises', 'status','jalonDemande','i'));
     }
 
     public function addDate(Request $request, Jalon $jalon, $option_ttm, Project $project)

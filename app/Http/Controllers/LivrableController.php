@@ -39,39 +39,32 @@ class LivrableController extends Controller
             'demande_jalon_id' => 'required|integer',
         ]);
         
-        $paths = [];
         
-        if ($request->hasFile('file')) {
-            $files = $request->file('file');
+        if ($request->hasFile('fichier')) {
             
-            foreach ($files as $file) {
-                $namefile = date('ymdhis') . '.' . $file->extension();
-                $path = $file->storeAs('livrable', $namefile);
-                
-                $publicPath = public_path('storage/livrable');
-                File::ensureDirectoryExists($publicPath);
-                File::delete($publicPath.'/'.$namefile);
-                File::link(storage_path('app/'.$path), $publicPath.'/'.$namefile);
-        
-                $paths[] = $path;
-            }
+            $namefile = date('ymdhis') . '.' . $request->fichier->extension();
+            $path = $request->fichier->storeAs('livrable', $namefile);
+            $publicPath = public_path('storage/livrable');
+            File::ensureDirectoryExists($publicPath);
+            File::delete($publicPath.'/'.$namefile);
+            File::link(storage_path('app/'.$path), $publicPath.'/'.$namefile);
         }
         
         $livrable = Livrable::create([
             'demande_jalon_id' => $request->demande_jalon_id,
             'nom' => $request->nom,
             'description' => $request->description,
-            'fichier' => implode(',', $paths),
+            'fichier' => $path,
         ]);
     
         $demande = DemandeJalon::findOrFail($request->demande_jalon_id);
         $demande->status = 'En attente de validation';
         $demande->date_reelle = $livrable->created_at;
         $demande->save();
-    
-        $logMessage = 'a uploadé un fichier';
-        if ($paths) {
-            $logMessage .= ' '.implode(',', $paths);
+
+      $logMessage = 'a uploadé un fichier';
+        if ($path) {
+            $logMessage .= $path;
         }
         activity()
             ->causedBy(auth()->user()->id)
@@ -136,8 +129,10 @@ class LivrableController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(string $id)
+    public function destroy($id)
     {
-        //
+        $livrable=Livrable::findOrFail($id);
+        $livrable->delete();
+        return redirect()->back();
     }
 }
