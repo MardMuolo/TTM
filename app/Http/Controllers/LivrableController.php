@@ -25,7 +25,7 @@ class LivrableController extends Controller
      */
     public function create()
     {
-        $livrable = Livrable::all();
+        //
     }
 
     /**

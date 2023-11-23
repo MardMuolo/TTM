@@ -73,10 +73,9 @@ class JalonController extends Controller
     public function show_demande($demande){
         $demande=DemandeJalon::find($demande);
         $livrables=$demande->livrables()->get();
-        // dd($livrables);
         $i=1;
-        // dd($demande);
-        return view('jalons.demande',compact('demande','livrables','i'));
+        $color=['A Corriger'=>'bg-warning','Valider'=>'bg-success', 'en attente'=>'bg-secondary','Rejeter'=>'bg-danger'];
+        return view('jalons.demande',compact('demande','livrables','i','color'));
     }
 
 
