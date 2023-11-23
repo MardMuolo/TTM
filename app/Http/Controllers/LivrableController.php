@@ -90,6 +90,12 @@ class LivrableController extends Controller
         //
     }
 
+    public function valider_livrable(Request $request,Livrable $livrable){
+        $livrable->status=$request->Avis;
+        $livrable->save();
+        return redirect()->back()->with(['message'=>'validation du livrable avec success']);
+    }
+
     /**
      * Update the specified resource in storage.
      */
@@ -116,6 +122,8 @@ class LivrableController extends Controller
     $livrable->nom = $request->input('nom', $livrable->nom);
     $livrable->demande_id = $request->input('demande_id', $livrable->demande_id);
     $livrable->description = $request->input('description', $livrable->description);
+    $livrable->description = $request->input('description', $livrable->description);
+    $livrable->status = $request->input('status', $request->Avis);
     
 
     $livrable->save();

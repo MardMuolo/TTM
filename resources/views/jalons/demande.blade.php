@@ -59,10 +59,15 @@
                                                 <td>{{ $livrable->description }}</td>
                                                 <td>
                                                     <a href="{{ asset('storage/livrable/' . basename($livrable->fichier)) }}"
-                                                        download>{{ basename($livrable->fichier) ?? 'N/A' }}</a>
+                                                        download>Telecharger <i class="fas fa-download"></i></a>
                                                 </td>
                                                 <td>{{ $livrable->status }}</td>
                                                 <td>
+                                                    <a class="btn btn-warning btn-sm" href="{{ route('valider_livrable', $livrable->id) }}" onclick="edit(event)" title = "{{ $livrable->title }}" fichier="{{ $livrable->fichier }}" data-toggle="modal" data-target="#edit">
+                                                        <i class="fas fa-pen">
+                                                        </i>
+                                                        
+                                                    </a>
                                                     <a class="btn btn-danger btn-sm"
                                                         href="{{ route('livrables.destroy', $livrable->id) }}"
                                                         onclick="supprimer(event)"
@@ -70,12 +75,21 @@
                                                         data-target="#supprimer" title="archiver">
                                                         <i class="fas fa-archive"></i>
                                                     </a>
+                                                  
+                                                    <a class="btn btn-secondary btn-sm" title="validation" href="{{ route('valider_livrable', $livrable->id) }}" onclick="edit(event)" item = "{{ $livrable->nom }}" description="{{ $livrable->description }}" data-toggle="modal" data-target="#validate">
+                                                        <i class="far fa-envelope-open">
+                                                        </i>
+                                                        
+                                                    </a>
+                                                   
+
                                                 </td>
                                             </tr>
                                         @empty
-                                        <tr>
-                                            <td colspan="12" class="text-center text-secondary">Aucune livraison pour l'instant</td>
-                                        </tr>
+                                            <tr>
+                                                <td colspan="12" class="text-center text-secondary">Aucune livraison pour
+                                                    l'instant</td>
+                                            </tr>
                                         @endforelse
 
                                     </tbody>
@@ -89,10 +103,13 @@
                         <!-- this row will not appear when printing -->
                         <div class="row no-print">
                             <div class="col-12">
+                                {{-- <a class="btn btn-warning btn-sm" title="validation" href="{{ route('valider_livrable', $livrable->id) }}" onclick="edit(event)" item = "{{ $livrable->nom }}" fichier="{{ $livrable->fichier }}" data-toggle="modal" data-target="#edit">
+                                    <i class="far fa-envelope-open">
+                                    </i>  
+                                </a> --}}
                                 <button type="button" class="btn btn-primary float-right" style="margin-right: 5px;"
-                                    data-toggle="modal" data-target="#modal-default">
-                                    <i class="fas fa-pencil-alt"></i> Deposer
-                                </button>
+                                data-toggle="modal" data-target="#create_modal">
+                                    <i class="fas fa-pencil-alt"></i></button>
                             </div>
                         </div>
                     </div>
@@ -101,7 +118,7 @@
             </div><!-- /.row -->
         </div><!-- /.container-fluid -->
     </section>
-    <div class="modal fade" id="modal-default">
+    {{-- <div class="modal fade" id="modal-default">
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
@@ -146,8 +163,8 @@
                             </div>
                         </div>
                         <div class="modal-footer justify-content-between">
-                            <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                            <button type="submit" class="btn btn-primary">Save changes</button>
+                            <button type="button" class="btn btn-default" data-dismiss="modal">Annuler</button>
+                            <button type="submit" class="btn btn-primary"><i class="fas fa-paper-plane"></i></button>
                         </div>
                     </form>
                 </div>
@@ -155,7 +172,57 @@
             <!-- /.modal-content -->
         </div>
         <!-- /.modal-dialog -->
-    </div>
+    </div> --}}
+
+    {{-- directeur modale
+    <div class="modal fade" id="modal-default-2">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title">Validation du livrable</h4>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <form action="{{ route('livrables.update',5) }}" method="POST" enctype="multipart/form-data">
+                        @csrf
+                        @method('PUT')
+                        <div class="card-body">
+                            <div class="form-group">
+                                <div class="form-group">
+                                    <h4>Votre Avis</h4>
+                                    <select class="custom-select form-control-border" id="exampleSelectBorder" name="Avis">
+                                        <option value="Valider">Valider</option>
+                                        <option value="corriger">A corriger</option>
+                                        <option value="Rejette">Rejette</option>
+                                    </select>
+                                </div>
+                                <div class="form-group">
+                                    <h4>Observation</h4>
+                                    <textarea class="form-control" rows="3" placeholder="Entrer ..." name="description"></textarea>
+                                </div>
+                            </div>
+                            <div class="form-check">
+                                <input type="checkbox" class="form-check-input" id="exampleCheck1">
+                                <label class="form-check-label" for="exampleCheck1">J'ai vérifié le document avant de
+                                    l'envoyer</label>
+                            </div>
+                        </div>
+                        <div class="modal-footer justify-content-between">
+                            <button type="button" class="btn btn-default" data-dismiss="modal">Annuler</button>
+                            <button type="submit" class="btn btn-primary"><i class="fas fa-paper-plane"></i></button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+            <!-- /.modal-content -->
+        </div>
+        <!-- /.modal-dialog -->
+    </div> --}}
+    @include('jalons.partials.modalCreate')
+    @include('jalons.partials.modalEdit')
+    @include('jalons.partials.modalValidation')
     @include('layouts.delete')
 @endsection
 @push('page_scripts')
@@ -171,6 +238,23 @@
 
             let titleDelete = document.getElementById('titleDelete');
             titleDelete.innerHTML = "Suppression";
+        }
+
+        function edit(event){
+            event.preventDefault();
+            a = event.target.closest('a');
+
+            let editForm = document.getElementById('editForm');
+            editForm.setAttribute('action', a.getAttribute('href'));
+
+            let a_tag = event.target.closest('a');
+
+            let titleEdit = document.getElementById('titleEdit');
+            titleEdit.innerHTML = "Modification de l'élement "+ a_tag.getAttribute('item');
+
+            document.getElementById('title').value = a_tag.getAttribute('title');
+            document.getElementById('file').innerHTML = ""+a_tag.getAttribute('fichier');
+            
         }
     </script>
 @endpush
