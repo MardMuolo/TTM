@@ -18,8 +18,8 @@
                                 <h4>Votre Avis</h4>
                                 <select class="custom-select form-control-border" id="exampleSelectBorder" name="Avis">
                                     <option value="Valider">Valider</option>
-                                    <option value="corriger">A corriger</option>
-                                    <option value="Rejette">Rejeter</option>
+                                    <option value="A Corriger">A Corriger</option>
+                                    <option value="Rejeter">Rejeter</option>
                                 </select>
                             </div>
                             <div class="form-group">

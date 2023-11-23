@@ -5,7 +5,7 @@
 @section('filsAriane')
     <li class="breadcrumb-item"><a href="{{ route('projects.index') }}">Projets</a></li>
     <li class="breadcrumb-item"><a href="{{ route('projects.show', $project->id) }}">{{ $project->name }}</a></li>
-    <li class="breadcrumb-item"><a href="#">{{ $jalon->designation }}</a></li>
+    <li class="breadcrumb-item text-secondary">Demande</li>
 @endsection
 @section('content')
     <section class="content">
@@ -225,7 +225,7 @@
 
                                 <td>
                                     <div class="row">
-                                        <a class="btn btn-sm" href="{{ route('show_demande', $item->id) }}"
+                                        <a class="btn btn-sm" href="{{ route('show_demande', ['project'=>$project->id,'optionttm'=>$optionTtm->id,'jalon'=>$jalon->id,'demande'=>$item->id]) }}"
                                             role="button">
                                             <i class="fas fa-eye"></i>
                                         </a>

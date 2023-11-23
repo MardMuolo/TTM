@@ -70,12 +70,15 @@ class JalonController extends Controller
     {
     }
 
-    public function show_demande($demande){
+    public function show_demande($project,$optionTtm,Jalon $jalon,$demande){
+        $project=Project::findOrFail($project);
+
+        // die($project->users[0]->pivot);
         $demande=DemandeJalon::find($demande);
         $livrables=$demande->livrables()->get();
         $i=1;
         $color=['A Corriger'=>'bg-warning','Valider'=>'bg-success', 'en attente'=>'bg-secondary','Rejeter'=>'bg-danger'];
-        return view('jalons.demande',compact('demande','livrables','i','color'));
+        return view('jalons.demande',compact('demande','livrables','i','color','project','optionTtm','jalon'));
     }
 
 

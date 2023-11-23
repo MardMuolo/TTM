@@ -18,7 +18,7 @@ Route::middleware(['auth'])->group(function(){
     Route::post('/jalons/{jalon}/optionttm/{option_ttm}/project/{project}/add-date',  [JalonController::class,'addDate'])->name('jalons.addDate');
     Route::put('/jalons/{jalon}/option_ttm/{option_ttm}/project/{project}/repouser-date', [JalonController::class,'repouserDate'])->name('repouserDate');
     Route::put('/jalons/{jalon}/optionttm/{option_ttm}/project/{project}/update-status', [JalonController::class, 'updateStatus'])->name('jalons.updateStatus');
-    Route::get('/jalon/demande/{demande}', [JalonController::class, 'show_demande'])->name('show_demande');
+    Route::get('project/{project}/optionttm/{optionttm}/jalon/{jalon}/demande/{demande}', [JalonController::class, 'show_demande'])->name('show_demande');
     Route::put('/livrable/{livrable}', [LivrableController::class, 'valider_livrable'])->name('valider_livrable');
 
 });

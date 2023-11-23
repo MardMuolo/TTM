@@ -2,11 +2,11 @@
 @section('title')
     Dépôt du livrable
 @endsection
-{{-- @section('filsAriane')
-    <li class="breadcrumb-item"><a href="#">Projets</a></li>
-    <li class="breadcrumb-item"><a href="#">jalon</a></li>
-    <li class="breadcrumb-item"><a href="#"> {{ $demande->demande->title }}</a></li>
-@endsection --}}
+@section('filsAriane')
+    <li class="breadcrumb-item"><a href="{{ route('projects.show', $project->id) }}">{{$project->name}}</a></li>
+    <li class="breadcrumb-item text-secondary">{{$jalon->designation}}</li>
+    <li class="breadcrumb-item text-secondary">Livrable</li>
+@endsection
 @section('content')
     <section class="content">
         <div class="container-fluid">
@@ -61,27 +61,36 @@
                                                     <a href="{{ asset('storage/livrable/' . basename($livrable->fichier)) }}"
                                                         download>Telecharger <i class="fas fa-download"></i></a>
                                                 </td>
-                                                <td>{{ $livrable->status }}</td>
+                                                <td class="badge {{ $color[$livrable->status] }}">{{ $livrable->status }}
+                                                </td>
                                                 <td>
-                                                    <a class="btn btn-warning btn-sm" href="{{ route('valider_livrable', $livrable->id) }}" onclick="edit(event)" title = "{{ $livrable->title }}" fichier="{{ $livrable->fichier }}" data-toggle="modal" data-target="#edit">
-                                                        <i class="fas fa-pen">
-                                                        </i>
-                                                        
-                                                    </a>
-                                                    <a class="btn btn-danger btn-sm"
+                                                    @if (auth()->user()->id == $demande->contributeur)
+                                                        <a class="btn btn-warning btn-sm" title="validation"
+                                                            href="{{ route('valider_livrable', $livrable->id) }}"
+                                                            onclick="edit(event)" title = "{{ $livrable->title }}"
+                                                            fichier="{{ $livrable->fichier }}" data-toggle="modal"
+                                                            data-target="#edit">
+                                                            <i class="fas fa-pen">
+                                                            </i>
+                                                        </a>
+                                                    @endif
+                                                    <a class="btn btn-danger btn-sm disable"
                                                         href="{{ route('livrables.destroy', $livrable->id) }}"
                                                         onclick="supprimer(event)"
                                                         project="Voulez-vous supprimer ce livrable" data-toggle="modal"
                                                         data-target="#supprimer" title="archiver">
                                                         <i class="fas fa-archive"></i>
                                                     </a>
-                                                  
-                                                    <a class="btn btn-secondary btn-sm" title="validation" href="{{ route('valider_livrable', $livrable->id) }}" onclick="edit(event)" item = "{{ $livrable->nom }}" description="{{ $livrable->description }}" data-toggle="modal" data-target="#validate">
+
+                                                    <a class="btn btn-secondary btn-sm" title="validation"
+                                                        href="{{ route('valider_livrable', $livrable->id) }}"
+                                                        onclick="edit(event)" item = "{{ $livrable->nom }}"
+                                                        description="{{ $livrable->description }}" data-toggle="modal"
+                                                        data-target="#validate">
                                                         <i class="far fa-envelope-open">
                                                         </i>
-                                                        
                                                     </a>
-                                                   
+
 
                                                 </td>
                                             </tr>
@@ -107,9 +116,11 @@
                                     <i class="far fa-envelope-open">
                                     </i>  
                                 </a> --}}
-                                <button type="button" class="btn btn-primary float-right" style="margin-right: 5px;"
-                                data-toggle="modal" data-target="#create_modal">
-                                    <i class="fas fa-pencil-alt"></i></button>
+                                @if (auth()->user()->id == $demande->contributeur)
+                                    <button type="button" class="btn btn-primary float-right" style="margin-right: 5px;"
+                                        data-toggle="modal" data-target="#create_modal">
+                                        <i class="fas fa-pencil-alt"></i></button>
+                                @endif
                             </div>
                         </div>
                     </div>
@@ -240,7 +251,7 @@
             titleDelete.innerHTML = "Suppression";
         }
 
-        function edit(event){
+        function edit(event) {
             event.preventDefault();
             a = event.target.closest('a');
 
@@ -250,11 +261,11 @@
             let a_tag = event.target.closest('a');
 
             let titleEdit = document.getElementById('titleEdit');
-            titleEdit.innerHTML = "Modification de l'élement "+ a_tag.getAttribute('item');
+            titleEdit.innerHTML = "Modification de l'élement " + a_tag.getAttribute('item');
 
             document.getElementById('title').value = a_tag.getAttribute('title');
-            document.getElementById('file').innerHTML = ""+a_tag.getAttribute('fichier');
-            
+            document.getElementById('file').innerHTML = "" + a_tag.getAttribute('fichier');
+
         }
     </script>
 @endpush
