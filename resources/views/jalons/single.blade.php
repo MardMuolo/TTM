@@ -189,7 +189,7 @@
                                 </td>
 
                                 <td class="text-center"><a
-                                        href="{{ asset('storage/demandes/' . basename($item->pathTask)) }}" download><i
+                                        href="{{ asset('storage/demandes/' . basename($item->pathTask)) }}" download>Telecharger<i
                                             class="fas fa-download"></i></a>
                                 </td>
 
@@ -225,7 +225,8 @@
 
                                 <td>
                                     <div class="row">
-                                        <a class="btn btn-sm" href="{{ route('show_demande', ['project'=>$project->id,'optionttm'=>$optionTtm->id,'jalon'=>$jalon->id,'demande'=>$item->id]) }}"
+                                        <a class="btn btn-sm"
+                                            href="{{ route('show_demande', ['project' => $project->id, 'optionttm' => $optionTtm->id, 'jalon' => $jalon->id, 'demande' => $item->id]) }}"
                                             role="button">
                                             <i class="fas fa-eye"></i>
                                         </a>
@@ -252,6 +253,59 @@
                 </table>
             </div>
         </div>
+
+        <div class="modal fade" id="modal-fin-jalon" tabindex="-1" role="dialog"
+            aria-labelledby="modal-fin-jalon-label" aria-hidden="true">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    @if ($demandesSoumises < $totalDemandes)
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="modal-finish-jalon-label">Message d'avertissement</h5>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                        <div class="modal-body">
+                            <p>Toutes les demandes doivent être soumises avant de terminer le jalon.</p>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Fermer</button>
+                        </div>
+                    @else
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="modal-finish-jalon-label">Confirmation</h5>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                        <form
+                            action="{{ route('jalons.updateStatus', ['jalon' => $jalon->id, 'option_ttm' => $optionTtm->id, 'project' => $project->id]) }}"
+                            method="POST" style="display: inline" enctype="multipart/form-data">
+                            @csrf
+                            @method('PUT')
+                            <div class="modal-body">
+                                <p>Voulez-vous marquer ce jalon comme étant fini ?</p>
+                                <div class="form-group">
+                                    <label for="jalonPv">Sélectionnez un fichier :</label>
+                                    <input type="file" class="form-control-file" name="jalonPv" id="jalonPv"
+                                        required>
+                                </div>
+                            </div>
+                            <input type="hidden" name="status" value="Finis">
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" data-dismiss="modal"><i
+                                        class="fa fa-times"></i></button>
+                                <button type="submit" class="btn btn-primary" id="submitBtn" disabled><i
+                                        class="fa fa-check"></i></button>
+                            </div>
+                        </form>
+                    @endif
+                </div>
+            </div>
+        </div>
+
+
+
         @include('jalons.create')
         @include('layouts.delete')
         {{-- @include('demande.delete') --}}
@@ -285,12 +339,18 @@
 
 
 @push('third_party_scripts')
-    <script type='module' src="{{ Vite::asset('node_modules/admin-lte/plugins/datatables/jquery.dataTables.min.js') }}"></script>
-    <script type='module'src="{{ Vite::asset('node_modules/admin-lte/plugins/datatables-buttons/js/buttons.bootstrap4.min.js') }}"></script>
-    <script type="module" src="{{ Vite::asset('node_modules/admin-lte/plugins/select2/js/select2.full.min.js') }}"></script>
-    <script type="module" src="{{ Vite::asset('node_modules/admin-lte/plugins/sweetalert2/sweetalert2.min.js') }}"></script>
-    <script type="module" src="{{ Vite::asset('node_modules/admin-lte/plugins/datatables-buttons/js/dataTables.buttons.min.js') }}"></script>
-    <script type="module" src="{{ Vite::asset('node_modules/admin-lte/plugins/datatables-bs4/js/dataTables.bootstrap4.min.js') }}"></script>
+    <script type='module' src="{{ Vite::asset('node_modules/admin-lte/plugins/datatables/jquery.dataTables.min.js') }}">
+    </script>
+    <script type='module'
+        src="{{ Vite::asset('node_modules/admin-lte/plugins/datatables-buttons/js/buttons.bootstrap4.min.js') }}"></script>
+    <script type="module" src="{{ Vite::asset('node_modules/admin-lte/plugins/select2/js/select2.full.min.js') }}">
+    </script>
+    <script type="module" src="{{ Vite::asset('node_modules/admin-lte/plugins/sweetalert2/sweetalert2.min.js') }}">
+    </script>
+    <script type="module"
+        src="{{ Vite::asset('node_modules/admin-lte/plugins/datatables-buttons/js/dataTables.buttons.min.js') }}"></script>
+    <script type="module"
+        src="{{ Vite::asset('node_modules/admin-lte/plugins/datatables-bs4/js/dataTables.bootstrap4.min.js') }}"></script>
 @endpush
 
 @push('page_css')
