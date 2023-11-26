@@ -20,6 +20,6 @@
         </div>
         
             @yield('scripts')
-        
+            @vite('resources/css/style.css')
     </body>
 </x-laravel-ui-adminlte::adminlte-layout>

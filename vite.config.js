@@ -7,6 +7,7 @@ export default defineConfig({
         laravel({
 
             input: [
+                'resources/css/style.css',
                 'resources/sass/app.scss',
                 'resources/js/app.js',
                 'resources/css/table.css',
@@ -29,6 +30,7 @@ export default defineConfig({
                 'node_modules/admin-lte/plugins/datatables-buttons/js/buttons.bootstrap4.min.js',
                 'node_modules/admin-lte/dist/js/demo.js',
                 'resources/js/scripts.js',
+                'node_modules/admin-lte/dist/css/adminlte.min.css',
                 'node_modules/dhtmlx-gantt/codebase/sources/dhtmlxgantt.css',
                 'node_modules/frappe-gantt/dist/frappe-gantt.css',
                 'node_modules/frappe-gantt/dist/frappe-gantt.min.js',

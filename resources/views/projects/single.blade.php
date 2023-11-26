@@ -185,7 +185,7 @@
                                         @forelse ($file as $item)
                                             <li><a href="{{ asset('storage/documents/' . basename($item->filePath)) }}"
                                                     download class="btn-link text-secondary"><i
-                                                        class="far fa-fw fa-file-word"></i>{{basename($item->filePath) }}</a>
+                                                        class="far fa-fw fa-file-word"></i>{{ basename($item->filePath) }}</a>
                                             </li>
                                         @empty
                                             <li><a href="#" class="btn-link text-secondary"><i
@@ -236,6 +236,7 @@
     </div>
 @endsection
 @push('page_css')
+    @vite('resources/css/style.css')
     @vite('node_modules/admin-lte/plugins/select2/css/select2.min.css')
     @vite('node_modules/admin-lte/plugins/sweetalert2-theme-bootstrap-4/bootstrap-4.min.css')
     @vite('node_modules/admin-lte/plugins/datatables-bs4/css/dataTables.bootstrap4.min.css')
@@ -244,12 +245,18 @@
 @endpush
 @push('third_party_scripts')
     <script type="module" src="{{ Vite::asset('node_modules/admin-lte/plugins/jquery/jquery.min.js') }}"></script>
-    <script type='module'src="{{ Vite::asset('node_modules/admin-lte/plugins/datatables-buttons/js/buttons.bootstrap4.min.js') }}"></script>
-    <script type="module" src="{{ Vite::asset('node_modules/admin-lte/plugins/datatables/jquery.dataTables.min.js') }}"></script>
-    <script type="module" src="{{ Vite::asset('node_modules/admin-lte/plugins/select2/js/select2.full.min.js') }}"></script>
-    <script type="module" src="{{ Vite::asset('node_modules/admin-lte/plugins/sweetalert2/sweetalert2.min.js') }}"></script>
-    <script type="module" src="{{ Vite::asset('node_modules/admin-lte/plugins/datatables-buttons/js/dataTables.buttons.min.js') }}"></script>
-    <script type="module" src="{{ Vite::asset('node_modules/admin-lte/plugins/datatables-bs4/js/dataTables.bootstrap4.min.js') }}"></script>
+    <script type='module'
+        src="{{ Vite::asset('node_modules/admin-lte/plugins/datatables-buttons/js/buttons.bootstrap4.min.js') }}"></script>
+    <script type="module" src="{{ Vite::asset('node_modules/admin-lte/plugins/datatables/jquery.dataTables.min.js') }}">
+    </script>
+    <script type="module" src="{{ Vite::asset('node_modules/admin-lte/plugins/select2/js/select2.full.min.js') }}">
+    </script>
+    <script type="module" src="{{ Vite::asset('node_modules/admin-lte/plugins/sweetalert2/sweetalert2.min.js') }}">
+    </script>
+    <script type="module"
+        src="{{ Vite::asset('node_modules/admin-lte/plugins/datatables-buttons/js/dataTables.buttons.min.js') }}"></script>
+    <script type="module"
+        src="{{ Vite::asset('node_modules/admin-lte/plugins/datatables-bs4/js/dataTables.bootstrap4.min.js') }}"></script>
     <script type="module" src="{{ vite::asset('node_modules/admin-lte/dist/js/demo.js') }}"></script>
 @endpush
 @push('page_scripts')

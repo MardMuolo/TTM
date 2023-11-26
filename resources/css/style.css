@@ -1,0 +1,14 @@
+.thead-color{
+    background-color:  #000000;
+    color: #FF7900;
+}
+a{
+    color: #000000;
+}
+
+a:hover{
+    color: #FF7900;
+}
+h3{
+    color: #FF7900;
+}

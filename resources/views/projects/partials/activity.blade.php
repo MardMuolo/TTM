@@ -1,6 +1,6 @@
     <section class="col-12 py-3">
         <table class="table table-striped " id="tab_activity">
-            <thead>
+            <thead class="thead-color">
                 <th></th>
                 <th ></th>
                 <th></th>
@@ -49,6 +49,7 @@
                                 @default
                                     <i class="fas fa-random"></i>
                             @endswitch
+                            {{$activity->causer->name}}
                         </td>
 
                         <td>

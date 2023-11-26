@@ -3,8 +3,8 @@
     Dépôt du livrable
 @endsection
 @section('filsAriane')
-    <li class="breadcrumb-item"><a href="{{ route('projects.show', $project->id) }}">{{$project->name}}</a></li>
-    <li class="breadcrumb-item text-secondary">{{$jalon->designation}}</li>
+    <li class="breadcrumb-item"><a href="{{ route('projects.show', $project->id) }}">{{ $project->name }}</a></li>
+    <li class="breadcrumb-item text-secondary">{{ $jalon->designation }}</li>
     <li class="breadcrumb-item text-secondary">Livrable</li>
 @endsection
 @section('content')
@@ -64,7 +64,7 @@
                                                 <td class="badge {{ $color[$livrable->status] }}">{{ $livrable->status }}
                                                 </td>
                                                 <td>
-                                                    @if (auth()->user()->id == $demande->contributeur)
+                                                    @if (auth()->user()->id == $demande->contributeur && $livrable->status=="en attente" )
                                                         <a class="btn btn-warning btn-sm" title="validation"
                                                             href="{{ route('valider_livrable', $livrable->id) }}"
                                                             onclick="edit(event)" title = "{{ $livrable->title }}"
@@ -82,14 +82,16 @@
                                                         <i class="fas fa-archive"></i>
                                                     </a>
 
-                                                    <a class="btn btn-secondary btn-sm" title="validation"
-                                                        href="{{ route('valider_livrable', $livrable->id) }}"
-                                                        onclick="edit(event)" item = "{{ $livrable->nom }}"
-                                                        description="{{ $livrable->description }}" data-toggle="modal"
-                                                        data-target="#validate">
-                                                        <i class="far fa-envelope-open">
-                                                        </i>
-                                                    </a>
+                                                    @if (Auth()->user()->roles == 'directeur')
+                                                        <a class="btn btn-secondary btn-sm" title="validation"
+                                                            href="{{ route('valider_livrable', $livrable->id) }}"
+                                                            onclick="edit(event)" item = "{{ $livrable->nom }}"
+                                                            description="{{ $livrable->description }}" data-toggle="modal"
+                                                            data-target="#validate">
+                                                            <i class="far fa-envelope-open">
+                                                            </i>
+                                                        </a>
+                                                    @endif
 
 
                                                 </td>
@@ -117,6 +119,7 @@
                                     </i>  
                                 </a> --}}
                                 @if (auth()->user()->id == $demande->contributeur)
+
                                     <button type="button" class="btn btn-primary float-right" style="margin-right: 5px;"
                                         data-toggle="modal" data-target="#create_modal">
                                         <i class="fas fa-pencil-alt"></i></button>

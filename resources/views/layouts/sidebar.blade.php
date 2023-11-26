@@ -1,4 +1,4 @@
-<aside class="main-sidebar sidebar-dark-primary elevation-4">
+<aside class="main-sidebar thead-color sidebar-dark-primary elevation-4">
     <a href="{{ route('home') }}" class="brand-link">
         <img src="{{Vite::asset('resources/images/logo.svg')}}"
              alt="Logo"

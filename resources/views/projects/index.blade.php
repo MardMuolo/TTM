@@ -22,7 +22,7 @@
         </div>
         <div class="card-body p-0">
             <table class="table table-striped projects" id="tab_project">
-                <thead class="text-left">
+                <thead class="text-left thead-color">
                     <tr>
                         <th style="width: 1%"></th>
                         <th style="width: 20%">Nom</th>
@@ -135,7 +135,7 @@
     <script type='module' src="{{ Vite::asset('node_modules/admin-lte/plugins/jquery/jquery.min.js') }}"></script>
 @endpush
 @push('page_scripts')
-    {{-- @vite('resources/css/style.css') --}}
+    @vite('resources/css/style.css')
     @vite('node_modules/admin-lte/plugins/datatables-bs4/css/dataTables.bootstrap4.min.css')
     @vite('node_modules/admin-lte/plugins/datatables-responsive/css/responsive.bootstrap4.min.css')
     @vite('node_modules/admin-lte/plugins/datatables-buttons/css/buttons.bootstrap4.min.css')
