@@ -6,13 +6,16 @@
         </a>
     @endaccess
 </li>
-<li class="nav-item">
-    <a href="{{ route('projects.index') }}" class="nav-link {{ Request::is('projects') ? 'active' : '' }}">
-        <i class="nav-icon fas fa-folder"></i>
-        <p>Projets <span class="badge bg-danger"> {{ Illuminate\Support\Facades\Cache::get('projects') ?? '0' }}</span>
-        </p>
-    </a>
-</li>
+
+@access('read', 'Project')
+    <li class="nav-item">
+        <a href="{{ route('projects.index') }}" class="nav-link {{ Request::is('projects') ? 'active' : '' }}">
+            <i class="nav-icon fas fa-folder"></i>
+            <p>Projets <span class="badge bg-danger"> {{ Illuminate\Support\Facades\Cache::get('projects') ?? '0' }}</span>
+            </p>
+        </a>
+    </li>
+@endaccess
 
 {{-- @if (Cache::get('members') != null)
     <li class="nav-item">
@@ -23,7 +26,7 @@
     </li>
 @endif --}}
 
-@access('read', 'Rapport')
+@access('delete', 'Project')
     <li class="nav-item">
         <a href="{{ route('rapport.index') }}" class="nav-link {{ Request::is('reporting') ? 'active' : '' }}">
             <i class="nav-icon fa fa-table"></i>
@@ -32,7 +35,7 @@
     </li>
 @endaccess
 @foreach (auth()->user()->roles as $user)
-    @if ($user->name == 'directeur')
+    @if ($user->name == 'Directeur')
         <li class="nav-item">
             <a href="#" class="nav-link">
                 <i class="nav-icon fa fa-bell" aria-hidden="true"></i>
@@ -62,7 +65,7 @@
 @endforeach
 
 @foreach (auth()->user()->roles as $user)
-    @if ($user->name == 'admin')
+    @if ($user->name == 'adminSys')
         <li class="nav-item">
             <a href="#" class="nav-link">
                 <i class="nav-icon fas  fa-cogs"></i>
