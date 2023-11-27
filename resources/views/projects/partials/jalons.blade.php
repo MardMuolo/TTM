@@ -1,7 +1,7 @@
-<div class="card-body">
+<div class="card-body col-12">
     <div class="row">
         @forelse ($jalonsProgress as $index => $jalon)
-            <div class="col-lg-3 col-6">
+            <div class="col-lg-4 col-6">
                 <!-- small box -->
                 <div class="small-box bg-light">
                     <div class="inner">

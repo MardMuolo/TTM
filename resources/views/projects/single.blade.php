@@ -233,6 +233,7 @@
                 </div>
             </div>
         </div>
+        @include('layouts.delete')
     </div>
 @endsection
 @push('page_css')
@@ -296,57 +297,6 @@
 
     <script type="module">
         $(document).ready(function() {
-            if (true) {
-                (async () => {
-
-                    /* inputOptions can be an object or Promise */
-                    const inputOptions = new Promise((resolve) => {
-                        setTimeout(() => {
-                            resolve({
-                                'd': 2
-                            })
-                        }, 800)
-                    })
-                    const {
-                        value: sondage
-                    } = await Swal.fire({
-                        icon: 'success',
-                        title: '<h2 class="text-success">Création avec Succès</h2> ',
-                        html: 'Le score est de <span class="text-black-50 h6">{{ $score ?? 'N/A' }}</span> et le projet est retenu en mode <span class="text-black-50 h6">{{ $options->nom ?? 'N/A' }}</span><br> Veuillez préciser les dates des jalons du projet',
-
-                        // preConfirm: () => {
-                        //     var debutDate = document.getElementById('dateStart').value;
-                        //     var echeance = document.getElementById('dateEnd').value;
-
-                        //     return {
-                        //         debutDate: debutDate,
-                        //         echeance:echeance
-                        //     }
-                        // },
-                    })
-
-                    // if (sondage) {
-                    //     var Url="{{ route('repouserDate', ['jalon' => '1', 'option_ttm' => '1', 'project' => '1']) }}"
-                    //     $.ajax({
-                    //         url: Url,
-                    //         type: 'POST',
-                    //         data: {
-                    //             date: sondage
-                    //         },
-                    //         success: (response) => {
-                    //             console.log('Date enregistrée avec succès');
-                    //         },
-                    //         error: (xhr, status, error) => {
-                    //             alert('Erreur lors de l\'enregistrement de la date '+Url);
-                    //         }
-
-                    //     })
-                    // }
-
-
-                })()
-            }
-
             $.ajax({
                 url: 'http://10.143.41.70:8000/promo2/odcapi/?method=getUsers',
                 dataType: 'json',

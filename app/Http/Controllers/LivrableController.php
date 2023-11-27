@@ -122,7 +122,6 @@ class LivrableController extends Controller
     $livrable->nom = $request->input('nom', $livrable->nom);
     $livrable->demande_id = $request->input('demande_id', $livrable->demande_id);
     $livrable->description = $request->input('description', $livrable->description);
-    $livrable->description = $request->input('description', $livrable->description);
     $livrable->status = $request->input('status', $request->Avis);
     
 

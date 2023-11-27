@@ -51,6 +51,23 @@ class ProjectController extends Controller
     // cette methode permet d'afficher un projet en particulier et de l'injeter dans la vue single
     public function show(Project $project, Jalon $jalon, OptionTtm $optionTtm, Livrable $livrable)
     {
+
+        $statusColor=[
+            'create'=>'fas fa-user-tie',
+            'update'=>'fas fa-edit',
+            'add'=>'fas fa-chart-line',
+            'addUser'=>'fas fa-user-plus',
+            'deleteUser'=>'fas fa-user-minus',
+            'updateUser'=>'fas fa-user-cog',
+            'addFile'=>'fas fa-file-upload',
+            'updateDate'=>'fas fa-clock',
+            'addDate'=>'fas fa-clock',
+            'updateTask'=>'fas fa-random',
+            'edit'=>'fas fa-edit',
+        ];
+
+
+
         // Récuperation des documents du projets
         $demandes = Demande::orderBy('id', 'desc')->paginate(5);
         $file = ProjectFile::all()->where('project_id', $project->id);
@@ -156,7 +173,7 @@ class ProjectController extends Controller
 
         // dd($exit);
 
-        return view('projects.single', compact('project', 'optionTtm', 'projectOptionttmJalon', 'file', 'score', 'option_ttm', 'jalons', 'options', 'jalonsProgress', 'members', 'i', 'activity', 'exit', 'demandeByJalon', 'contributeurs', 'titleOfDemandes', 'demandesProject', 'today', 'directions', 'users', 'complexityTargets', 'complexity_items'));
+        return view('projects.single', compact('statusColor','project', 'optionTtm', 'projectOptionttmJalon', 'file', 'score', 'option_ttm', 'jalons', 'options', 'jalonsProgress', 'members', 'i', 'activity', 'exit', 'demandeByJalon', 'contributeurs', 'titleOfDemandes', 'demandesProject', 'today', 'directions', 'users', 'complexityTargets', 'complexity_items'));
     }
 
     // cette methode permet la rediction au formulaire de création projet
