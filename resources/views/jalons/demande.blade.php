@@ -64,7 +64,7 @@
                                                 <td class="badge {{ $color[$livrable->status] }}">{{ $livrable->status }}
                                                 </td>
                                                 <td>
-                                                    @if (auth()->user()->id == $demande->contributeur && $livrable->status=="en attente" )
+                                                    @if (auth()->user()->id == $demande->contributeur && $livrable->status == 'en attente')
                                                         <a class="btn btn-warning btn-sm" title="validation"
                                                             href="{{ route('valider_livrable', $livrable->id) }}"
                                                             onclick="edit(event)" title = "{{ $livrable->title }}"
@@ -82,7 +82,7 @@
                                                         <i class="fas fa-archive"></i>
                                                     </a>
 
-                                                    @if (Auth()->user()->roles == 'directeur')
+                                                    @if (Auth()->user()->roles[0]->name == 'Directeur')
                                                         <a class="btn btn-secondary btn-sm" title="validation"
                                                             href="{{ route('valider_livrable', $livrable->id) }}"
                                                             onclick="edit(event)" item = "{{ $livrable->nom }}"
@@ -119,7 +119,6 @@
                                     </i>  
                                 </a> --}}
                                 @if (auth()->user()->id == $demande->contributeur)
-
                                     <button type="button" class="btn btn-primary float-right" style="margin-right: 5px;"
                                         data-toggle="modal" data-target="#create_modal">
                                         <i class="fas fa-pencil-alt"></i></button>

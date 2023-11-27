@@ -10,7 +10,7 @@
                     <tr>
                         <td>
                             <i class="{{$statusColor[$activity->event]}}"></i>
-                            {{$activity->causer->name}}
+                            {{-- {{$activity->causer->name}} --}}
 
                             {{ $activity->description }}
 

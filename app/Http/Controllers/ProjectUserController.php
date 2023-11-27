@@ -59,18 +59,18 @@ class ProjectUserController extends Controller
         $manager = User::where('id', $user->line_manager)->get()->first();
 
         // Requete de notification au Line Manager
-        if ($manager) {
-            $message1 = MessageMail::Where('code_name', 'notify_to_manager')->first();
-            $manager->notify(new EasyTtmNotification($message1, route('home'), []));
-        }
+        // if ($manager) {
+        //     $message1 = MessageMail::Where('code_name', 'notify_to_manager')->first();
+        //     $manager->notify(new EasyTtmNotification($message1, route('home'), []));
+        // }
 
         foreach ($project->projectFile as $file) {
             $projectFiles[] = 'storage/'.$file->filePath;
         }
         try {
             // Requete de notification au contributeur
-            $message2 = MessageMail::Where('code_name', 'add_member_to_project')->get()->first();
-            $user->notify(new EasyTtmNotification($message2, route('home'), $projectFiles));
+            //$message2 = MessageMail::Where('code_name', 'add_member_to_project')->get()->first();
+            //$user->notify(new EasyTtmNotification($message2, route('home'), $projectFiles));
         } catch (\Exception $e) {
             return redirect()->back()->withErrors(['projet' => 'Echec d\'ajout de membre']);;
         }

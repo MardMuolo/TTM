@@ -62,6 +62,18 @@ class Project extends Model
         }
     }
 
+    public static function isDirector(){
+        $projects = Project::join('project_users', 'projects.id', '=', 'project_users.project_id')
+        ->join('users', 'project_users.user_id', '=', 'users.id')
+        ->join('direction_users', 'users.id', '=', 'direction_users.user_id')
+        ->where('direction_users.direction_id', Auth()->user()->direction_user->direction->id) // Remplacez $directionXId par l'ID de la direction spécifique
+        ->where('project_users.role', 'projectOwner')
+        ->select('projects.*')
+        ->with('optionsJalons')
+        ->get();
+        return $projects;
+    }
+
     // Méthode get: permet d'afficher les projects selon les roles de l'utilisateur connecté
     public static function get($status)
     {

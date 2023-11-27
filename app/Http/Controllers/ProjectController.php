@@ -8,37 +8,44 @@ Author: emmenuel badibanga
 
 namespace App\Http\Controllers;
 
-use App\Models\ComplexityItem;
-use App\Models\ComplexityTarget;
-use App\Models\Demande;
-use App\Models\DemandeJalon;
-use App\Models\Direction;
-use App\Models\Jalon;
-use App\Models\Livrable;
-use App\Models\MessageMail;
-use App\Models\OptionTtm;
-use App\Models\Project;
-use App\Models\ProjectComplexityTarget;
-use App\Models\ProjectFile;
-use App\Models\ProjectOptionttmJalon;
-use App\Models\ProjectUser;
+use Carbon\Carbon;
 use App\Models\Role;
 use App\Models\User;
-use App\Notifications\EasyTtmNotification;
-use Carbon\Carbon;
+use App\Models\Jalon;
+use App\Models\Demande;
+use App\Models\Project;
+use App\Models\Livrable;
+use App\Models\Direction;
+use App\Models\OptionTtm;
+use App\Models\MessageMail;
+use App\Models\ProjectFile;
+use App\Models\ProjectUser;
+use App\Models\DemandeJalon;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Cache;
+use App\Models\ComplexityItem;
+use App\Models\ComplexityTarget;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Auth;
+use App\Models\ProjectOptionttmJalon;
+use Illuminate\Support\Facades\Cache;
+use App\Models\ProjectComplexityTarget;
 use Spatie\Activitylog\Models\Activity;
+use App\Notifications\EasyTtmNotification;
 
 class ProjectController extends Controller
 {
     public function index(Request $request)
     {
+        // dd(Auth()->user()->direction_user->is_director);
         $filter = $request->filter ?? null;
+        if (isset(Auth()->user()->direction_user->is_director)) {
+            $projects = Project::isDirector();
+        } else {
 
-        // Variable project: nous permet de recuperer tous les projets selon le rôle de l'utilisateur connecté
-        $projects = ($filter) ? Project::where('status', $filter)->get() : Project::get(Project::isAdmin());
+            // Variable project: nous permet de recuperer tous les projets selon le rôle de l'utilisateur connecté
+            $projects = ($filter) ? Project::where('status', $filter)->get() : Project::get(Project::isAdmin());
+        }
+        //dd($projects[0]->with('users', 'optionsJalons')->get());
         Cache::forever('projects', count($projects));
 
         $i = 1;
@@ -51,19 +58,18 @@ class ProjectController extends Controller
     // cette methode permet d'afficher un projet en particulier et de l'injeter dans la vue single
     public function show(Project $project, Jalon $jalon, OptionTtm $optionTtm, Livrable $livrable)
     {
-
-        $statusColor=[
-            'create'=>'fas fa-user-tie',
-            'update'=>'fas fa-edit',
-            'add'=>'fas fa-chart-line',
-            'addUser'=>'fas fa-user-plus',
-            'deleteUser'=>'fas fa-user-minus',
-            'updateUser'=>'fas fa-user-cog',
-            'addFile'=>'fas fa-file-upload',
-            'updateDate'=>'fas fa-clock',
-            'addDate'=>'fas fa-clock',
-            'updateTask'=>'fas fa-random',
-            'edit'=>'fas fa-edit',
+        $statusColor = [
+            'create' => 'fas fa-user-tie',
+            'update' => 'fas fa-edit',
+            'add' => 'fas fa-chart-line',
+            'addUser' => 'fas fa-user-plus',
+            'deleteUser' => 'fas fa-user-minus',
+            'updateUser' => 'fas fa-user-cog',
+            'addFile' => 'fas fa-file-upload',
+            'updateDate' => 'fas fa-clock',
+            'addDate' => 'fas fa-clock',
+            'updateTask' => 'fas fa-random',
+            'edit' => 'fas fa-edit',
         ];
 
 
@@ -173,7 +179,7 @@ class ProjectController extends Controller
 
         // dd($exit);
 
-        return view('projects.single', compact('statusColor','project', 'optionTtm', 'projectOptionttmJalon', 'file', 'score', 'option_ttm', 'jalons', 'options', 'jalonsProgress', 'members', 'i', 'activity', 'exit', 'demandeByJalon', 'contributeurs', 'titleOfDemandes', 'demandesProject', 'today', 'directions', 'users', 'complexityTargets', 'complexity_items'));
+        return view('projects.single', compact('statusColor', 'project', 'optionTtm', 'projectOptionttmJalon', 'file', 'score', 'option_ttm', 'jalons', 'options', 'jalonsProgress', 'members', 'i', 'activity', 'exit', 'demandeByJalon', 'contributeurs', 'titleOfDemandes', 'demandesProject', 'today', 'directions', 'users', 'complexityTargets', 'complexity_items'));
     }
 
     // cette methode permet la rediction au formulaire de création projet
@@ -245,7 +251,7 @@ class ProjectController extends Controller
                     } else {
                         $fichier = null;
                     }
-                    
+
                 }
             }
 
@@ -279,7 +285,8 @@ class ProjectController extends Controller
 
             // return redirect()->route('projects.show', $project->id)->with('score');
         } catch (\Throwable $th) {
-            return redirect()->back()->withErrors(['projet' => 'Echec de création du projet']);;
+            return redirect()->back()->withErrors(['projet' => 'Echec de création du projet']);
+            ;
         }
     }
 

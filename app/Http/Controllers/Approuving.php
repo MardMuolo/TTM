@@ -31,10 +31,10 @@ class Approuving extends Controller
     public function getOwner($id, $code)
     {
         $owner = User::where('id', $id)->get()->first();
-        if ($owner) {
-            $message1 = MessageMail::Where('code_name', $code)->first();
-            $owner->notify(new EasyTtmNotification($message1, route('home'), []));
-        }
+        // if ($owner) {
+        //     $message1 = MessageMail::Where('code_name', $code)->first();
+        //     $owner->notify(new EasyTtmNotification($message1, route('home'), []));
+        // }
     }
 
     public function update(Request $request, int $id)
