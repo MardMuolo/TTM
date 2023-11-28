@@ -20,10 +20,9 @@
                 </ul>
             </div>
         @endif
-
-        <div class="mb-3">
+        <div class="row">
             @if (empty($debutDate) && empty($echeance))
-                <div class="row ml-2">
+                <div class="col">
                     <div class="text-right mr-2">
                         @if (auth()->user()->name == $project->projectOwner)
                             <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#modal-default">
@@ -37,9 +36,9 @@
                     </div>
                 </div>
             @else
-                <div class="mt-2">
+                <div class="col">
                     <div class="row">
-                        <div class="col-md-3 col-sm-6 col-12">
+                        <div class="col">
                             @if (!empty($debutDate))
                                 <div class="info-box">
                                     <span class="info-box-icon bg-info"><i class="far fa-calendar-alt"></i></span>
@@ -50,9 +49,10 @@
                                     </div>
 
                                 </div>
+                            @endif
                         </div>
 
-                        <div class="col-md-3 col-sm-6 col-12">
+                        <div class="col">
                             @if (!empty($echeance))
                                 <div class="info-box">
                                     <span class="info-box-icon bg-success"><i class="far fa-calendar-alt"></i></span>
@@ -77,34 +77,35 @@
                                 </div>
                             @endif
                         </div>
-
-                        <div class="col-md-3 col-sm-6 col-12">
-                            <div class="info-box">
-                                <span class="info-box-icon bg-warning"><i class="far fa-calendar"></i></span>
-                                <div class="info-box-content">
-                                    <span class="info-box-text">Décider de la fin du jalon</span>
-                                    <span class="info-box-number">
-                                        @if ($status == 'Finis')
-                                            <button type="button" class="btn btn-light btn-sm float-right"
-                                                data-toggle="modal" data-target="#modal-fin-jalon"
-                                                title="ce jalon est finis" disabled>
-                                                <i class="fas fa-plus-circle"></i>
-                                            </button>
-                                        @else
-                                            @if (auth()->user()->name == $project->projectOwner)
-                                                <span class="info-box-number"><button type="button"
-                                                        class="btn btn-light btn-sm float-right" data-toggle="modal"
-                                                        data-target="#modal-fin-jalon">
+                        @access('update', 'Jalon')
+                            @if (Auth()->user()->roles[0]->name == 'ttmOfficer')
+                                <div class="col">
+                                    <div class="info-box">
+                                        <span class="info-box-icon bg-warning"><i class="far fa-calendar"></i></span>
+                                        <div class="info-box-content">
+                                            <span class="info-box-text">Décider de la fin du jalon</span>
+                                            <span class="info-box-number">
+                                                @if ($status == 'Finis')
+                                                    <button type="button" class="btn btn-light btn-sm float-right"
+                                                        data-toggle="modal" data-target="#modal-fin-jalon"
+                                                        title="ce jalon est finis" disabled>
                                                         <i class="fas fa-plus-circle"></i>
-                                                    </button></span>
-                                            @endif
-                                        @endif
-                                    </span>
+                                                    </button>
+                                                @else
+                                                    <span class="info-box-number"><button type="button"
+                                                            class="btn btn-light btn-sm float-right" data-toggle="modal"
+                                                            data-target="#modal-fin-jalon">
+                                                            <i class="fas fa-plus-circle"></i>
+                                                        </button></span>
+                                                @endif
+                                            </span>
+                                        </div>
+
+                                    </div>
+
                                 </div>
-
-                            </div>
-
-                        </div>
+                            @endif
+                        @endaccess
 
                         <div class="col-md-3 col-sm-6 col-12">
                             <div class="info-box">
@@ -137,7 +138,6 @@
                 </div>
             @endif
         </div>
-        @endif
     </section>
     <section class="content">
         <div class="row justify-content-end text-right">

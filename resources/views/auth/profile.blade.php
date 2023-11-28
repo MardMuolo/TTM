@@ -13,17 +13,13 @@ Profil
                 <div class="col-md-3">
                     <div class="card card-primary card-outline">
                         <div class="card-body box-profile">
-                            <div class="text-center">
-                                <img class="profile-user-img img-fluid img-circle" src="@if(Auth::user()->profile_photo == null)
-                                {{Vite::asset('resources/images/logo.svg')}}
-                                @else
-                                {{asset('storage/profiles/'.Auth::user()->profile_photo)}}
-                                @endif"
-                                alt="User profile picture">
-                                
+                            <div class="text-center py-2">
+                                <span class="user-image img-circle elevation-2 bg-danger p-4 my-3 text-center">
+                                    {{str(Auth::user()->username[0])->upper()}}{{str(Auth::user()->name[0])->upper()}}
+                                </span>
                             </div>
 
-                            <h3 class="profile-username text-center">{{ Auth::user()->name }}</h3>
+                            <h3 class="profile-username text-center py-3">{{ Auth::user()->name }}</h3>
 
 
                             {{-- <p class="text-muted text-center">Software Engineer</p> --}}
@@ -99,7 +95,7 @@ Profil
                                             <input type="text" class="form-control" id="inputUsername" value="{{ Auth::user()->username }}" disabled>
                                         </div>
                                     </div> --}}
-                                    <div class="form-group row">
+                                    {{-- <div class="form-group row">
                                         <label for="profile" class="col-sm-2 form-label">Photo de profil</label>
                                         <div class="col-sm-10">
                                             <input type="file" name="profile" class="form-control @error('profile') is-invalid @enderror" id="profile">
@@ -108,7 +104,7 @@ Profil
                                         @enderror
                                         </div>
                                         
-                                    </div>
+                                    </div> --}}
                                     
                                     <div class="form-group row">
                             
