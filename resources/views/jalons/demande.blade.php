@@ -56,7 +56,11 @@
                                             <tr>
                                                 <td>{{ $i++ }}</td>
                                                 <td>{{ $livrable->nom }}</td>
-                                                <td>{{ $livrable->description }}</td>
+                                                <td>{{ $livrable->description }}
+                                                    @if ($livrable->pv)
+                                                        <p><span class="text-danger bold">Alerte!:</span> {{$livrable->pv}}</p>
+                                                    @endif
+                                                </td>
                                                 <td>
                                                     <a href="{{ asset('storage/livrable/' . basename($livrable->fichier)) }}"
                                                         download>Telecharger <i class="fas fa-download"></i></a>
@@ -64,8 +68,9 @@
                                                 <td class="badge {{ $color[$livrable->status] }}">{{ $livrable->status }}
                                                 </td>
                                                 <td>
-                                                    @if (auth()->user()->id == $demande->contributeur && $livrable->status == 'en attente')
-                                                        <a class="btn btn-warning btn-sm" title="validation"
+                                                    @if (auth()->user()->id == $demande->contributeur)
+                                                        <a class="btn btn-warning btn-sm {{ $livrable->status != 'Valider' ? '' : 'disabled' }}"
+                                                            title="validation"
                                                             href="{{ route('valider_livrable', $livrable->id) }}"
                                                             onclick="edit(event)" title = "{{ $livrable->title }}"
                                                             fichier="{{ $livrable->fichier }}" data-toggle="modal"
@@ -73,14 +78,15 @@
                                                             <i class="fas fa-pen">
                                                             </i>
                                                         </a>
+
+                                                        <a class="btn btn-danger btn-sm {{ $livrable->status != 'Valider' ? '' : 'disabled' }}"
+                                                            href="{{ route('livrables.destroy', $livrable->id) }}"
+                                                            onclick="supprimer(event)"
+                                                            project="Voulez-vous supprimer ce livrable" data-toggle="modal"
+                                                            data-target="#supprimer" title="archiver">
+                                                            <i class="fas fa-archive"></i>
+                                                        </a>
                                                     @endif
-                                                    <a class="btn btn-danger btn-sm disable"
-                                                        href="{{ route('livrables.destroy', $livrable->id) }}"
-                                                        onclick="supprimer(event)"
-                                                        project="Voulez-vous supprimer ce livrable" data-toggle="modal"
-                                                        data-target="#supprimer" title="archiver">
-                                                        <i class="fas fa-archive"></i>
-                                                    </a>
 
                                                     @if (Auth()->user()->roles[0]->name == 'Directeur')
                                                         <a class="btn btn-secondary btn-sm" title="validation"

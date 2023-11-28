@@ -189,8 +189,8 @@
                                 </td>
 
                                 <td class="text-center"><a
-                                        href="{{ asset('storage/demandes/' . basename($item->pathTask)) }}" download>Telecharger<i
-                                            class="fas fa-download"></i></a>
+                                        href="{{ asset('storage/demandes/' . basename($item->pathTask)) }}"
+                                        download>Telecharger<i class="fas fa-download"></i></a>
                                 </td>
 
                                 <td>{{ \Carbon\Carbon::parse($item->date_prevue)->format('d/m/Y') }} </td>
@@ -232,17 +232,19 @@
                                         </a>
 
                                         @if ($status != 'Finis')
-                                            <a class="btn btn-sm" data-widget="control-sidebar"
-                                                data-controlsidebar-slide="true"
-                                                data-target="#edit-{{ $item->id }}-2"
-                                                href="#edit-{{ $item->id }}-2" role="button">
-                                                <i class="fas fa-pen"></i>
-                                            </a>
-                                            <a class="btn btn-sm bg-warning" href="/" onclick="supprimer(event)"
-                                                demande="Voulez-vous supprimer cette demande {{ $item->demande->title }}"
-                                                data-toggle="modal" data-target="#supprimer" title="archiver">
-                                                <i class="fas fa-archive"></i>
-                                            </a>
+                                            @access(['update', 'delete'], 'DemandeJalon')
+                                                <a class="btn btn-sm" data-widget="control-sidebar"
+                                                    data-controlsidebar-slide="true"
+                                                    data-target="#edit-{{ $item->id }}-2"
+                                                    href="#edit-{{ $item->id }}-2" role="button">
+                                                    <i class="fas fa-pen"></i>
+                                                </a>
+                                                <a class="btn btn-sm bg-warning" href="/" onclick="supprimer(event)"
+                                                    demande="Voulez-vous supprimer cette demande {{ $item->demande->title }}"
+                                                    data-toggle="modal" data-target="#supprimer" title="archiver">
+                                                    <i class="fas fa-archive"></i>
+                                                </a>
+                                            @endaccess
                                         @endif
                                     </div>
                                 </td>

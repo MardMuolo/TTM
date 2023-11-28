@@ -91,7 +91,12 @@ class LivrableController extends Controller
     }
 
     public function valider_livrable(Request $request,Livrable $livrable){
+        // dd($request);
         $livrable->status=$request->Avis;
+        $livrable->pv=Null;
+        if ($request->Avis=="A Corriger") {
+            $livrable->pv=$request->description;
+        }
         $livrable->save();
         return redirect()->back()->with(['message'=>'validation du livrable avec success']);
     }
@@ -109,7 +114,7 @@ class LivrableController extends Controller
             Storage::delete($livrable->file);
         }
 
-        
+
         $files = $request->file('file');
         $filePaths = [];
         foreach ($files as $file) {

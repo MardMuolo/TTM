@@ -1,6 +1,6 @@
 <div class="col-12 p-2">
     <table class="table table-striped" id="tab_demande2">
-        <thead>
+        <thead class="thead-color">
             {{-- <th style="width: 1%"></th> --}}
             <th style="width: 30%"></th>
             <th style="width: 30%"></th>
@@ -33,9 +33,7 @@
                             <td>pour un délai de {{ $demande->deadLine }}</td>
                         </tr>
                     @else
-                        <tr>
-                            <td colspan="12">Aucune demande ne vous est assignée pour le moment.</td>
-                        </tr>
+                       
                     @endif
                 @empty
                 @endforelse

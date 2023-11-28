@@ -208,6 +208,9 @@ class ProjectController extends Controller
         try {
             $owner = User::where('id', auth()->user()->id)->first();
             $sponsor = User::where('id', $request->sponsor)->first();
+
+
+            //Processus de création du projet
             $project = Project::create([
                 'name' => $request->name,
                 'description' => $request->description,
@@ -220,7 +223,6 @@ class ProjectController extends Controller
                 'projectOwner' => $owner['name'],
                 'sponsor' => $sponsor['name'],
             ]);
-            // dd($sponsor);
 
             // ajout du premier membre qui est  l'initiateur du projet
             $this->addStaff($owner, $project, 'projectOwner');
@@ -239,7 +241,9 @@ class ProjectController extends Controller
                 foreach ($request->file as $file) {
                     if ($request->hasFile('file')) {
                         $namefile = substr(str_replace([' ', "'"], '', $request->name), 0, 6) . '' . date('ymdhis') . '.' . $file->extension();
-                        $fichier = $file->storeAs('documents', $namefile, 'public');
+                        $fichier = $file->storeAs('documents', $namefile, 'app');
+                        // dd(url($fichier));
+
                         $project->projectFile()->create([
                             'filePath' => $fichier,
                         ]);
@@ -286,7 +290,6 @@ class ProjectController extends Controller
             // return redirect()->route('projects.show', $project->id)->with('score');
         } catch (\Throwable $th) {
             return redirect()->back()->withErrors(['projet' => 'Echec de création du projet']);
-            ;
         }
     }
 
