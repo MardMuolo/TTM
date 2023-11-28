@@ -2,22 +2,23 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Requests\StoreJalonRequest;
-use App\Http\Requests\UpdateJalonRequest;
-use App\Models\CategoryDemande;
-use App\Models\Demande;
-use App\Models\DemandeJalon;
-use App\Models\HistoriqueDate;
+use Carbon\Carbon;
+use App\Models\User;
 use App\Models\Jalon;
+use App\Models\Demande;
+use App\Models\Project;
 use App\Models\Livrable;
 use App\Models\OptionTtm;
-use App\Models\Project;
-use App\Models\ProjectOptionttmJalon;
-use App\Models\User;
-use Carbon\Carbon;
+use App\Models\DemandeJalon;
 use Illuminate\Http\Request;
+use App\Models\HistoriqueDate;
+use App\Models\CategoryDemande;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Http;
+use App\Models\ProjectOptionttmJalon;
+use Illuminate\Support\Facades\Crypt;
+use App\Http\Requests\StoreJalonRequest;
+use App\Http\Requests\UpdateJalonRequest;
 
 class JalonController extends Controller
 {
@@ -70,15 +71,29 @@ class JalonController extends Controller
     {
     }
 
-    public function show_demande($project,$optionTtm,Jalon $jalon,$demande){
-        $project=Project::findOrFail($project);
+    public function show_demande($project, $optionTtm, $jalon, $demande)
+    {
+
+
+        //Decrypatge des Id au niveau des URL
+        $project_id = Crypt::decrypt($project);
+        $project = Project::findOrFail($project_id);
+
+        $optionTtm_id = Crypt::decrypt($optionTtm);
+        $optionTtm = OptionTtm::findOrFail($optionTtm_id);
+
+        $jalon_id = Crypt::decrypt($jalon);
+        $jalon = Jalon::findOrFail($jalon_id);
+        // dd($optionTtm);
+
+        // $project=Project::findOrFail($project);
 
         // die($project->users[0]->pivot);
-        $demande=DemandeJalon::find($demande);
-        $livrables=$demande->livrables()->get();
-        $i=1;
-        $color=['A Corriger'=>'bg-warning','Valider'=>'bg-success', 'en attente'=>'bg-secondary','Rejeter'=>'bg-danger'];
-        return view('jalons.demande',compact('demande','livrables','i','color','project','optionTtm','jalon'));
+        $demande = DemandeJalon::find($demande);
+        $livrables = $demande->livrables()->get();
+        $i = 1;
+        $color = ['A Corriger' => 'bg-warning', 'Valider' => 'bg-success', 'en attente' => 'bg-secondary', 'Rejeter' => 'bg-danger'];
+        return view('jalons.demande', compact('demande', 'livrables', 'i', 'color', 'project', 'optionTtm', 'jalon'));
     }
 
 
@@ -118,16 +133,27 @@ class JalonController extends Controller
         return $tmp;
     }
 
-    public function single(Jalon $jalon, OptionTtm $optionTtm, Project $project, Livrable $livrable)
+    public function single($jalon, $option_ttm, $project)
     {
+
+        //Decrypatge des Id au niveau des URL
+        $jalon = Crypt::decrypt($jalon);
+        $jalon = Jalon::findOrFail($jalon);
+
+        $option_ttm = Crypt::decrypt($option_ttm);
+        $optionTtm = Optionttm::findOrFail($option_ttm);
+
+        $project = Crypt::decrypt($project);
+        $project = Project::findOrFail($project);
+
         // $allContributeur = Http::get('http://10.143.41.70:8000/promo2/odcapi/?method=getUsers');
         $allContributeurs = User::all();
         $categoryDemandes = CategoryDemande::all();
         $projetOptionJalon = ProjectOptionttmJalon::where("jalon_id", $jalon->id)
             ->where("option_ttm_id", $optionTtm->id)
             ->where("project_id", $project->id)->get()->first();
-        $jalonDemande = DemandeJalon::where("project_optionttm_jalon_id",$projetOptionJalon->id)->get();
-        $i=1;
+        $jalonDemande = DemandeJalon::where("project_optionttm_jalon_id", $projetOptionJalon->id)->get();
+        $i = 1;
         // dd($demandeJalons);
 
         $allDemandes = Demande::whereHas('jalon', function ($query) use ($jalon) {
@@ -165,7 +191,7 @@ class JalonController extends Controller
             $echeance = $projectOptionttmJalon->echeance;
         }
         $historiques = HistoriqueDate::where('project_optionttm_jalon_id', $projectOptionttmJalon->id)->orderBy('date_repouser', 'desc')->get();
-        return view('jalons.single', compact('is_active', 'allContributeurs', 'categoryDemandes', 'allDemandes', 'jalon', 'optionTtm', 'project', 'demandes', 'users', 'option_ttm', 'debutDate', 'echeance', 'pivotId', 'historiques', 'totalDemandes', 'demandesSoumises', 'status','jalonDemande','i'));
+        return view('jalons.single', compact('is_active', 'allContributeurs', 'categoryDemandes', 'allDemandes', 'jalon', 'optionTtm', 'project', 'demandes', 'users', 'option_ttm', 'debutDate', 'echeance', 'pivotId', 'historiques', 'totalDemandes', 'demandesSoumises', 'status', 'jalonDemande', 'i'));
     }
 
     public function addDate(Request $request, Jalon $jalon, $option_ttm, Project $project)

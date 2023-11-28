@@ -101,7 +101,11 @@
                             </td>
                             <td class="item-actions text-right">
                                 @access('read', 'Project')
-                                    <a class="btn btn-light btn-sm" href="{{ route('projects.show', $project->id) }}"
+                                @php
+                                    $id=Crypt::encrypt($project->id)
+                                @endphp
+
+                                    <a class="btn btn-light btn-sm" href="{{ route('projects.show',$id) }}"
                                         title="voir"><i class="fas fa-eye"></i></a>
                                 @endaccess
 

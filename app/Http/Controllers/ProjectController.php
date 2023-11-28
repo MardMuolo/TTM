@@ -28,6 +28,7 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
 use App\Models\ProjectOptionttmJalon;
 use Illuminate\Support\Facades\Cache;
+use Illuminate\Support\Facades\Crypt;
 use App\Models\ProjectComplexityTarget;
 use Spatie\Activitylog\Models\Activity;
 use App\Notifications\EasyTtmNotification;
@@ -56,8 +57,11 @@ class ProjectController extends Controller
     }
 
     // cette methode permet d'afficher un projet en particulier et de l'injeter dans la vue single
-    public function show(Project $project, Jalon $jalon, OptionTtm $optionTtm, Livrable $livrable)
+    public function show($id)
     {
+        $id=Crypt::decrypt($id);
+        $project=Project::findOrFail($id);
+        // dd($id);
         $statusColor = [
             'create' => 'fas fa-user-tie',
             'update' => 'fas fa-edit',
@@ -111,9 +115,10 @@ class ProjectController extends Controller
                 foreach ($demandesByProjectId as $projectId => $projectDemandes) {
                     $contributeurs = $projectDemandes->pluck('contributeur')->unique();
                 }
-
+                
                 $totalDemandes = $demandes->count();
                 $demandesSoumises = $demandes->where('status', 'Soumis')->count();
+                // dd($demandesSoumises);
 
                 $progressionJalon = $totalDemandes > 0 ? ($demandesSoumises / $totalDemandes) * 100 : 0;
 
@@ -178,6 +183,7 @@ class ProjectController extends Controller
                      ->get();*/
 
         // dd($exit);
+        // dd($jalonsProgress);
 
         return view('projects.single', compact('statusColor', 'project', 'optionTtm', 'projectOptionttmJalon', 'file', 'score', 'option_ttm', 'jalons', 'options', 'jalonsProgress', 'members', 'i', 'activity', 'exit', 'demandeByJalon', 'contributeurs', 'titleOfDemandes', 'demandesProject', 'today', 'directions', 'users', 'complexityTargets', 'complexity_items'));
     }

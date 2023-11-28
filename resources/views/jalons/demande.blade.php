@@ -89,8 +89,11 @@
                                                     @endif
 
                                                     @if (Auth()->user()->roles[0]->name == 'Directeur')
+                                                    @php
+                                                        $id=Crypt::encrypt( $livrable->id);
+                                                    @endphp
                                                         <a class="btn btn-secondary btn-sm" title="validation"
-                                                            href="{{ route('valider_livrable', $livrable->id) }}"
+                                                            href="{{ route('valider_livrable',$id) }}"
                                                             onclick="edit(event)" item = "{{ $livrable->nom }}"
                                                             description="{{ $livrable->description }}" data-toggle="modal"
                                                             data-target="#validate">

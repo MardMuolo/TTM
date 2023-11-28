@@ -226,7 +226,7 @@
                                 <td>
                                     <div class="row">
                                         <a class="btn btn-sm"
-                                            href="{{ route('show_demande', ['project' => $project->id, 'optionttm' => $optionTtm->id, 'jalon' => $jalon->id, 'demande' => $item->id]) }}"
+                                            href="{{ route('show_demande', ['project' => encrypt($project->id), 'optionttm' => encrypt($optionTtm->id), 'jalon' => encrypt($jalon->id), 'demande' => $item->id]) }}"
                                             role="button">
                                             <i class="fas fa-eye"></i>
                                         </a>

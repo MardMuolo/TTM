@@ -16,7 +16,7 @@
         let diffDays = diffMonth / 86400000;
         const jalonId = parent.jalon_id;
         const jalon = @json($jalons).find(j => j.id ===
-        jalonId); // Faire une recherche dans le tableau des jalons pour trouver celui correspondant
+            jalonId); // Faire une recherche dans le tableau des jalons pour trouver celui correspondant
 
         // Créer la tâche parent
         taskGantt.push({
@@ -59,13 +59,40 @@
 
 
         taskGantt.push(...childTasks);
+        console.log(childTasks);
         //taskGantt= [...taskGantt, ...childTasks];
     });
 
     //console.log('task', taskGantt);
 
     gantt.init("gantt-chart");
-    gantt.config.date_format = "%Y-%m-%d";
+    gantt.config.date_format = "%d/%m/%Y";
+    gantt.config.columns = [{
+            name: "text",
+            label: "Tâche",
+            width: "250",
+            tree: true,
+            resize: true
+        },
+        {
+            name: "start_date",
+            label: "Date début",
+            width: "140",
+            align: "center"
+        },
+        {
+            name: "owner",
+            label: "Contributeur",
+            width: "195",
+            align: "center"
+        },
+        {
+            name: "duration",
+            label: "Durée",
+            width: "50",
+            align: "center"
+        },
+    ];
     gantt.parse({
         data: taskGantt,
         links: links

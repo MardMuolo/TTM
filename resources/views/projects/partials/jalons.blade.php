@@ -85,8 +85,7 @@
                     @if ($index === 0 || ($index > 0 && $jalonsProgress[$index - 1]['status'] === 'Finis') || 
                     (auth()->check() && auth()->user()->hasRoles(['admin', 'ttofficer', 'project_owner'])))
 
-                        
-                            <a href="{{ route('jalons.single', ['jalon' => $jalon['jalon']->id, 'option_ttm' => $options->id, 'project' => $project->id]) }}"
+                            <a href="{{ route('jalons.single',['jalon' => Crypt::encrypt($jalon['jalon']->id), 'option_ttm' => Crypt::encrypt($options->id), 'project' =>Crypt::encrypt( $project->id)]) }}"
                                 class="small-box-footer">
                                 Plus d'infos <i class="fas fa-arrow-circle-right"></i>
                             </a>
