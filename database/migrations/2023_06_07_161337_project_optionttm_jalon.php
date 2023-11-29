@@ -18,7 +18,7 @@ return new class extends Migration
             $table->unsignedBigInteger('jalon_id');
             $table->date('debutDate')->nullable();
             $table->date('echeance')->nullable();
-            $table->string('status')->default('en attente');
+            $table->string('status')->default(env('statusEnAttente'));
             $table->timestamps();
             $table->softDeletes();
 

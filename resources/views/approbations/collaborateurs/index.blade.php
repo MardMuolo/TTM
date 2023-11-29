@@ -29,9 +29,9 @@
                             @php
 
                             @endphp
-                            @if ($user->status == 'accepter')
+                            @if ($user->status == env('membreApprouver'))
                                 <td class="item-state badge bg-success">{{ $user->status }}</td>
-                            @elseif($user->status == 'en attente')
+                            @elseif($user->status == env('membreEnAttente'))
                                 <td class="item-state badge bg-orange">{{ $user->status }}</td>
                             @else
                                 <td class="item-state badge bg-danger">{{ $user->status }}</td>
@@ -49,15 +49,13 @@
                         </tr>
 
                         <div class="modal fade" id="modal-default-{{ $user->id }}">
-                            <form
-                                action="{{ route('approuving.update', $user->user_id) }}?response=refus&project={{ $user->project_id }}"
-                                method="post">
+                            <form action="{{ route('approuving.update', Crypt::encrypt($user->user_id)) }}?response={{Crypt::encrypt(env('membreRefuser'))}}&project={{ Crypt::encrypt($user->project_id) }}" method="post">
                                 @csrf
                                 @method('PUT')
                                 <div class="modal-dialog">
                                     <div class="modal-content">
                                         <div class="modal-header">
-                                            <h4 class="modal-title">Refus</h4>
+                                            <h4 class="modal-title">Refuser l'invitation</h4>
                                             <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                                                 <span aria-hidden="true">&times;</span>
                                             </button>
@@ -82,20 +80,20 @@
                         </div>
                         <div class="modal fade" id="modal-default-{{ $user->id }}-accepter">
                             <form
-                                action="{{ route('approuving.update', $user->user_id) }}?response=accepter&project={{ $user->project_id }}"
+                                action="{{ route('approuving.update', Crypt::encrypt($user->user_id)) }}?response={{Crypt::encrypt(env('membreApprouver'))}}&project={{ Crypt::encrypt($user->project_id) }}"
                                 method="post">
                                 @csrf
                                 @method('PUT')
                                 <div class="modal-dialog">
                                     <div class="modal-content">
                                         <div class="modal-header">
-                                            <h4 class="modal-title">Autorisation</h4>
+                                            <h4 class="modal-title">Accepter l'invitation</h4>
                                             <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                                                 <span aria-hidden="true">&times;</span>
                                             </button>
                                         </div>
                                         <div class="modal-body">
-                                            <p>Vous-voulez vous autoriser {{ $user->name }} à paticiper au projet
+                                            <p>Vous-voulez vous accepter {{ $user->name }} à paticiper au projet
                                                 {{ $user->project_name }}?</p>
                                         </div>
                                         <div class="modal-footer">

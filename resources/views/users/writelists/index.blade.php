@@ -15,10 +15,9 @@
             </div>
 
             <div class="card">
-                <div class="card-body p-0">
-                    <table class="table table-striped projects text-center">
-                        <thead>
-                            <tr>
+                <div class="card-body">
+                    <table class="table table-striped projects text-center" id="tab_writeList">
+                        <thead class="thead-color">
                                 <th class="text-center col-lg-1">
                                     #
                                 </th>
@@ -28,11 +27,9 @@
                                 <th class="text-right col-lg-2">
                                     Actions
                                 </th>
-                            </tr>
                         </thead>
                         <tbody>
-                            <tr class="text-center col-lg-1">
-                                @foreach ($writelists as $writelist)
+                            @foreach ($writelists as $writelist)
                             <tr>
                                 <td class="text-center col-lg-1">{{ $writelist->id }}</td>
                                 <td class="text-center col-lg-9">{{ $writelist->username }}</td>
@@ -59,7 +56,6 @@
                             @include('users.writelists.partials.edit')
                             @include('layouts.delete')
                             @endforeach
-                            </tr>
                         </tbody>
                     </table>
                 </div>
@@ -75,7 +71,44 @@
 
     </section>
 @endsection
-@section('scripts')
+@push('third_party_scripts')
+    <script type='module' src="{{ Vite::asset('node_modules/admin-lte/plugins/jquery/jquery.min.js') }}"></script>
+@endpush
+@push('page_scripts')
+    @vite('resources/css/style.css')
+    @vite('node_modules/admin-lte/plugins/datatables-bs4/css/dataTables.bootstrap4.min.css')
+    @vite('node_modules/admin-lte/plugins/datatables-responsive/css/responsive.bootstrap4.min.css')
+    @vite('node_modules/admin-lte/plugins/datatables-buttons/css/buttons.bootstrap4.min.css')
+    <script type='module' src="{{ Vite::asset('node_modules/admin-lte/plugins/datatables/jquery.dataTables.min.js') }}">
+    </script>
+    <script type='module'
+        src="{{ Vite::asset('node_modules/admin-lte/plugins/datatables-buttons/js/dataTables.buttons.min.js') }}"></script>
+    <script type='module'
+        src="{{ Vite::asset('node_modules/admin-lte/plugins/datatables-bs4/js/dataTables.bootstrap4.min.js') }}"></script>
+    <script type='module'
+        src="{{ Vite::asset('node_modules/admin-lte/plugins/datatables-buttons/js/buttons.bootstrap4.min.js') }}"></script>
+    <script type='module' src="{{ Vite::asset('node_modules/admin-lte/plugins/jszip/jszip.min.js') }}"></script>
+    <script type='module' src="{{ Vite::asset('node_modules/admin-lte/plugins/pdfmake/pdfmake.min.js') }}"></script>
+    <script type='module' src="{{ Vite::asset('node_modules/admin-lte/plugins/pdfmake/vfs_fonts.js') }}"></script>
+    <script type='module'
+        src="{{ Vite::asset('node_modules/admin-lte/plugins/datatables-buttons/js/buttons.html5.min.js') }}"></script>
+    <script type='module'
+        src="{{ Vite::asset('node_modules/admin-lte/plugins/datatables-buttons/js/buttons.print.min.js') }}"></script>
+    <script type='module'
+        src="{{ Vite::asset('node_modules/admin-lte/plugins/datatables-buttons/js/buttons.colVis.min.js') }}"></script>
+    <script type='module'>
+        $(function() {
+            $("#tab_writeList").DataTable({
+                "responsive": true,
+                "lengthChange": true,
+                "autoWidth": true,
+                "searching": true,
+                "ordering": true,
+                "paging": true,
+                "data": "",
+            }).buttons().container().appendTo('#tab_writeList_wrapper .col-md-6:eq(0)');
+        });
+    </script>
     <script>
         function supprimer(event) {
             event.preventDefault();
@@ -83,13 +116,11 @@
 
             let deleteForm = document.getElementById('deleteForm');
             deleteForm.setAttribute('action', a.getAttribute('href'));
-
             let textDelete = document.getElementById('textDelete');
-            textDelete.innerHTML = a.getAttribute('item') + " ?";
+            textDelete.innerHTML = a.getAttribute('project') + " ?";
 
             let titleDelete = document.getElementById('titleDelete');
             titleDelete.innerHTML = "Suppression";
-
         }
     </script>
-@endsection
+@endpush

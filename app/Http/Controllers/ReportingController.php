@@ -17,9 +17,9 @@ class ReportingController extends Controller
     {
         //
           
-        $projetSoumis =  Project::where('status','onWait')->get()->count();  
-        $projetEncours =  Project::where('status','progress')->get()->count();  
-        $projetFinis =  Project::where('status','finish')->get()->count(); 
+        $projetSoumis =  Project::where('status',env('projetSoumis'))->get()->count();  
+        $projetEncours =  Project::where('status',env('projetenCours'))->get()->count();  
+        $projetFinis =  Project::where('status',env('projetTerminer'))->get()->count(); 
        
        
         // $projets = DB::table('projects')

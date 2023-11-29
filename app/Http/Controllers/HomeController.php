@@ -26,9 +26,9 @@ class HomeController extends Controller
      */
     public function index()
     {
-        $projetSoumis =  Project::where('status','nouveau')->get()->count();  
-        $projetEncours =  Project::where('status','en cours')->get()->count();  
-        $projetFinis =  Project::where('status','terminé')->get()->count(); 
+        $projetSoumis =  Project::where('status',env('projetSoumis'))->get()->count();  
+        $projetEncours =  Project::where('status',env('projetenCours'))->get()->count();  
+        $projetFinis =  Project::where('status',env('projetTerminer'))->get()->count(); 
        
        
         // $projets = DB::table('projects')
@@ -49,7 +49,7 @@ class HomeController extends Controller
                     ->select('id','name', DB::raw("(SELECT COUNT(pu.project_id) FROM direction_users du, users u,
                      project_users pu WHERE directions.id = du.direction_id AND du.user_id = u.id AND u.id = pu.user_id AND pu.role = 'projectOwner' GROUP BY du.direction_id) AS nb_projet"),
                      DB::raw("(SELECT COUNT(pu.project_id) FROM direction_users du, users u, project_users pu, projects p WHERE directions.id = du.direction_id 
-                     AND du.user_id = u.id AND u.id = pu.user_id AND pu.project_id = p.id AND pu.role = 'projectOwner' AND p.status = 'finish' GROUP BY du.direction_id) AS nb_projetFinis")
+                     AND du.user_id = u.id AND u.id = pu.user_id AND pu.project_id = p.id AND pu.role = 'projectOwner' AND p.status = 'Terminé' GROUP BY du.direction_id) AS nb_projetFinis")
                      )->get()
                     ;
 

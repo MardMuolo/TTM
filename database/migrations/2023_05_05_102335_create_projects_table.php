@@ -23,7 +23,7 @@ return new class() extends Migration {
             $table->integer('coast');
             $table->string('projectOwner');
             $table->string('sponsor');
-            $table->string('status')->default('nouveau');
+            $table->string('status')->default(env('projetSoumis'));
         });
     }
 

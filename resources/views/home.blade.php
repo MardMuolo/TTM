@@ -13,7 +13,7 @@
                     <div class="icon">
                         <i class=""></i>
                     </div>
-                    <a href="{{ route('projects.index') }}?filter=nouveau" class="small-box-footer">voir plus <i
+                    <a href="{{ route('projects.index') }}?filter={{env('projetSoumis')}}" class="small-box-footer">voir plus <i
                             class="fas fa-arrow-circle-right"></i></a>
                 </div>
             </div>
@@ -28,7 +28,7 @@
                     <div class="icon">
                         <i class=""></i>
                     </div>
-                    <a href="{{ route('projects.index') }}?filter=En cours" class="small-box-footer">voir plus <i
+                    <a href="{{ route('projects.index') }}?filter={{env('projetenCours')}}" class="small-box-footer">voir plus <i
                             class="fas fa-arrow-circle-right"></i></a>
                 </div>
             </div>
@@ -43,7 +43,7 @@
                     <div class="icon">
                         <i class=""></i>
                     </div>
-                    <a class="small-box-footer" href="{{ route('projects.index') }}?filter=finis">voir plus <i
+                    <a class="small-box-footer" href="{{ route('projects.index') }}?filter={{env('projetTerminer')}}">voir plus <i
                             class="fas fa-arrow-circle-right"></i></a>
 
                 </div>

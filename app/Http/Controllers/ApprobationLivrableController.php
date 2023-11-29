@@ -1,13 +1,15 @@
 <?php
 
 namespace App\Http\Controllers;
-use App\Models\MessageMail;
 use App\Models\User;
-use App\Notifications\EasyTtmNotification;
+use App\Models\MessageMail;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Cache;
-use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Crypt;
+use App\Notifications\EasyTtmNotification;
+
 class ApprobationLivrableController extends Controller
 {
     public function index()
@@ -36,16 +38,18 @@ class ApprobationLivrableController extends Controller
 
     public function update(Request $request, int $id)
     {
+        $id=Crypt::decrypt($id);
+        $response=Crypt::decrypt($request->response);
         DB::table('project_users')
         ->where('user_id', $id)
         ->update([
-            'status' => $request->response,
+            'status' =>$response ,
             'user_id' => $id,
         ]);
-        if ($request->response == 'accepter') {
+        if ($request->response == env('membreApprouver')) {
             $this->getOwner($id, 'approuved_member_to_project');
         }
-        if ($request->response == 'refus') {
+        if ($request->response == env('membreRefuser')) {
             $this->getOwner($id, 'denied_member_to_project');
         }
 

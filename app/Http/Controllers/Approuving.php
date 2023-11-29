@@ -45,10 +45,10 @@ class Approuving extends Controller
             'status' => $request->response,
             'user_id' => $id,
         ]);
-        if ($request->response == 'accepter') {
+        if ($request->response == env('membreApprouver')) {
             $this->getOwner($id, 'approuved_member_to_project');
         }
-        if ($request->response == 'refus') {
+        if ($request->response == env('membreRefuser')) {
             $this->getOwner($id, 'denied_member_to_project');
         }
 

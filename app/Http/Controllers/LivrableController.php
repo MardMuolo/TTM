@@ -59,7 +59,7 @@ class LivrableController extends Controller
         ]);
 
         $demande = DemandeJalon::findOrFail($request->demande_jalon_id);
-        $demande->status = 'En attente de validation';
+        $demande->status = env('demandeEnAttenteValidation');
         $demande->date_reelle = $livrable->created_at;
         $demande->save();
 
@@ -98,7 +98,7 @@ class LivrableController extends Controller
         
         $livrable->status = $request->Avis;
         $livrable->pv = Null;
-        if ($request->Avis == "A Corriger") {
+        if ($request->Avis == env('livrableRevoquer')) {
             $livrable->pv = $request->description;
         }
         $demandeJalon = DemandeJalon::findOrFail($livrable->demande_jalon_id);
@@ -140,7 +140,7 @@ class LivrableController extends Controller
         $livrable->save();
 
         $demande = Demande::findOrFail($request->demande_id);
-        $demande->status = 'En attente de validation';
+        $demande->status = env('demandeEnAttenteValidation');
         $demande->save();
 
         return redirect()->back();

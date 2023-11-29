@@ -61,7 +61,7 @@
                                         <span
                                             class="info-box-number">{{ \Carbon\Carbon::parse($echeance)->format('d/m/Y') }}</span>
                                     </div>
-                                    @if ($status == 'Finis')
+                                    @if ($status == env('jalonCloturer'))
                                         <span class="info-box-number"><button type="button"
                                                 class="btn btn-light btn-sm float-right" data-toggle="modal"
                                                 title="Ce jalon est finis" disabled data-target="#modal-date">
@@ -85,7 +85,7 @@
                                         <div class="info-box-content">
                                             <span class="info-box-text">Décider de la fin du jalon</span>
                                             <span class="info-box-number">
-                                                @if ($status == 'Finis')
+                                                @if ($status == env('jalonCloturer'))
                                                     <button type="button" class="btn btn-light btn-sm float-right"
                                                         data-toggle="modal" data-target="#modal-fin-jalon"
                                                         title="ce jalon est finis" disabled>
@@ -212,11 +212,11 @@
                                 </td>
 
                                 <td>
-                                    @if ($item->status === 'Soumis')
+                                    @if ($item->status === env('demandeSoumise'))
                                         <small class="badge badge-success">{{ $item->status }}</small>
-                                    @elseif ($item->status === 'rejeté')
+                                    @elseif ($item->status === env('demandeNonSoumise'))
                                         <small class="badge badge-danger">{{ $item->status }}</small>
-                                    @elseif ($item->status === 'à corriger')
+                                    @elseif ($item->status === env('demandeRenvoyer'))
                                         <small class="badge badge-warning">{{ $item->status }}</small>
                                     @else
                                         <small class="badge badge-light">{{ $item->status }}</small>
@@ -231,7 +231,7 @@
                                             <i class="fas fa-eye"></i>
                                         </a>
 
-                                        @if ($status != 'Finis')
+                                        @if ($status != env('jalonCloturer'))
                                             @access(['update', 'delete'], 'DemandeJalon')
                                                 <a class="btn btn-sm" data-widget="control-sidebar"
                                                     data-controlsidebar-slide="true"

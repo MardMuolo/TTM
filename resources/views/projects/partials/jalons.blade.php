@@ -18,7 +18,7 @@
                             @endphp
 
                             @if ($joursRestants > 0)
-                                @if ($jalon['status'] === 'En cours')
+                                @if ($jalon['status'] === env('jalonEnCours'))
                                     <p class="{{ $joursRestants <= 3 ? 'text-danger' : '' }}">
                                         <span class="font-weight-bold">{{ $joursRestants }}</span> jour(s) restant(s)
                                     </p>
@@ -27,7 +27,7 @@
                                         <span class="font-weight-normal small">{{ $debutDate->format('d/m/Y') }} au
                                             {{ $echeance->format('d/m/Y') }}</span>
                                     </p>
-                                @elseif ($jalon['status'] === 'Finis')
+                                @elseif ($jalon['status'] === env('jalonCloturer'))
                                     @if ($echeance->isPast())
                                         <p>Livrable soumis avec retard de {{ abs($joursRestants) }} jour(s)</p>
                                     @else
@@ -70,9 +70,9 @@
                         </div>
                     </div>
                     <div class="d-flex justify-content-center mb-2">
-                        @if ($jalon['status'] === 'En cours')
+                        @if ($jalon['status'] === env('jalonEnCours'))
                             <small class="badge badge-primary">{{ $jalon['status'] }}</small>
-                        @elseif ($jalon['status'] === 'Finis')
+                        @elseif ($jalon['status'] === env('jalonCloturer'))
                             <small class="badge badge-success">{{ $jalon['status'] }}</small>
                         @else
                             <small class="badge badge-warning">{{ $jalon['status'] }}</small>
@@ -82,7 +82,7 @@
                         <i class="ion ion-pie-graph"></i>
                     </div>
                     @access('read','Jalon')
-                    @if ($index === 0 || ($index > 0 && $jalonsProgress[$index - 1]['status'] === 'Finis') || 
+                    @if ($index === 0 || ($index > 0 && $jalonsProgress[$index - 1]['status'] === env('jalonCloturer')) || 
                     (auth()->check() && auth()->user()->hasRoles(['admin', 'ttofficer', 'project_owner'])))
 
                             <a href="{{ route('jalons.single',['jalon' => Crypt::encrypt($jalon['jalon']->id), 'option_ttm' => Crypt::encrypt($options->id), 'project' =>Crypt::encrypt( $project->id)]) }}"

@@ -116,7 +116,7 @@
                                                     $joursRestants = $today->diffInDays($echeance, false);
                                                 @endphp
                                                 @if ($joursRestants > 0)
-                                                    @if ($jalon['status'] === 'En cours')
+                                                    @if ($jalon['status'] === env('jalonEnCours'))
                                                         <p class="{{ $joursRestants <= 3 ? 'text-danger' : '' }}">
                                                             <span class="font-weight-bold">{{ $joursRestants }}</span>
                                                             jour(s) restant(s)
@@ -128,7 +128,7 @@
                                                                 au
                                                                 {{ $echeance->format('d/m/Y') }}</span>
                                                         </p>
-                                                    @elseif ($jalon['status'] === 'Finis')
+                                                    @elseif ($jalon['status'] === env('jalonCloturer'))
                                                         @if ($echeance->isPast())
                                                             <p>Livrable soumis avec retard de {{ abs($joursRestants) }}
                                                                 jour(s)</p>

@@ -118,22 +118,22 @@ class ProjectController extends Controller
                 }
                 
                 $totalDemandes = $demandes->count();
-                $demandesSoumises = $demandes->where('status', 'Valider')->count();
+                $demandesSoumises = $demandes->where('status', env('demandeSoumise'))->count();
                 // dd($demandesSoumises);
 
                 $progressionJalon = $totalDemandes > 0 ? ($demandesSoumises / $totalDemandes) * 100 : 0;
 
                 if ($projectOptionttmJalon->debutDate && $projectOptionttmJalon->echeance) {
-                    if ($projectOptionttmJalon->status !== 'Finis') {
+                    if ($projectOptionttmJalon->status !== env('jalonCloturer')) {
                         // Le statut n'est pas "Finis"
                         if ($totalDemandes > 0 && $totalDemandes == $demandesSoumises) {
-                            $status = 'Complète';
+                            $status = env('jalonEnAttente');
                         } else {
-                            $status = 'En cours';
+                            $status = env('jalonEnCours');
                         }
                     } else {
                         // Le statut est "Finis"
-                        $status = 'Finis';
+                        $status = env('jalonCloturer');
                     }
                 } else {
                     $status = 'En attente';
@@ -208,7 +208,7 @@ class ProjectController extends Controller
             'user_id' => $user->id,
             'project_id' => $project->id,
             'role' => $role,
-            'status' => 'accepter',
+            'status' => env('membreApprouver'),
         ]);
     }
 
@@ -356,21 +356,21 @@ class ProjectController extends Controller
                 $demandes = $projectOptionttmJalon->demandeJalons()->get();
                 $demandesProject = $demandesProject->concat($demandes);
                 $totalDemandes = $demandes->count();
-                $demandesSoumises = $demandes->where('status', 'Soumis')->count();
+                $demandesSoumises = $demandes->where('status', env('demandeSoumise'))->count();
 
                 $progressionJalon = $totalDemandes > 0 ? ($demandesSoumises / $totalDemandes) * 100 : 0;
 
                 if ($projectOptionttmJalon->debutDate && $projectOptionttmJalon->echeance) {
-                    if ($projectOptionttmJalon->status !== 'Finis') {
+                    if ($projectOptionttmJalon->status !== env('jalonCloturer')) {
                         // Le statut n'est pas "Finis"
                         if ($totalDemandes > 0 && $totalDemandes == $demandesSoumises) {
-                            $status = 'Complète';
+                            $status = env('jalonEnAttente');
                         } else {
-                            $status = 'En cours';
+                            $status = env('jalonEnCours');
                         }
                     } else {
                         // Le statut est "Finis"
-                        $status = 'Finis';
+                        $status = env('jalonCloturer');
                     }
                 } else {
                     $status = 'En attente';

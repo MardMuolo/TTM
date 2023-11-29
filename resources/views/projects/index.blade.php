@@ -67,7 +67,7 @@
                                     $finish = [];
                                     $total = [];
                                     foreach ($project->optionsJalons as $jalon) {
-                                        if ($jalon->pivot->status == 'Finis') {
+                                        if ($jalon->pivot->status == env('jalonCloturer')) {
                                             array_push($finish, $jalon->pivot->status);
                                         } else {
                                             array_push($onProgress, $jalon->pivot->status);
@@ -97,7 +97,7 @@
                             </td>
                             <td class="item-state">
                                 <span
-                                    class="badge  {{ $project->status == 'nouveau' ? 'bg-secondary' : $color }}">{{ $project->status }}</span>
+                                    class="badge  {{ $project->status == env('projetSoumis') ? 'bg-secondary' : $color }}">{{ $project->status }}</span>
                             </td>
                             <td class="item-actions text-right">
                                 @access('read', 'Project')

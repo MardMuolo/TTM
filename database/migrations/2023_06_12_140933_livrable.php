@@ -16,7 +16,7 @@ return new class extends Migration
             $table->string('nom');
             $table->text('description');
             $table->string('fichier');
-            $table->string('status')->default('en attente');
+            $table->string('status')->default(env('statusEnAttente'));
             $table->string('pv')->nullable();
             $table->timestamps();
             $table->softDeletes();

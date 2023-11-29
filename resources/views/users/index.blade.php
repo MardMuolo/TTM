@@ -9,14 +9,12 @@
     <div class="container-fluid">
         <div class="card">
             <div class="card-body  p-0">
-                <table id="example1" class="table table-striped">
+                <table class="table table-striped" id="tab_user">
                     <thead>
-                        <tr>
-                            <th class="text-left">Nom</th>
-                            <th>Email</th>
-                            <th>Rôles</th>
-                            <th class="text-right">Actions</th>
-                        </tr>
+                        <th class="text-left">Nom</th>
+                        <th>Email</th>
+                        <th>Rôles</th>
+                        <th class="text-right">Actions</th>
                     </thead>
                     <tbody>
                         @foreach ($users as $user)
@@ -28,7 +26,6 @@
                                         <a href="{{ route('roles.show', $role->id) }}">{{ $role->name }}</a>
                                     @endforeach
                                 </td>
-
                                 <td class="text-right">
                                     <a href=" {{ route('users.edit', $user->id) }} "><button
                                             class=" btn btn-default btn-sm"><i class="fas fa-pencil-alt"></i></button></a>
@@ -56,7 +53,44 @@
         @include('layouts.delete')
     </div>
 @endsection
-@section('scripts')
+@push('third_party_scripts')
+    <script type='module' src="{{ Vite::asset('node_modules/admin-lte/plugins/jquery/jquery.min.js') }}"></script>
+@endpush
+@push('page_scripts')
+    @vite('resources/css/style.css')
+    @vite('node_modules/admin-lte/plugins/datatables-bs4/css/dataTables.bootstrap4.min.css')
+    @vite('node_modules/admin-lte/plugins/datatables-responsive/css/responsive.bootstrap4.min.css')
+    @vite('node_modules/admin-lte/plugins/datatables-buttons/css/buttons.bootstrap4.min.css')
+    <script type='module' src="{{ Vite::asset('node_modules/admin-lte/plugins/datatables/jquery.dataTables.min.js') }}">
+    </script>
+    <script type='module'
+        src="{{ Vite::asset('node_modules/admin-lte/plugins/datatables-buttons/js/dataTables.buttons.min.js') }}"></script>
+    <script type='module'
+        src="{{ Vite::asset('node_modules/admin-lte/plugins/datatables-bs4/js/dataTables.bootstrap4.min.js') }}"></script>
+    <script type='module'
+        src="{{ Vite::asset('node_modules/admin-lte/plugins/datatables-buttons/js/buttons.bootstrap4.min.js') }}"></script>
+    <script type='module' src="{{ Vite::asset('node_modules/admin-lte/plugins/jszip/jszip.min.js') }}"></script>
+    <script type='module' src="{{ Vite::asset('node_modules/admin-lte/plugins/pdfmake/pdfmake.min.js') }}"></script>
+    <script type='module' src="{{ Vite::asset('node_modules/admin-lte/plugins/pdfmake/vfs_fonts.js') }}"></script>
+    <script type='module'
+        src="{{ Vite::asset('node_modules/admin-lte/plugins/datatables-buttons/js/buttons.html5.min.js') }}"></script>
+    <script type='module'
+        src="{{ Vite::asset('node_modules/admin-lte/plugins/datatables-buttons/js/buttons.print.min.js') }}"></script>
+    <script type='module'
+        src="{{ Vite::asset('node_modules/admin-lte/plugins/datatables-buttons/js/buttons.colVis.min.js') }}"></script>
+    <script type='module'>
+        $(function() {
+            $("#tab_user").DataTable({
+                "responsive": true,
+                "lengthChange": true,
+                "autoWidth": true,
+                "searching": true,
+                "ordering": true,
+                "paging": true,
+                "data": "",
+            }).buttons().container().appendTo('#tab_user_wrapper .col-md-6:eq(0)');
+        });
+    </script>
     <script>
         function supprimer(event) {
             event.preventDefault();
@@ -64,13 +98,11 @@
 
             let deleteForm = document.getElementById('deleteForm');
             deleteForm.setAttribute('action', a.getAttribute('href'));
-
             let textDelete = document.getElementById('textDelete');
-            textDelete.innerHTML = a.getAttribute('item') + " ?";
+            textDelete.innerHTML = a.getAttribute('project') + " ?";
 
             let titleDelete = document.getElementById('titleDelete');
             titleDelete.innerHTML = "Suppression";
-
         }
     </script>
-@endsection
+@endpush

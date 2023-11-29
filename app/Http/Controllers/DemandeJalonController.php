@@ -173,7 +173,7 @@ class DemandeJalonController extends Controller
         $demandeJalon->contributeur = $user->id;
         $demandeJalon->deadLine = $deadlineCombinee;
         $demandeJalon->date_prevue = $datePrevue;
-        $demandeJalon->status = 'non soumis';
+        $demandeJalon->status = env('demandeNonSoumise');
         $demandeJalon->project_optionttm_jalon_id = $request->input('project_optionttm_jalon_id');
         $demandeJalon->save();
         $project_id = ProjectOptionttmJalon::where('id', $demandeJalon->project_optionttm_jalon_id)->get()->first()->project_id;

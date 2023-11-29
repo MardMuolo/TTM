@@ -69,7 +69,7 @@
                                                 </td>
                                                 <td>
                                                     @if (auth()->user()->id == $demande->contributeur)
-                                                        <a class="btn btn-warning btn-sm {{ $livrable->status != 'Valider' ? '' : 'disabled' }}"
+                                                        <a class="btn btn-warning btn-sm {{ $livrable->status != env('livrableValider') ? '' : 'disabled' }}"
                                                             title="validation"
                                                             href="{{ route('valider_livrable', $livrable->id) }}"
                                                             onclick="edit(event)" title = "{{ $livrable->title }}"
@@ -79,7 +79,7 @@
                                                             </i>
                                                         </a>
 
-                                                        <a class="btn btn-danger btn-sm {{ $livrable->status != 'Valider' ? '' : 'disabled' }}"
+                                                        <a class="btn btn-danger btn-sm {{ $livrable->status != env('livrableValider') ? '' : 'disabled' }}"
                                                             href="{{ route('livrables.destroy', $livrable->id) }}"
                                                             onclick="supprimer(event)"
                                                             project="Voulez-vous supprimer ce livrable" data-toggle="modal"

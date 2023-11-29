@@ -52,7 +52,7 @@
                             </td>
                             <td class="project-state">
                                 <span
-                                    class="badge {{ $item->pivot->status == 'En Attente' ? 'bg-secondary' : ($item->pivot->status == 'refus' ? 'bg-danger' : 'bg-success') }} p-2">{{ $item->pivot->status }}</span>
+                                    class="badge {{ $item->pivot->status == env('membreEnAttente') ? 'bg-secondary' : ($item->pivot->status == env('membreRefuser') ? 'bg-danger' : 'bg-success') }} p-2">{{ $item->pivot->status }}</span>
                             </td>
                             <td class="project-actions text-center">
                                 <a class="btn btn-light btn-sm" href="#"><i class="fas fa-eye"></i></a>

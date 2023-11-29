@@ -17,9 +17,9 @@
                             <div class="form-group">
                                 <h4>Votre Avis</h4>
                                 <select class="custom-select form-control-border" id="exampleSelectBorder" name="Avis">
-                                    <option value="Valider">Valider</option>
-                                    <option value="A Corriger">A Corriger</option>
-                                    <option value="Rejeter">Rejeter</option>
+                                    <option value={{env('livrableValider')}}>Valider</option>
+                                    <option value={{env('livrableRevoquer')}}>A Corriger</option>
+                                    <option value={{env('livrableRejeter')}}>Rejeter</option>
                                 </select>
                             </div>
                             <div class="form-group">

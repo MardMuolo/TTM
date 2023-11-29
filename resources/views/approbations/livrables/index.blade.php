@@ -29,9 +29,9 @@
                             @php
                                 
                             @endphp
-                            @if ($user->status == 'accepter')
+                            @if ($user->status == env('livrableValider'))
                                 <td class="item-state badge bg-success">{{ $user->status }}</td>
-                            @elseif($user->status == 'en attente')
+                            @elseif($user->status == env('livrableEnAttente'))
                                 <td class="item-state badge bg-orange">{{ $user->status }}</td>
                             @else
                                 <td class="item-state badge bg-danger">{{ $user->status }}</td>

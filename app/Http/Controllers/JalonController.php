@@ -126,7 +126,7 @@ class JalonController extends Controller
     {
         $tmp = DB::table('project_users')
             ->where('user_id', $id)
-            ->where('status', 'accepter')
+            ->where('status', env('membreApprouver'))
             ->get();
         // dd($tmp);
 
@@ -167,7 +167,7 @@ class JalonController extends Controller
         if ($projectOptionttmJalon) {
             $demandes = $projectOptionttmJalon->demandeJalons()->get();
             $totalDemandes = $demandes->count();
-            $demandesSoumises = $demandes->where('status', 'Valider')->count();
+            $demandesSoumises = $demandes->where('status', env('demandeSoumise'))->count();
             $is_active = $this->is_active(Auth()->user()->id);
             // dd($is_active);
             $members = $project->users;
@@ -236,7 +236,7 @@ class JalonController extends Controller
 
             // Mise à jour du statut du projet
             $project->update([
-                'status' => 'En cours',
+                'status' => env('projetenCours'),
             ]);
 
             // Redirection vers la page précédente

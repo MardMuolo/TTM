@@ -65,7 +65,7 @@
 @endforeach
 
 @foreach (auth()->user()->roles as $user)
-    @if ($user->name == 'adminSys')
+    @if ($user->name == 'AdminSys' or $user->name == 'admin')
         <li class="nav-item">
             <a href="#" class="nav-link">
                 <i class="nav-icon fas  fa-cogs"></i>

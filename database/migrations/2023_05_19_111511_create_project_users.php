@@ -16,7 +16,7 @@ return new class extends Migration
             $table->foreignId("user_id")->constrained()->onDelete('cascade');
             $table->foreignId("project_id")->constrained()->onDelete('cascade');
             $table->string('role');
-            $table->string('status')->default('En Attente');
+            $table->string('status')->default(env('statusEnAttente'));
             $table->timestamps();
         });
     }
