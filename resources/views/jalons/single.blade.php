@@ -260,7 +260,7 @@
             aria-labelledby="modal-fin-jalon-label" aria-hidden="true">
             <div class="modal-dialog" role="document">
                 <div class="modal-content">
-                    @if ($demandesSoumises < $totalDemandes)
+                    @if ($totalDemandes<=0 || $demandesSoumises < $totalDemandes)
                         <div class="modal-header">
                             <h5 class="modal-title" id="modal-finish-jalon-label">Message d'avertissement</h5>
                             <button type="button" class="close" data-dismiss="modal" aria-label="Close">
@@ -281,7 +281,8 @@
                             </button>
                         </div>
                         <form
-                            action="{{ route('jalons.updateStatus', ['jalon' => $jalon->id, 'option_ttm' => $optionTtm->id, 'project' => $project->id]) }}"
+                            action="{{ route('jalons.updateStatus', 
+                            ['jalon' => Crypt::encrypt($jalon->id), 'option_ttm' => Crypt::encrypt($optionTtm->id), 'project' => Crypt::encrypt($project->id)]) }}"
                             method="POST" style="display: inline" enctype="multipart/form-data">
                             @csrf
                             @method('PUT')
@@ -297,7 +298,7 @@
                             <div class="modal-footer">
                                 <button type="button" class="btn btn-secondary" data-dismiss="modal"><i
                                         class="fa fa-times"></i></button>
-                                <button type="submit" class="btn btn-primary" id="submitBtn" disabled><i
+                                <button type="submit" class="btn btn-primary" id="submitBtn"><i
                                         class="fa fa-check"></i></button>
                             </div>
                         </form>

@@ -167,7 +167,7 @@ class JalonController extends Controller
         if ($projectOptionttmJalon) {
             $demandes = $projectOptionttmJalon->demandeJalons()->get();
             $totalDemandes = $demandes->count();
-            $demandesSoumises = $demandes->where('status', 'Soumis')->count();
+            $demandesSoumises = $demandes->where('status', 'Valider')->count();
             $is_active = $this->is_active(Auth()->user()->id);
             // dd($is_active);
             $members = $project->users;
@@ -191,6 +191,7 @@ class JalonController extends Controller
             $echeance = $projectOptionttmJalon->echeance;
         }
         $historiques = HistoriqueDate::where('project_optionttm_jalon_id', $projectOptionttmJalon->id)->orderBy('date_repouser', 'desc')->get();
+        // dd($totalDemandes);
         return view('jalons.single', compact('is_active', 'allContributeurs', 'categoryDemandes', 'allDemandes', 'jalon', 'optionTtm', 'project', 'demandes', 'users', 'option_ttm', 'debutDate', 'echeance', 'pivotId', 'historiques', 'totalDemandes', 'demandesSoumises', 'status', 'jalonDemande', 'i'));
     }
 

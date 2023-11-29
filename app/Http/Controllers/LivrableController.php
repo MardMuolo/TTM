@@ -104,8 +104,6 @@ class LivrableController extends Controller
         $demandeJalon = DemandeJalon::findOrFail($livrable->demande_jalon_id);
         $demandeJalon->status = $request->Avis;
         $demandeJalon->save();
-
-        // dd($demandeJalon);
         $livrable->save();
         return redirect()->back()->with(['message' => 'validation du livrable avec success']);
     }

@@ -74,6 +74,7 @@ class ProjectController extends Controller
             'addDate' => 'fas fa-clock',
             'updateTask' => 'fas fa-random',
             'edit' => 'fas fa-edit',
+            'endTask' => 'fas fa-clock',
         ];
 
 
@@ -117,7 +118,7 @@ class ProjectController extends Controller
                 }
                 
                 $totalDemandes = $demandes->count();
-                $demandesSoumises = $demandes->where('status', 'Soumis')->count();
+                $demandesSoumises = $demandes->where('status', 'Valider')->count();
                 // dd($demandesSoumises);
 
                 $progressionJalon = $totalDemandes > 0 ? ($demandesSoumises / $totalDemandes) * 100 : 0;
@@ -183,7 +184,9 @@ class ProjectController extends Controller
                      ->get();*/
 
         // dd($exit);
-        // dd($jalonsProgress);
+        // dd($demandesSoumises);
+
+        // $demandes_soumis=
 
         return view('projects.single', compact('statusColor', 'project', 'optionTtm', 'projectOptionttmJalon', 'file', 'score', 'option_ttm', 'jalons', 'options', 'jalonsProgress', 'members', 'i', 'activity', 'exit', 'demandeByJalon', 'contributeurs', 'titleOfDemandes', 'demandesProject', 'today', 'directions', 'users', 'complexityTargets', 'complexity_items'));
     }
