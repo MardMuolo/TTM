@@ -26,6 +26,7 @@ use App\Models\ComplexityItem;
 use App\Models\ComplexityTarget;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\File;
 use App\Models\ProjectOptionttmJalon;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Crypt;
@@ -59,8 +60,8 @@ class ProjectController extends Controller
     // cette methode permet d'afficher un projet en particulier et de l'injeter dans la vue single
     public function show($id)
     {
-        $id=Crypt::decrypt($id);
-        $project=Project::findOrFail($id);
+        $id = Crypt::decrypt($id);
+        $project = Project::findOrFail($id);
         // dd($id);
         $statusColor = [
             'create' => 'fas fa-user-tie',
@@ -116,7 +117,7 @@ class ProjectController extends Controller
                 foreach ($demandesByProjectId as $projectId => $projectDemandes) {
                     $contributeurs = $projectDemandes->pluck('contributeur')->unique();
                 }
-                
+
                 $totalDemandes = $demandes->count();
                 $demandesSoumises = $demandes->where('status', env('demandeSoumise'))->count();
                 // dd($demandesSoumises);
@@ -246,25 +247,17 @@ class ProjectController extends Controller
                 return redirect()->back()->with('error', $th->getMessage());
             }
 
-            if ($request->file != null) {
+            if ($request->hasFile('file')) {
                 foreach ($request->file as $file) {
-                    if ($request->hasFile('file')) {
-                        $namefile = substr(str_replace([' ', "'"], '', $request->name), 0, 6) . '' . date('ymdhis') . '.' . $file->extension();
-                        $fichier = $file->storeAs('documents', $namefile, 'app');
-                        // dd(url($fichier));
-
-                        $project->projectFile()->create([
-                            'filePath' => $fichier,
-                        ]);
-                        activity()
-                            ->causedBy(auth()->user()->id)
-                            ->performedOn($project)
-                            ->event('add')
-                            ->log(auth()->user()->name . ' a ajouté un fichier  du projet ');
-                    } else {
-                        $fichier = null;
-                    }
-
+                    $namefile = substr(str_replace([' ', "'"], '', $request->name), 0, 6) . '' . date('ymdhis') . '.' . $file->extension();
+                    $path = $file->storeAs('documents', $namefile);
+                    $publicPath = public_path('storage/documents');
+                    File::ensureDirectoryExists($publicPath);
+                    File::delete($publicPath . '/' . $namefile);
+                    File::link(storage_path('app/' . $path), $publicPath . '/' . $namefile);
+                    $project->projectFile()->create([
+                        'filePath' => $path,
+                    ]);
                 }
             }
 
