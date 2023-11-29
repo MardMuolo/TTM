@@ -110,8 +110,11 @@
                                 @endaccess
 
                                 @access('update', 'Project')
+                                @php
+                                    $id=Crypt::encrypt($project->id);
+                                @endphp
                                     @if (auth()->user()->name == $project->projectOwner)
-                                        <a class="btn btn-light btn-sm" href="{{ route('projects.edit', $project->id) }}"><i
+                                        <a class="btn btn-light btn-sm" href="{{ route('projects.edit',$id) }}"><i
                                                 class="fas fa-pencil-alt" title="editer"></i></a>
                                     @endif
                                 @endaccess

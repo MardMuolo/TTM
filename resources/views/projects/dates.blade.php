@@ -187,7 +187,10 @@
     </div>
     {{-- voir le projet --}}
     <div class="text-right mt-4">
-        <a href="{{ route('projects.show', ['project' => $project->id]) }}" class="btn btn-primary"><i
+        @php
+            $id=Crypt::encrypt( $project->id)
+        @endphp
+        <a href="{{ route('projects.show', $id) }}" class="btn btn-primary"><i
                 class="fa fa-save"></i></a>
     </div>
     </div>

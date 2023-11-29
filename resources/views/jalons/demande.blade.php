@@ -88,7 +88,7 @@
                                                         </a>
                                                     @endif
 
-                                                    @if (Auth()->user()->roles[0]->name == 'Directeur')
+                                                    @if (Auth()->user()->roles[0]->name == env('Directeur'))
                                                     @php
                                                         $id=Crypt::encrypt( $livrable->id);
                                                     @endphp

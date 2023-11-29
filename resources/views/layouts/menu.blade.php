@@ -35,7 +35,7 @@
     </li>
 @endaccess
 @foreach (auth()->user()->roles as $user)
-    @if ($user->name == 'Directeur')
+    @if ($user->name == env('Directeur'))
         <li class="nav-item">
             <a href="#" class="nav-link">
                 <i class="nav-icon fa fa-bell" aria-hidden="true"></i>
@@ -65,7 +65,7 @@
 @endforeach
 
 @foreach (auth()->user()->roles as $user)
-    @if ($user->name == 'AdminSys' or $user->name == 'admin')
+    @if ($user->name == env('AdminSys') or $user->name == env('RootAdmin'))
         <li class="nav-item">
             <a href="#" class="nav-link">
                 <i class="nav-icon fas  fa-cogs"></i>

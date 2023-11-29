@@ -38,14 +38,13 @@ class ProjectController extends Controller
 {
     public function index(Request $request)
     {
-        // dd(Auth()->user()->direction_user->is_director);
         $filter = $request->filter ?? null;
         if (isset(Auth()->user()->direction_user->is_director)) {
             $projects = Project::isDirector();
         } else {
-
             // Variable project: nous permet de recuperer tous les projets selon le rôle de l'utilisateur connecté
-            $projects = ($filter) ? Project::where('status', $filter)->get() : Project::get(Project::isAdmin());
+            $projects = isset($filter) ? Project::where('status', $filter)->get() : Project::get(Project::isAdmin());
+        
         }
         //dd($projects[0]->with('users', 'optionsJalons')->get());
         Cache::forever('projects', count($projects));
@@ -53,7 +52,6 @@ class ProjectController extends Controller
         $i = 1;
 
         $tab = ['yellow', 'orange', 'secondary'];
-
         return view('projects.index', compact('projects', 'i', 'filter', 'tab'));
     }
 
@@ -404,8 +402,10 @@ class ProjectController extends Controller
         return view('projects.dates', compact('project', 'echeance', 'optionTtm', 'score', 'option_ttm', 'jalons', 'options', 'jalonsProgress', 'i', 'exit', 'today', 'directions', 'projectOptionttmJalon', 'complexityTargets', 'complexity_items'));
     }
 
-    public function edit(Project $project)
+    public function edit($id)
     {
+        $id=Crypt::decrypt($id);
+        $project=Project::findOrFail($id);
         $users = User::all();
         $complexity_items = ComplexityItem::all();
 

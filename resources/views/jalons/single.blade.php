@@ -78,7 +78,7 @@
                             @endif
                         </div>
                         @access('update', 'Jalon')
-                            @if (Auth()->user()->roles[0]->name == 'ttmOfficer')
+                            @if (Auth()->user()->roles[0]->name == env('TtmOfficer'))
                                 <div class="col">
                                     <div class="info-box">
                                         <span class="info-box-icon bg-warning"><i class="far fa-calendar"></i></span>
