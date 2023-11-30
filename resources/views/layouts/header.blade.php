@@ -38,7 +38,10 @@
                 </li>
                 <!-- Menu Footer-->
                 <li class="user-footer">
-                    <a href="{{route('profile')}}" class="btn btn-default btn-flat">Profile</a>
+                    @php
+                        $id=Crypt::encrypt(Auth::user()->id);    
+                    @endphp
+                    <a href="{{route('profile',$id)}}" class="btn btn-default btn-flat">Profile</a>
                     <a href="#" class="btn btn-default btn-flat float-right"
                         onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
                         Se deconnecter

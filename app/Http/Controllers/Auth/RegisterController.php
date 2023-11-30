@@ -2,19 +2,22 @@
 
 namespace App\Http\Controllers\Auth;
 
-use App\Http\Controllers\ActiveDirectoryController;
-use App\Http\Controllers\Controller;
-use App\Models\Direction;
-use App\Models\DirectionUser;
+use Carbon\Carbon;
 use App\Models\User;
-use App\Providers\RouteServiceProvider;
-use Illuminate\Foundation\Auth\RegistersUsers;
+use App\Models\Direction;
 use Illuminate\Http\Request;
+use App\Models\DirectionUser;
+use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Crypt;
+use App\Providers\RouteServiceProvider;
+use Spatie\Activitylog\Models\Activity;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Foundation\Auth\RegistersUsers;
 use Illuminate\Validation\ValidationException;
+use App\Http\Controllers\ActiveDirectoryController;
 
 class RegisterController extends Controller
 {
@@ -156,15 +159,22 @@ class RegisterController extends Controller
         return to_route('home');
     }
 
-    public function profile()
+    public function profile($id)
     {
+        $id=Crypt::decrypt($id);
+        $user=User::findOrFail($id);
+        // dd($user);
         $directions = Direction::all();
-        $line_manager = User::find(Auth::user()->line_manager);
-        $direction = Auth::user()->direction_user?->direction;
+        $line_manager = User::find($user->line_manager);
+        $direction = $user->direction_user?->direction;
         $direction_user_director = DirectionUser::Where(['direction_id' => $direction?->id, 'is_director' => true])->get()->first();
 
         $directeur = $direction_user_director?->user;
-
-        return view('auth.profile', compact('directions', 'line_manager', 'directeur', 'direction'));
+        $userProjects=$user->projects()->get();
+        // $userLivrable=Auth::user()->livrables()->get();
+        $userActivities= Activity::orderBy('id', 'desc')->where('causer_id', $user->id)->get();
+        // die($userProjects);
+        $today = Carbon::now();
+        return view('auth.profile', compact('user','today','userProjects','directions', 'line_manager', 'directeur', 'direction','userActivities'));
     }
 }

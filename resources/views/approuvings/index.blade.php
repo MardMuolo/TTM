@@ -37,12 +37,16 @@
                                 <td class="item-state badge bg-danger">{{ $user->status }}</td>
                             @endif
                             <td class="item-actions text-right">
-                                @access('read', 'Project')
+                                @php
+                                    $id=Crypt::encrypt($user->id);
+                                @endphp
+                                @access('update', 'ProjectUser')
+                                <a class="btn btn-light btn-sm" href="{{ route('profile',$id) }}"
+                                title="voir"><i class="fas fa-eye"></i></a>
+
                                     <a class="btn btn-light text-danger btn-sm" data-toggle="modal"
                                         data-target="#modal-default-{{ $user->id }}"><i class="fas fa-user-times"></i></a>
-                                @endaccess
 
-                                @access('update', 'Project')
                                     <a class="btn btn-light text-success btn-sm" data-toggle="modal"
                                         data-target="#modal-default-{{ $user->id }}-accepter"><i
                                             class="fas fa-user-check"></i></a>

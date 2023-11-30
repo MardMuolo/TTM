@@ -37,7 +37,13 @@
                                 <td class="item-state badge bg-danger">{{ $user->status }}</td>
                             @endif
                             <td class="item-actions text-right">
+                                @php
+                                    $id=Crypt::encrypt(Auth::user()->id);
+                                @endphp
                                 @access('update', 'ProjectUser')
+                                <a class="btn btn-light btn-sm" href="{{ route('profile',$id) }}"
+                                title="voir"><i class="fas fa-eye"></i></a>
+
                                     <a class="btn btn-light text-danger btn-sm" data-toggle="modal"
                                         data-target="#modal-default-{{ $user->id }}"><i class="fas fa-user-times"></i></a>
 
@@ -49,7 +55,9 @@
                         </tr>
 
                         <div class="modal fade" id="modal-default-{{ $user->id }}">
-                            <form action="{{ route('approuving.update', Crypt::encrypt($user->user_id)) }}?response={{Crypt::encrypt(env('membreRefuser'))}}&project={{ Crypt::encrypt($user->project_id) }}" method="post">
+                            <form
+                                action="{{ route('approuving.update', Crypt::encrypt($user->user_id)) }}?response={{ Crypt::encrypt(env('membreRefuser')) }}&project={{ Crypt::encrypt($user->project_id) }}"
+                                method="post">
                                 @csrf
                                 @method('PUT')
                                 <div class="modal-dialog">
@@ -80,7 +88,7 @@
                         </div>
                         <div class="modal fade" id="modal-default-{{ $user->id }}-accepter">
                             <form
-                                action="{{ route('approuving.update', Crypt::encrypt($user->user_id)) }}?response={{Crypt::encrypt(env('membreApprouver'))}}&project={{ Crypt::encrypt($user->project_id) }}"
+                                action="{{ route('approuving.update', Crypt::encrypt($user->user_id)) }}?response={{ Crypt::encrypt(env('membreApprouver')) }}&project={{ Crypt::encrypt($user->project_id) }}"
                                 method="post">
                                 @csrf
                                 @method('PUT')

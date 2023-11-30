@@ -1,17 +1,22 @@
 <x-laravel-ui-adminlte::adminlte-layout>
 
     <body class="hold-transition login-page">
+        
         <div class="login-box">
+            <div class="text-danger mb-3 col-lg-12">
+                @error('username')
+                    {{ $message }}
+                @enderror
+            </div>
             <div class="login-logo">
                 <div class="text-center">
-                    <img class="profile-user-img img-fluid" src="{{Vite::asset('resources/images/logo.svg')}}"
-                    alt="User profile picture">
-                    
+                    <img class="profile-user-img img-fluid" src="{{ Vite::asset('resources/images/logo.svg') }}"
+                        alt="User profile picture">
+
                 </div>
                 <a href="{{ url('/home') }}"><b>Easy TTM</b></a>
             </div>
             <!-- /.login-logo -->
-
             <!-- /.login-box-body -->
             <div class="card">
                 <div class="card-body login-card-body">
@@ -21,7 +26,8 @@
                         @csrf
 
                         <div class="input-group mb-3">
-                            <input type="text" name="username" value="{{ old('username') }}" placeholder="Nom d'utilisateur"
+                            <input type="text" name="username" value="{{ old('username') }}"
+                                placeholder="Nom d'utilisateur"
                                 class="form-control @error('username') is-invalid @enderror" autocomplete="off">
                             <div class="input-group-append">
                                 <div class="input-group-text"><span class="fas fa-envelope"></span></div>
