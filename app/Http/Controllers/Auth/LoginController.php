@@ -2,18 +2,21 @@
 
 namespace App\Http\Controllers\Auth;
 
-use App\Http\Controllers\Controller;
-use App\Models\User;
-use App\Providers\RouteServiceProvider;
 use Exception;
-use Illuminate\Foundation\Auth\AuthenticatesUsers;
-use Illuminate\Http\JsonResponse;
+use Carbon\Carbon;
+use App\Models\User;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\DB;
+use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Http;
+use Illuminate\Support\Facades\Crypt;
+use App\Providers\RouteServiceProvider;
+use App\Http\Controllers\SoapClientHelper;
 use Illuminate\Validation\ValidationException;
+use Illuminate\Foundation\Auth\AuthenticatesUsers;
 use App\Http\Controllers\ActiveDirectoryController;
 
 class LoginController extends Controller
@@ -74,58 +77,79 @@ class LoginController extends Controller
 
     public function login(Request $request)
     {
-        $credentials = $this->validateLogin($request);
-        // Vérifiez si l'utilisateur est "admin" avec le mot de passe "admin"
-        $user = User::Where(['username' => $request->username])?->get()->first();
-        $isAdmin = $user?->roles->where('name', 'admin')->first();
-        if ($user and $isAdmin) {
-            if (Auth::attempt($credentials)) {
-                $request->session()->regenerate();
+        $this->validateLogin($request);
 
-                return to_route('home');
-            } else {
-                return $this->sendFailedLoginResponse($request);
-            }
-        } else { // Retrieve the ID of the logged in user à partir serveur
-            $username = $request->username;
-            // Check if the user's username exists in the writelist table
-            $username = DB::table('writelists')->where('username', $username)->exists();
-            if (!$username) {
-                return redirect()->back()->withErrors(['username' => "Vous n'est pas autorisé à se connecter. Veuillez contacter l'administrateur."]);
-            }
+        $username = $request->username;
+        $password = $request->password;
 
-            //Login From Active directory
-            $req = ActiveDirectoryController::loginFromAd($request->username, $request->password);
+        $localUser = User::where('username', $username)->first();
 
-            if (isset($req->user)) {
-                $user = User::Where(['username' => $request->username])?->get()->first();
-                // gestion softdelete
-                $email = $user?->email;
-                $user = User::withTrashed()
-                    ->where('email', $email)
-                    ->first();
 
-                if ($user) {
-                    $user->restore();
-                    // Faire quelque chose après avoir restauré l'utilisateur
-                }
-                if (!$user) {
-                    $user = User::create([
-                        'name' => $req->user->first_name.' '.$req->user->last_name,
-                        'email' => $req->user->email,
-                        'username' => $request->username,
-                        'password' => Hash::make('password'),
+        if ($localUser && $localUser->role === env('AdminSys') && Hash::check($password, $localUser->password)) {
+            $this->guard()->login($localUser);
+            return redirect()->route('home');
+        }
+
+        /*if($localUser){
+            $this->guard()->login($localUser);
+            return redirect()->route('home');
+        }*/
+
+        try {
+
+            $request_ldap = new SoapClientHelper();
+            $request_body = '<?xml version="1.0"?>
+            <COMMAND>
+                   <TYPE>AUTH_SVC</TYPE>
+                   <APPLINAME>OrangeBadge</APPLINAME>
+                   <CUID>' . $username . '</CUID>
+                   <PASSWORD>' . $password . '</PASSWORD>
+                   <DATE>' . Carbon::now() . '</DATE>       
+           </COMMAND>';
+
+            $result = $request_ldap->postXmlRequest($request_body);
+
+            $xml = simplexml_load_string($result);
+            $json = json_encode($xml);
+            $array = json_decode($json, TRUE);
+            $array = (object)$array;
+
+
+            if ($array->REQSTATUS == "SUCCESS") {
+
+                if (!$localUser) {
+                    $localUser = User::create([
+                        'name' => $array->FULLNAME,
+                        'username' => $array->CUID,
+                        'email' => $array->EMAIL,
+                        'phone' => $array->PHONENUMBER,
+                        'password' => Hash::make($password)
                     ]);
+
+                    activity()
+                        ->causedBy($localUser)
+                        ->performedOn($localUser)
+                        ->event('add')
+                        ->log("Création d'une nouvelle instance utilisateur");
                 }
 
-                $this->guard()->login($user);
+                if ($localUser) {
+                    $this->guard()->login($localUser);
+                } else {
+                    $id = Crypt::encrypt(auth()->user()->id);
+                    return redirect()->route('info');
+                }
 
                 return $this->sendLoginResponse($request);
             } else {
+
                 return $this->sendFailedLoginResponse($request);
             }
+        } catch (Exception) {
+            return $this->sendFailedLoginResponse($request);
         }
     }
+
 
     /**
      * Get the failed login response instance.

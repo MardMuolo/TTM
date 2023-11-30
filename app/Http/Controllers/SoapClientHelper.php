@@ -1,32 +1,28 @@
 <?php
 
-namespace App\Helpers;
+namespace App\Http\Controllers;
+
+use Illuminate\Support\Facades\Http;
 
 class SoapClientHelper
 {
-    private $client;
+        //
+        private $url;
 
-    public function __construct()
-    {
-
-        $url =  env('ldap_url');
-
-        $this->client = new \SoapClient($url, [
-            // 'cache_url' => url_CACHE_NONE,
-            'trace' => true,
-        ]);
-    }
-
-    public function getDataFromSoapApi()
-    {
-        try {
-            // Appeler une méthode de l'API SOAP
-            $response = $this->client->getData();
-
-            return $response;
-        } catch (\SoapFault $e) {
-            
-            return null;
+        public function __construct()
+        {
+            $this->url = env('ldap_url');
         }
-    }
+    
+        public function postXmlRequest($xml)
+        {
+            $response=Http::withBody($xml,'Content-Type: text/xml')->post($this->url);
+            return $response;
+        }
+    
+        public function getXmlRequest($xml){
+            $response = Http::withBody($xml,'Content-Type: text/xml')->get($this->url);
+            return $response;
+        }
+    
 }
