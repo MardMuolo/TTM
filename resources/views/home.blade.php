@@ -57,7 +57,7 @@
 
     </section>
 
-    <section class="row container">
+    <section class="row">
         <div class="col-md-12">
             <div class="card">
                 <div class="card-header">
@@ -93,7 +93,8 @@
                                 Projet Soumis
                                 <span class="float-right"><b>{{ $projetSoumis }}</b>/{{ $projets }}</span>
                                 <div class="progress progress-sm">
-                                    <div class="progress-bar bg-secondary" style="width: 80%"></div>
+                                <span class="float-right"><b>{{ $projetSoumis }}</b>/{{ $projets }}</span>
+                                    <div class="progress-bar bg-secondary" style="width: {{($projetSoumis*$projets)/100}}%"></div>
                                 </div>
                             </div>
                             <!-- /.progress-group -->
@@ -102,7 +103,7 @@
                                 Projet En cours
                                 <span class="float-right"><b>{{ $projetEncours }}</b>/{{ $projets }}</span>
                                 <div class="progress progress-sm">
-                                    <div class="progress-bar bg-warning" style="width: 75%"></div>
+                                    <div class="progress-bar bg-warning" style="width: {{($projetEncours*$projets)/100}}%"></div>
                                 </div>
                             </div>
                             <!-- /.progress-group -->
@@ -110,7 +111,7 @@
                                 Projet Cloturé
                                 <span class="float-right"><b>{{ $projetFinis }}</b>/{{ $projets }}</span>
                                 <div class="progress progress-sm">
-                                    <div class="progress-bar bg-success" style="width: 50%"></div>
+                                    <div class="progress-bar bg-success" style="width: {{($projetFinis*$projets)/100}}%"></div>
                                 </div>
                             </div>
                             <!-- /.progress-group -->
@@ -129,7 +130,7 @@
                         <div class="col-sm-3 col-6">
                             <div class="description-block border-right">
                                 <span class="description-percentage text-success"><i class="fas fa-caret-up"></i>
-                                    {{ number_format(($jalonEnCours * 100) / $alljalon, 1) }}%</span>
+                                   {{ ($alljalon>0)?number_format(($jalonEnCours * 100) / $alljalon, 1):0 }}%</span>
                                 <h5 class="description-header">{{ $jalonEnCours }}</h5>
                                 <span class="description-text">{{ env('jalonEnCours') }}</span>
                             </div>
@@ -139,7 +140,7 @@
                         <div class="col-sm-3 col-6">
                             <div class="description-block border-right">
                                 <span class="description-percentage text-warning"><i class="fas fa-caret-left"></i>
-                                    {{ number_format(($jalonEnAttente * 100) / $alljalon, 1) }}%</span>
+                                    {{($alljalon>0)? number_format(($jalonEnAttente * 100) / $alljalon, 1):0 }}%</span>
                                 <h5 class="description-header">{{ $jalonEnAttente }}</h5>
                                 <span class="description-text">{{ env('jalonEnAttente') }}</span>
                             </div>
@@ -149,7 +150,7 @@
                         <div class="col-sm-3 col-6">
                             <div class="description-block border-right">
                                 <span class="description-percentage text-success"><i class="fas fa-caret-up"></i>
-                                    {{ number_format(($jalonCloturer * 100) / $alljalon, 1) }}%</span>
+                                    {{($alljalon>0)? number_format(($jalonCloturer * 100) / $alljalon, 1):0 }}%</span>
                                 <h5 class="description-header">{{ $jalonCloturer }}</h5>
                                 <span class="description-text">{{ env('jalonCloturer') }}</span>
                             </div>
@@ -159,7 +160,7 @@
                         <div class="col-sm-3 col-6">
                             <div class="description-block">
                                 <span class="description-percentage text-danger"><i class="fas fa-caret-down"></i>
-                                    {{ number_format((count($jalonEnRetard) * 100) / $alljalon, 1) }}%</span>
+                                    {{ ($alljalon>0)?number_format((count($jalonEnRetard) * 100) / $alljalon, 1):0 }}%</span>
                                 <h5 class="description-header">{{ count($jalonEnRetard) }}</h5>
                                 <span class="description-text">en retard</span>
                             </div>
