@@ -14,12 +14,12 @@ return new class() extends Migration {
             $table->id();
             $table->timestamps();
             $table->string('name');
-            $table->string('description');
+            $table->longText('description');
             $table->string('target');
             $table->string('type');
             $table->date('startDate');
             $table->date('endDate')->nullable();
-            $table->integer('score');
+            $table->bigInteger('score');
             $table->integer('coast');
             $table->string('projectOwner');
             $table->string('sponsor');
