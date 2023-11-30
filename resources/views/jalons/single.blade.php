@@ -294,7 +294,7 @@
                                         required>
                                 </div>
                             </div>
-                            <input type="hidden" name="status" value="Finis">
+                            <input type="hidden" name="status" value="{{env('jalonCloturer')}}">
                             <div class="modal-footer">
                                 <button type="button" class="btn btn-secondary" data-dismiss="modal"><i
                                         class="fa fa-times"></i></button>

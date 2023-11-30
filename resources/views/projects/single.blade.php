@@ -346,45 +346,7 @@
                     console.log('Erreur AJAX: ' + error);
                 }
             });
-            // $.ajax({
-            //     url: '/directions.index/?direction_id='+directionId,
-            //     dataType: 'json',
-            //     success: function(response) {
-
-            //         if (response.success) {
-            //             var data = response.users;
-
-            //             var formattedData = data.map(function(user) {
-            //                 return {
-            //                     id: directiion.id,
-            //                     name: direction.name,
-
-            //                 };
-            //             });
-
-            //             // Initialiser le champ de sélection avec les options
-            //             $('#direction').select2({
-            //                 data: formattedData,
-            //                 minimumInputLength: 1
-            //             });
-
-            //             // Événement de sélection d'utilisateur
-            //             $('#direction').on('select2:select', function(e) {
-            //                 var selectedUser = e.params.data;
-
-            //                 // Mettre à jour la valeur de l'input "Email" avec l'e-mail de l'utilisateur sélectionné
-            //                 // $('#user').val(selectedUser.username);
-            //                 $('#directionName').val(selectedUser.name);
-            //                 $('#directionId').val(selectedUser.id);
-            //             });
-            //         } else {
-            //             console.log('Erreur: ' + response.message);
-            //         }
-            //     },
-            //     error: function(xhr, status, error) {
-            //         console.log('Erreur AJAX: ' + error);
-            //     }
-            // });
+            
         });
 
         function supprimer(event) {

@@ -349,7 +349,7 @@ class JalonController extends Controller
                     ->causedBy(auth()->user()->id)
                     ->performedOn($project)
                     ->event('endTask')
-                    ->log(auth()->user()->name . ' a déclaré le jalon ' . $jalon . ' comme terminer');
+                    ->log(auth()->user()->name . ' a déclaré le jalon ' . $jalon . ' comme cloturé');
             }
         }
 
