@@ -93,7 +93,7 @@
                                 Projet Soumis
                                 <span class="float-right"><b>{{ $projetSoumis }}</b>/{{ $projets }}</span>
                                 <div class="progress progress-sm">
-                                <span class="float-right"><b>{{ $projetSoumis }}</b>/{{ $projets }}</span>
+                                <span class="float-right"></span>
                                     <div class="progress-bar bg-secondary" style="width: {{($projetSoumis*$projets)/100}}%"></div>
                                 </div>
                             </div>
