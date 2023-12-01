@@ -13,10 +13,17 @@
             <div class="col-md-3">
                 <div class="card card-primary card-outline">
                     <div class="card-body box-profile">
-                        <div class="text-center py-2">
-                            <span class="user-image img-circle elevation-2 bg-danger p-4 my-3 text-center">
+                        <div class="text-center">
+                            {{-- <span class="user-image img-circle elevation-2 bg-danger p-4 my-3 text-center">
                                 {{ str($user->username[0])->upper() }}{{ str($user->name[0])->upper() }}
-                            </span>
+                            </span> --}}
+                            <img class="profile-user-img img-fluid img-circle" src="@if(Auth::user()->profile_photo == null)
+                                {{Vite::asset('resources/images/logo.svg')}}
+                                @else
+                                {{asset('storage/profiles/'.Auth::user()->profile_photo)}}
+                                @endif"
+                                class="user-image img-circle elevation-2"
+                                alt="User profile picture">
                         </div>
 
                         <h3 class="profile-username text-center py-3">{{ $user->name }}</h3>
@@ -26,7 +33,7 @@
 
                         <ul class="list-group list-group-unbordered">
                             <li class="list-group-item">
-                                <b>Projets</b> <a class="float-right">{{count($userProjects)}}</a>
+                                <b>Projets</b> <a class="float-right">{{ count($userProjects) }}</a>
                             </li>
                             <li class="list-group-item">
                                 <b>Livrables</b> <a class="float-right">543</a>
@@ -75,8 +82,9 @@
                             <li class="nav-item"><a class="nav-link active" href="#activity" data-toggle="tab">Activité</a>
                             </li>
                             <li class="nav-item"><a class="nav-link" href="#timeline" data-toggle="tab">Gantt</a></li>
-                            @if ($user->id==Auth::user()->id)
-                                <li class="nav-item"><a class="nav-link" href="#settings" data-toggle="tab">Configuration</a>
+                            @if ($user->id == Auth::user()->id)
+                                <li class="nav-item"><a class="nav-link" href="#settings"
+                                        data-toggle="tab">Configuration</a>
                             @endif
                             </li>
                         </ul>
@@ -121,16 +129,17 @@
                                         <input type="text" class="form-control" id="inputUsername" value="{{ $user->username }}" disabled>
                                     </div>
                                 </div> --}}
-                                    {{-- <div class="form-group row">
-                                    <label for="profile" class="col-sm-2 form-label">Photo de profil</label>
-                                    <div class="col-sm-10">
-                                        <input type="file" name="profile" class="form-control @error('profile') is-invalid @enderror" id="profile">
-                                        @error('profile')
-                                        <span class="error invalid-feedback">{{ $message }}</span>
-                                    @enderror
+                                    <div class="form-group row">
+                                        <label for="profile" class="col-sm-2 form-label">Photo de profil</label>
+                                        <div class="col-sm-10">
+                                            <input type="file" name="profile"
+                                                class="form-control @error('profile') is-invalid @enderror" id="profile">
+                                            @error('profile')
+                                                <span class="error invalid-feedback">{{ $message }}</span>
+                                            @enderror
+                                        </div>
+
                                     </div>
-                                    
-                                </div> --}}
 
                                     <div class="form-group row">
 
@@ -276,7 +285,7 @@
                 "ordering": true,
                 "paging": true,
                 "data": "",
-                
+
             }).buttons().container().appendTo('#tab_project_wrapper .col-md-6:eq(0)');
         });
     </script>

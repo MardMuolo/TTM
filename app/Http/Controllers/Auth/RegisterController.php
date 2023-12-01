@@ -98,16 +98,21 @@ class RegisterController extends Controller
 
             if (($file->getSize() / 1000000) <= 5) {
                 if (in_array($extension, $allowed)) {
-                    $fileName = date('ymdhis').'.'.$extension;
                     if ($user->profile_photo != null) {
-                        if (File::exists('storage/profiles/'.$user->profile_photo)) {
-                            File::delete('storage/profiles/'.$user->profile_photo);
+                        if (File::exists('storage/profiles/' . $user->profile_photo)) {
+                            File::delete('storage/profiles/' . $user->profile_photo);
                         }
                     }
 
-                    $user->profile_photo = $fileName;
+                    $namefile = substr(str_replace([' ', "'"], '', Auth::user()->name), 0, 6) . '' . date('ymdhis') . '.' . $file->extension();
+                    $path = $file->storeAs('profiles', $namefile);
+                    $publicPath = public_path('storage/profiles');
+                    File::ensureDirectoryExists($publicPath);
+                    File::delete($publicPath . '/' . $namefile);
+                    File::link(storage_path('app/' . $path), $publicPath . '/' . $namefile);
+                    $user->profile_photo = $namefile;
                     $user->save();
-                    $file->storeAs('profiles', $fileName, 'public');
+
                 } else {
                     throw ValidationException::withMessages(['profile' => 'Le format du fichier est incorrect, seuls png,jpg,jpeg sont acceptés!!']);
                 }
@@ -117,7 +122,8 @@ class RegisterController extends Controller
         }
 
         if (!$request->email && !$request->direction) {
-            return to_route('profile');
+            $id=Crypt::encrypt(Auth::user()->id);
+            return to_route('profile',$id);
         }
 
         $line_manager = User::Where(['email' => $request->email])?->get()->first();
@@ -127,7 +133,7 @@ class RegisterController extends Controller
 
             if (isset($req->user)) {
                 $line_manager = User::create([
-                    'name' => $req->user->first_name.' '.$req->user->last_name,
+                    'name' => $req->user->first_name . ' ' . $req->user->last_name,
                     'email' => $req->user->email,
                     'username' => $req->user->username,
                     'password' => Hash::make('password'),
@@ -161,8 +167,8 @@ class RegisterController extends Controller
 
     public function profile($id)
     {
-        $id=Crypt::decrypt($id);
-        $user=User::findOrFail($id);
+        $id = Crypt::decrypt($id);
+        $user = User::findOrFail($id);
         // dd($user);
         $directions = Direction::all();
         $line_manager = User::find($user->line_manager);
@@ -170,11 +176,11 @@ class RegisterController extends Controller
         $direction_user_director = DirectionUser::Where(['direction_id' => $direction?->id, 'is_director' => true])->get()->first();
 
         $directeur = $direction_user_director?->user;
-        $userProjects=$user->projects()->get();
+        $userProjects = $user->projects()->get();
         // $userLivrable=Auth::user()->livrables()->get();
-        $userActivities= Activity::orderBy('id', 'desc')->where('causer_id', $user->id)->get();
+        $userActivities = Activity::orderBy('id', 'desc')->where('causer_id', $user->id)->get();
         // die($userProjects);
         $today = Carbon::now();
-        return view('auth.profile', compact('user','today','userProjects','directions', 'line_manager', 'directeur', 'direction','userActivities'));
+        return view('auth.profile', compact('user', 'today', 'userProjects', 'directions', 'line_manager', 'directeur', 'direction', 'userActivities'));
     }
 }
