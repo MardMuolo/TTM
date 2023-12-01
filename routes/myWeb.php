@@ -31,4 +31,5 @@ Route::middleware(['auth'])->group(function () {
     Route::resource('approbationCollaborateur', App\Http\Controllers\ApprobationCollaboController::class);
     Route::resource('approbationLivrable', App\Http\Controllers\ApprobationLivrableController::class);
     Route::get('projets/dates/{project}', [App\Http\Controllers\ProjectController::class, 'addDates'])->name('projects.dates');
+    Route::get('project', [App\Http\Controllers\ProjectController::class, 'getProjectToRepport'])->name('projectReporting');
 });

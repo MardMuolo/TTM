@@ -77,27 +77,23 @@ class LoginController extends Controller
 
     public function login(Request $request)
     {
-        $this->validateLogin($request);
-
-        $username = $request->username;
-        $password = $request->password;
-
-        $localUser = User::where('username', $username)->first();
-
-
-        if ($localUser && $localUser->role === env('AdminSys') && Hash::check($password, $localUser->password)) {
-            $this->guard()->login($localUser);
-            return redirect()->route('home');
-        }
-
-        /*if($localUser){
-            $this->guard()->login($localUser);
-            return redirect()->route('home');
-        }*/
-
         try {
+            $credentials=$this->validateLogin($request);
+            $username = $request->username;
+            $password = $request->password;
 
-            $request_ldap = new SoapClientHelper();
+            $localUser = User::Where(['username' => $request->username])?->get()->first();
+            $isAdmin = $localUser?->roles->where('name', 'admin')->first();
+            if ($localUser and $isAdmin) {
+                if (Auth::attempt($credentials)) {
+                    $request->session()->regenerate();
+    
+                    return to_route('projects.index');
+                } else {
+                    return $this->sendFailedLoginResponse($request);
+                }
+            }else{
+                $request_ldap = new SoapClientHelper();
             $request_body = '<?xml version="1.0"?>
             <COMMAND>
                    <TYPE>AUTH_SVC</TYPE>
@@ -112,7 +108,7 @@ class LoginController extends Controller
             $xml = simplexml_load_string($result);
             $json = json_encode($xml);
             $array = json_decode($json, TRUE);
-            $array = (object)$array;
+            $array = (object) $array;
 
 
             if ($array->REQSTATUS == "SUCCESS") {
@@ -145,6 +141,9 @@ class LoginController extends Controller
 
                 return $this->sendFailedLoginResponse($request);
             }
+            }
+
+            
         } catch (Exception) {
             return $this->sendFailedLoginResponse($request);
         }

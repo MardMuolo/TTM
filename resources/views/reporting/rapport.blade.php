@@ -3,106 +3,48 @@
     Rapport
 @endsection
 @section('filsAriane')
-    <li class="breadcrumb-item"><a href="#">Rapports</a></li>
+    {{-- <li class="breadcrumb-item"><a href="#"></a></li> --}}
 @endsection
 @section('content')
-    <section class="content">
+    <div class="invoice p-3 mb-3">
+        <!-- title row -->
+        <div class="row">
+            <div class="col-12">
+                <h4>
+                    <i class="fas fa-globe"></i> Rapports
+                    <small class="float-right">{{ \Carbon\Carbon::now() }}</small>
+                </h4>
+            </div>
+            <!-- /.col -->
+        </div>
+        <!-- info row -->
+        <div class="row invoice-info py-4">
+            <div class="col-sm-4 invoice-col">
+                <label for="debut">Du</label>
+                <input type="date" name="debut" id="debut">
+            </div>
+            <!-- /.col -->
+            <div class="col-sm-4 invoice-col">
+                <label for="fin">AU</label>
+                <input type="date" name="fin" id="fin">
+            </div>
+            <!-- /.col -->
+            <div class="col-sm-4 invoice-col">
+                <input type="checkbox" name="comite" id="comite">
+                <label for="comite">COMCOM</label>
+            </div>
+            <!-- /.col -->
+        </div>
+        <!-- /.row -->
 
-        <div class="card">
-
-
-            <div class="card-body">
-
-                <form action="" method="get" class="mb-3">
-                    <div>
-                        <label for="from" class=" non-gras" style="font-weight: normal; ">De</label>
-                        <input type="date" id="debut" name="debut" style=" height:30px;">
-                        <label for="to" class=" non-gras" style="font-weight: normal;">A</label>
-                        <input type="date" id="fin" name="fin" style=" height:30px;">
-                    </div>
-                    <div class="row">
-
-
-
-                        <div class="col-2">
-                            <label class="non-gras" style="font-weight: normal; height:10px;">Directions</label>
-                            <select aria-label=".form-select-sm " name="direction" class="form-control " placeholder=""
-                                style=" height:30px;">
-                                <option value=""></option>
-                                @forelse ($directions as $direction)
-                                    <option value="{{ $direction->name }}">{{ $direction->name }}</option>
-                                @endforeach
-                            </select>
-                        </div>
-                        <div class="col-2">
-                            <label class=" non-gras" style="font-weight: normal; height:10px;">Option TTM</label>
-                            <select aria-label=".form-select-sm " class="form-control" placeholder=""name="optionttm"
-                                style=" height:30px;">
-                                <option value=""></option>
-                                @forelse ($optionttms as $option)
-                                    <option value="{{ $option->nom }}">{{ $option->nom }}</option>
-                                @endforeach
-                            </select>
-                        </div>
-                        <div class="col-2">
-                            <label class=" non-gras" style="font-weight: normal; height:10px;">Initiateur</label>
-                            <select aria-label=".form-select-sm " class="form-control" placeholder="" name="user"
-                                style=" height:30px;">
-
-                                <option value=""></option>
-                                @forelse ($projectOwners as $po)
-                                    <option value="{{ $po->projectOwner }}">{{ $po->projectOwner }}</option>
-                                @endforeach
-                            </select>
-                        </div>
-                        <div class="col-2">
-                            <label class="non-gras" style="font-weight: normal; height:10px;">Statut</label>
-                            <select aria-label=".form-select-sm " class="form-control" placeholder=""name="statut"
-                                style=" height:30px;">
-
-                                <option value=""></option>
-                                <option value="onWait">Soumis</option>
-                                <option value="progress">En cours</option>
-                                <option value="finish">Fini</option>
-                            </select>
-                        </div>
-                        <div class="col-2">
-                            <label class=" non-gras" style="font-weight: normal; height:10px;" for="">Jalons</label>
-                            <select aria-label=".form-select-sm " class="form-control" placeholder=""name="jalon"
-                                style=" height:30px;">
-                                <option value=""></option>
-                                @forelse ($jalons as $jalon)
-                                    <option value="{{ $jalon }}">{{ $jalon->designation }}</option>
-                                @empty
-
-                                @endforelse
-                            </select>
-                        </div>
-                        <div class="col-1">
-                            <label for=""></label> <br>
-                            <div> <button type="submit" class="btn btn-light"><i class="fas fa-filter"></i></button></div>
-                        </div>
-                        <div class="col-1">
-                            <label for=""></label> <br>
-                            <div>
-                                <button type="button btn-success" class="btn btn-success" onclick="exportToExcel()">
-                                    <i class="fas fa-file-excel"></i>
-                                </button>
-                            </div>
-
-                        </div>
-                    </div>
-
-                </form>
-
-                <table class="table table-striped projects" id="example1">
-
+        <!-- Table row -->
+        <div class="row">
+            <div class="col-12 table-responsive">
+                <table class="table table-bordered table-hover" id="tab_reporting">
                     <thead>
-                        <tr>
-                            <th style="width: 50%">Nom</th>
-                            <th style="width: 40%">Équipe</th>
-                            <th class="text-center" style="width: 20%">Statut</th>
-                        </tr>
+                        <th style="width: 50%">Nom</th>
+                        <th style="width: 40%">Équipe</th>
+                        <th class="text-center" style="width: 20%">Statut</th>
                     </thead>
                     <tbody>
                         @forelse ($projets as $item)
@@ -135,78 +77,172 @@
                     </tbody>
                 </table>
             </div>
-            @include('layouts.delete')
+            <!-- /.col -->
         </div>
-    </section>
+        <!-- /.row -->
 
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-    <script src="https://cdn.datatables.net/1.11.3/js/jquery.dataTables.min.js"></script>
-    <script src="https://cdn.datatables.net/1.11.3/js/dataTables.bootstrap4.min.js"></script>
-    <script>
-        $(document).ready(function() {
-            $('#example1').DataTable();
+        <div class="row">
+            <!-- accepted payments column -->
+            <div class="col-6 py-4">
+
+            </div>
+            <!-- /.col -->
+            <div class="col-6 float-right">
+                <p class="lead">Amount Due 2/22/2014</p>
+
+                <div class="table-responsive">
+                    <table class="table">
+                        <tr>
+                            <th style="width:50%">Subtotal:</th>
+                            <td>$250.30</td>
+                        </tr>
+                        <tr>
+                            <th>Tax (9.3%)</th>
+                            <td>$10.34</td>
+                        </tr>
+                        <tr>
+                            <th>Shipping:</th>
+                            <td>$5.80</td>
+                        </tr>
+                        <tr>
+                            <th>Total:</th>
+                            <td>$265.24</td>
+                        </tr>
+                    </table>
+                </div>
+            </div>
+            <!-- /.col -->
+        </div>
+        <div class="col-6 p-5">
+            <p class="lead">Signature</p>
+            <p class="text-muted well well-sm shadow-none" style="margin-top: 10px;">
+                Approuvé
+            </p>
+        </div>
+        <!-- /.row -->
+
+        <!-- this row will not appear when printing -->
+        <div class="row no-print">
+            <div class="col-12">
+                <a href="invoice-print.html" rel="noopener" target="_blank" class="btn btn-default"><i
+                        class="fas fa-print"></i> Print</a>
+                <button type="button" class="btn btn-success float-right"><i class="far fa-credit-card"></i> Submit
+                    Payment
+                </button>
+                <button type="button" class="btn btn-primary float-right" style="margin-right: 5px;">
+                    <i class="fas fa-download"></i> Generate PDF
+                </button>
+            </div>
+        </div>
+    </div>
+@endsection
+@push('third_party_scripts')
+    <script type='module' src="{{ Vite::asset('node_modules/admin-lte/plugins/jquery/jquery.min.js') }}"></script>
+@endpush
+@push('page_scripts')
+    @vite('resources/css/style.css')
+    @vite('node_modules/admin-lte/plugins/datatables-bs4/css/dataTables.bootstrap4.min.css')
+    @vite('node_modules/admin-lte/plugins/datatables-responsive/css/responsive.bootstrap4.min.css')
+    @vite('node_modules/admin-lte/plugins/datatables-buttons/css/buttons.bootstrap4.min.css')
+    <script type='module' src="{{ Vite::asset('node_modules/admin-lte/plugins/datatables/jquery.dataTables.min.js') }}">
+    </script>
+    <script type='module'
+        src="{{ Vite::asset('node_modules/admin-lte/plugins/datatables-buttons/js/dataTables.buttons.min.js') }}"></script>
+    <script type='module'
+        src="{{ Vite::asset('node_modules/admin-lte/plugins/datatables-bs4/js/dataTables.bootstrap4.min.js') }}"></script>
+    <script type='module'
+        src="{{ Vite::asset('node_modules/admin-lte/plugins/datatables-buttons/js/buttons.bootstrap4.min.js') }}"></script>
+    <script type='module' src="{{ Vite::asset('node_modules/admin-lte/plugins/jszip/jszip.min.js') }}"></script>
+    <script type='module' src="{{ Vite::asset('node_modules/admin-lte/plugins/pdfmake/pdfmake.min.js') }}"></script>
+    <script type='module' src="{{ Vite::asset('node_modules/admin-lte/plugins/pdfmake/vfs_fonts.js') }}"></script>
+    <script type='module'
+        src="{{ Vite::asset('node_modules/admin-lte/plugins/datatables-buttons/js/buttons.html5.min.js') }}"></script>
+    <script type='module'
+        src="{{ Vite::asset('node_modules/admin-lte/plugins/datatables-buttons/js/buttons.print.min.js') }}"></script>
+    <script type='module'
+        src="{{ Vite::asset('node_modules/admin-lte/plugins/datatables-buttons/js/buttons.colVis.min.js') }}"></script>
+    <script type='module'>
+        $(function() {
+            
+            var table = $("#tab_reporting").DataTable({
+                "responsive": true,
+                "lengthChange": true,
+                "autoWidth": true,
+                "searching": true,
+                "ordering": true,
+                "paging": true,
+                "data": "",
+                "buttons": [{
+                    extend: 'csv',
+                    title: 'les projects ',
+
+                }, "excel", {
+                    extend: 'pdf',
+                    title: 'les projects ',
+
+                }, {
+                    extend: 'print',
+                    title: 'les projects '
+                }, "colvis"]
+            });
+            var initialData=table.data().toArray();
+            $('#comite').on('click', function() {
+                // alert('bonjour')
+                // Vérifier si la case à cocher est cochée ou décochée
+                if ($(this).is(':checked')) {
+                    // Effectuer la requête AJAX lorsque la case est cochée
+                    $.ajax({
+                        url: '{{ route('projectReporting') . '?is_comite=1' }}',
+                        type: 'Get',
+                        dataType: 'json',
+                        // data: {
+                        //     param1: 'valeur1',
+                        //     param2: 'valeur2'
+                        // },
+                        success: function(response) {
+                            table.destroy()
+                            console.log(response)
+                            table=$("#tab_reporting").DataTable({
+                                "responsive": true,
+                                "lengthChange": true,
+                                "autoWidth": true,
+                                "searching": true,
+                                "ordering": true,
+                                "paging": true,
+                                "data": {
+                                    "data": response
+                                },
+                            });
+
+                        },
+                        error: function(xhr, status, error) {
+                            // Gestion des erreurs
+                        }
+                    });
+                } else {
+                    table.clear().rows.add(initialData).draw()
+                }
+            });
         });
     </script>
-
     <script>
-        function exportToExcel() {
+        function supprimer(event) {
+            event.preventDefault();
+            a = event.target.closest('a');
 
-            var table = document.getElementById("example1");
-            var html = table.outerHTML;
+            let deleteForm = document.getElementById('deleteForm');
+            deleteForm.setAttribute('action', a.getAttribute('href'));
+            let textDelete = document.getElementById('textDelete');
+            textDelete.innerHTML = a.getAttribute('project') + " ?";
 
-
-            var url = 'data:application/vnd.ms-excel;base64,' + window.btoa(html);
-
-
-            var a = document.createElement("a");
-            a.href = url;
-            a.download = "projets.xls";
-            a.style.display = "none";
-            document.body.appendChild(a);
-
-
-            a.click();
-
-
-            document.body.removeChild(a);
+            let titleDelete = document.getElementById('titleDelete');
+            titleDelete.innerHTML = "Suppression";
         }
     </script>
 
-    <script>
-        var debutInput = document.getElementById("debut");
-        var finInput = document.getElementById("fin");
 
 
-        debutInput.addEventListener("change", function() {
-
-            var debutDate = new Date(debutInput.value);
-
-
-            var finDate = new Date(finInput.value);
-
-
-            if (finDate < debutDate) {
-
-                finInput.value = debutInput.value;
-            }
-
-
-            finInput.min = debutInput.value;
-        });
-
-
-        finInput.addEventListener("change", function() {
-
-            var debutDate = new Date(debutInput.value);
-
-
-            var finDate = new Date(finInput.value);
-
-
-            if (finDate < debutDate) {
-
-                finInput.value = debutInput.value;
-            }
-        });
+    <script type="module">
+        // Attacher un gestionnaire d'événements au clic sur la case à cocher
     </script>
-@endsection
+@endpush

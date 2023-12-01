@@ -44,7 +44,7 @@ class ProjectController extends Controller
         } else {
             // Variable project: nous permet de recuperer tous les projets selon le rôle de l'utilisateur connecté
             $projects = isset($filter) ? Project::where('status', $filter)->get() : Project::get(Project::isAdmin());
-        
+
         }
         //dd($projects[0]->with('users', 'optionsJalons')->get());
         Cache::forever('projects', count($projects));
@@ -404,12 +404,32 @@ class ProjectController extends Controller
 
     public function edit($id)
     {
-        $id=Crypt::decrypt($id);
-        $project=Project::findOrFail($id);
+        $id = Crypt::decrypt($id);
+        $project = Project::findOrFail($id);
         $users = User::all();
         $complexity_items = ComplexityItem::all();
 
         return view('projects.edit', compact('project', 'complexity_items', 'users'));
+    }
+
+    public function getProjectToRepport(Request $request)
+    {
+        if($request->is_comite){
+
+            $projects=Project::where('id',1);
+        }
+    //    dd($request);
+
+        // Faites ce que vous voulez avec les données récupérées
+        // ...
+
+        // $response = [
+        //     'message' => 'Requête AJAX GET traitée avec succès',
+        //     'param1' => $param1,
+        //     'param2' => $param2
+        // ];
+
+        return response()->json($projects);
     }
 
     public function update(Request $request, Project $project)
