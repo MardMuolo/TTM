@@ -60,7 +60,6 @@ class ProjectController extends Controller
     {
         $id = Crypt::decrypt($id);
         $project = Project::findOrFail($id);
-        // dd($id);
         $statusColor = [
             'create' => 'fas fa-user-tie',
             'update' => 'fas fa-edit',
