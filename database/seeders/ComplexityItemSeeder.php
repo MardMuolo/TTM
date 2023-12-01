@@ -14,6 +14,26 @@ class ComplexityItemSeeder extends Seeder
     public function run(): void
     {
         //
-        ComplexityItem::factory(10)->hasComplexityTargets(5)->create();
+        $items=[
+            'Terminaux',
+            'Réseaux',
+            'Platformes',
+            'Process Metiers & Si',
+            'Technologies',
+            'Canaux de distribution',
+            'Organisation',
+            'Integration',
+            'Reglementation',
+            'International',
+            'Partenaires',
+            'Contenus'
+        ];
+        foreach ($items as $item) {
+            ComplexityItem::create([
+                'name'=>$item
+            ]);
+        }
+        
+        
     }
 }
