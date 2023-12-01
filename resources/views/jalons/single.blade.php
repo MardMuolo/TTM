@@ -78,33 +78,35 @@
                             @endif
                         </div>
                         @access('update', 'Jalon')
-                            @if (Auth()->user()->roles[0]->name == env('TtmOfficer'))
-                                <div class="col">
-                                    <div class="info-box">
-                                        <span class="info-box-icon bg-warning"><i class="far fa-calendar"></i></span>
-                                        <div class="info-box-content">
-                                            <span class="info-box-text">Décider de la fin du jalon</span>
-                                            <span class="info-box-number">
-                                                @if ($status == env('jalonCloturer'))
-                                                    <button type="button" class="btn btn-light btn-sm float-right"
-                                                        data-toggle="modal" data-target="#modal-fin-jalon"
-                                                        title="ce jalon est finis" disabled>
-                                                        <i class="fas fa-plus-circle"></i>
-                                                    </button>
-                                                @else
-                                                    <span class="info-box-number"><button type="button"
-                                                            class="btn btn-light btn-sm float-right" data-toggle="modal"
-                                                            data-target="#modal-fin-jalon">
+                            @foreach (Auth()->user()->roles as $role)
+                                @if ($role->name == env('TtmOfficer'))
+                                    <div class="col">
+                                        <div class="info-box">
+                                            <span class="info-box-icon bg-warning"><i class="far fa-calendar"></i></span>
+                                            <div class="info-box-content">
+                                                <span class="info-box-text">Décider de la fin du jalon</span>
+                                                <span class="info-box-number">
+                                                    @if ($status == env('jalonCloturer'))
+                                                        <button type="button" class="btn btn-light btn-sm float-right"
+                                                            data-toggle="modal" data-target="#modal-fin-jalon"
+                                                            title="ce jalon est finis" disabled>
                                                             <i class="fas fa-plus-circle"></i>
-                                                        </button></span>
-                                                @endif
-                                            </span>
+                                                        </button>
+                                                    @else
+                                                        <span class="info-box-number"><button type="button"
+                                                                class="btn btn-light btn-sm float-right" data-toggle="modal"
+                                                                data-target="#modal-fin-jalon">
+                                                                <i class="fas fa-plus-circle"></i>
+                                                            </button></span>
+                                                    @endif
+                                                </span>
+                                            </div>
+
                                         </div>
 
                                     </div>
-
-                                </div>
-                            @endif
+                                @endif
+                            @endforeach
                         @endaccess
 
                         <div class="col-md-3 col-sm-6 col-12">
@@ -239,8 +241,8 @@
                                                     href="#edit-{{ $item->id }}-2" role="button">
                                                     <i class="fas fa-pen"></i>
                                                 </a>
-                                                <a class="btn btn-sm bg-warning" href="/" onclick="supprimer(event)"
-                                                    demande="Voulez-vous supprimer cette demande {{ $item->demande->title }}"
+                                                <a class="btn btn-sm bg-warning" href="{{route('demandeJalon.destroy', $item->id) }}" onclick="supprimer(event)"
+                                                    demande="Voulez-vous supprimer cette demande '{{ $item->demande->title }}'"
                                                     data-toggle="modal" data-target="#supprimer" title="archiver">
                                                     <i class="fas fa-archive"></i>
                                                 </a>
@@ -260,7 +262,7 @@
             aria-labelledby="modal-fin-jalon-label" aria-hidden="true">
             <div class="modal-dialog" role="document">
                 <div class="modal-content">
-                    @if ($totalDemandes<=0 || $demandesSoumises < $totalDemandes)
+                    @if ($totalDemandes <= 0 || $demandesSoumises < $totalDemandes)
                         <div class="modal-header">
                             <h5 class="modal-title" id="modal-finish-jalon-label">Message d'avertissement</h5>
                             <button type="button" class="close" data-dismiss="modal" aria-label="Close">
@@ -268,7 +270,7 @@
                             </button>
                         </div>
                         <div class="modal-body">
-                            <p>Toutes les demandes doivent être soumises avant de terminer le jalon.</p>
+                            <p>{{$demandesSoumises}}Toutes les demandes doivent être soumises avant de terminer le jalon.</p>
                         </div>
                         <div class="modal-footer">
                             <button type="button" class="btn btn-secondary" data-dismiss="modal">Fermer</button>
@@ -281,8 +283,11 @@
                             </button>
                         </div>
                         <form
-                            action="{{ route('jalons.updateStatus', 
-                            ['jalon' => Crypt::encrypt($jalon->id), 'option_ttm' => Crypt::encrypt($optionTtm->id), 'project' => Crypt::encrypt($project->id)]) }}"
+                            action="{{ route('jalons.updateStatus', [
+                                'jalon' => Crypt::encrypt($jalon->id),
+                                'option_ttm' => Crypt::encrypt($optionTtm->id),
+                                'project' => Crypt::encrypt($project->id),
+                            ]) }}"
                             method="POST" style="display: inline" enctype="multipart/form-data">
                             @csrf
                             @method('PUT')
@@ -294,7 +299,7 @@
                                         required>
                                 </div>
                             </div>
-                            <input type="hidden" name="status" value="{{env('jalonCloturer')}}">
+                            <input type="hidden" name="status" value="{{ env('jalonCloturer') }}">
                             <div class="modal-footer">
                                 <button type="button" class="btn btn-secondary" data-dismiss="modal"><i
                                         class="fa fa-times"></i></button>
@@ -303,6 +308,47 @@
                             </div>
                         </form>
                     @endif
+                </div>
+            </div>
+        </div>
+        <div class="modal fade" id="modal-date">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h3 class="modal-title">Repouser l'écheance</h3>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <form method="POST"
+                            action="{{ route('repouserDate', ['jalon' => Crypt::encrypt($jalon->id), 'option_ttm' => Crypt::encrypt($optionTtm->id), 'project' => Crypt::encrypt($project->id)]) }}"
+                            enctype="multipart/form-data">
+                            @csrf
+                            @method('put')
+                            <div class="col">
+                                <div class="col">
+                                    <div class="form-group">
+                                        <label for="echeance">Date Fin</label>
+                                        <div class="input-group">
+                                            <div class="input-group-prepend">
+                                                <span class="input-group-text"><i class="far fa-calendar-alt"></i></span>
+                                            </div>
+                                            <input type="date" class="form-control" value="{{ $echeance }}"
+                                                inputformat="mm/dd/yyyy" name="echeance" id="echeance">
+                                        </div>
+
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="card-footer">
+                                <button type="submit" class="btn btn-secondary"><i class="fa fa-check"></i></button>
+                                <button type="button" class="btn btn-outline-secondary" data-dismiss="modal">
+                                    <i class="fa fa-times"></i>
+                                </button>
+                            </div>
+                        </form>
+                    </div>
                 </div>
             </div>
         </div>
@@ -505,4 +551,19 @@
             }).buttons().container().appendTo('#example1_wrapper .col-md-6:eq(0)');
         });
     </script>
+
+<script>
+    function supprimer(event) {
+        event.preventDefault();
+        a = event.target.closest('a');
+
+        let deleteForm = document.getElementById('deleteForm');
+        deleteForm.setAttribute('action', a.getAttribute('href'));
+        let textDelete = document.getElementById('textDelete');
+        textDelete.innerHTML = a.getAttribute('demande') + " ?";
+
+        let titleDelete = document.getElementById('titleDelete');
+        titleDelete.innerHTML = "Suppression";
+    }
+</script>
 @endpush

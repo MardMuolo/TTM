@@ -247,8 +247,13 @@ class JalonController extends Controller
         return redirect()->back()->with('error', 'Projet non trouvé.');
     }
 
-    public function repouserDate(Request $request, Jalon $jalon, $option_ttm, Project $project)
+    public function repouserDate(Request $request,$jalon, $option_ttm,$project)
     {
+        $jalon_id=Crypt::decrypt($jalon);
+        $jalon=Jalon::findOrFail($jalon_id);
+        $option_ttm=Crypt::decrypt($option_ttm);
+        $project_id=Crypt::decrypt($project);
+        $project=Project::findOrFail($project_id);
         // Validation du champ 'echeance' pour s'assurer qu'il contient une date valide
         $request->validate([
             'echeance' => 'required|date',
@@ -320,11 +325,11 @@ class JalonController extends Controller
             }
 
             // Redirection vers la route appropriée après la mise à jour de la date
-            return redirect()->route('jalons.single', ['jalon' => $jalon, 'option_ttm' => $option_ttm, 'project' => $project]);
+            return redirect()->route('jalons.single', ['jalon' => Crypt::encrypt($jalon->id), 'option_ttm' => Crypt::encrypt($option_ttm->id), 'project' => Crypt::encrypt($project->id)]);
         }
 
         // Redirection vers la route appropriée si aucun ProjectOptionttmJalon n'a été trouvé
-        return redirect()->route('jalons.single', ['jalon' => $jalon, 'option_ttm' => $option_ttm, 'project' => $project]);
+        return redirect()->route('jalons.single', ['jalon' => Crypt::encrypt($jalon->id), 'option_ttm' => Crypt::encrypt($option_ttm->id), 'project' => Crypt::encrypt($project->id)]);
     }
 
     public function updateStatus(Request $request, $jalon, $option_ttm, Project $project)
