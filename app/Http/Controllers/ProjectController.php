@@ -269,6 +269,7 @@ class ProjectController extends Controller
                 );
             }
             $complexityItem = $request->input('item_id');
+            // dd($complexityItem);
 
             foreach ($complexityItem as $item_id) {
                 $project->projectComplexityItems()->create(

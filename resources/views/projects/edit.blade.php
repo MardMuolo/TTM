@@ -113,11 +113,19 @@
                                         <textarea class="form-control" rows="3" placeholder="Description" name="description">{{ $project->description }} </textarea>
                                     </div>
                                     <div class="form-group">
-                                        <label for="exampleInputFile">Documents <span
-                                                class="text-black-50">(optionel)</span></label>
-                                        <div class="custom-file">
-                                            <input type="file" class="form-control" id="" name="file[]"
-                                                multiple>
+                                        <label for="exampleInputFile">Documents<span class="text-black-50">(optionel)</span></label>
+                                        <div class="input-group">
+                                            <div class="custom-file">
+                                                <input type="file" class="custom-file-input" id="doc" name="file[]" multiple>
+                                                <label class="custom-file-label" for="doc">
+                                                    @foreach ($project->projectFile as $item)
+                                                    {{$item?->filePath}}
+                                                    @endforeach
+                                                </label>
+                                            </div>
+                                            <div class="input-group-append">
+                                                <span class="input-group-text">Upload</span>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
@@ -173,7 +181,7 @@
     @vite('node_modules/admin-lte/plugins/bs-stepper/css/bs-stepper.min.css');
 @endpush
 @push('page_scripts')
-    <script>
+    <script type="module">
         function updateTargetId(selectElement, itemId) {
             var targetIdInput = document.getElementById("target_id_" + itemId);
             var selectedOption = selectElement.options[selectElement.selectedIndex];
@@ -189,6 +197,7 @@
 
         //handle Select2 field
         $(function() {
+            bsCustomFileInput.init();
             $('.select2').select2()
         });
     </script>

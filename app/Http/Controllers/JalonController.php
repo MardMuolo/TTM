@@ -332,8 +332,13 @@ class JalonController extends Controller
         return redirect()->route('jalons.single', ['jalon' => Crypt::encrypt($jalon->id), 'option_ttm' => Crypt::encrypt($option_ttm->id), 'project' => Crypt::encrypt($project->id)]);
     }
 
-    public function updateStatus(Request $request, $jalon, $option_ttm, Project $project)
+    public function updateStatus(Request $request, $jalon, $option_ttm,$project)
     {
+        $jalon=Crypt::decrypt($jalon);
+        $option_ttm=Crypt::decrypt($option_ttm);
+        $project_id=Crypt::decrypt($project);
+
+        $project=Project::findOrFail($project_id);
         if ($request->hasFile('jalonPv')) {
             $jalonPvFile = $request->file('jalonPv');
             $jalonPvFileName = substr(str_replace([' ', "'"], '', $jalonPvFile->getClientOriginalName()), 0, 6) . date('ymdhis') . '.' . $jalonPvFile->extension();
@@ -358,7 +363,7 @@ class JalonController extends Controller
             }
         }
 
-        return redirect()->route('jalons.single', ['jalon' => $jalon, 'option_ttm' => $option_ttm, 'project' => $project]);
+        return redirect()->back()->with(['msg'=>'Projet supprimé avec success']);
     }
 
     /**

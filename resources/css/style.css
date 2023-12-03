@@ -1,14 +1,30 @@
-.thead-color{
-    background-color:  #000000;
-    color: #FF7900;
-}
-a{
-    color: #000000;
+:root {
+    --primary: #4BB4E6;
+    --pink: #FFB4E6;
+    --purple: #A885D8;
+    --yellow: #FFD200;
+    --secondary: #d8d9db;
+    --orange: #FF7900;
+    --success:#50BE87;
+    --dark:#000000;
+    --white:#FFFFFF;
 }
 
-a:hover{
-    color: #FF7900;
+.sidebar-dark-primary{
+   background-color: var(--dark) !important;
+   color: var(--white) !important;
 }
-h3{
-    color: #FF7900;
+
+
+.bg-blue, li>a>.active, strong>a{
+    color: var(--orange) !important;
+}
+
+ol>li>a{
+    text-decoration: none !important;
+    color: var(--dark) !important;
+}
+
+ol>li>a:hover{
+    color: var(--orange) !important;
 }

@@ -3,6 +3,7 @@ import 'admin-lte';
 import $ from 'jquery';
 import select2 from 'select2';
 import Stepper from 'bs-stepper'
+import bsCustomFileInput from 'admin-lte/plugins/bs-custom-file-input/bs-custom-file-input'
 import.meta.glob([
     '../images/**',
     '../fonts/**',
@@ -10,6 +11,7 @@ import.meta.glob([
 window.jQuery = window.$ = $
 window.select2 = select2
 window.stepper = Stepper
+window.bsCustomFileInput = bsCustomFileInput
 document.addEventListener('DOMContentLoaded', function(e) {
   e.preventDefault();
   window.stepper = new Stepper(document.querySelector('.bs-stepper'))

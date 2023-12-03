@@ -1,6 +1,6 @@
 import { defineConfig } from 'vite';
 import laravel from 'laravel-vite-plugin';
-import commonjs from '@rollup/plugin-commonjs';     
+import commonjs from '@rollup/plugin-commonjs';
 
 export default defineConfig({
     plugins: [
@@ -48,9 +48,11 @@ export default defineConfig({
                 'node_modules/admin-lte/plugins/datatables-responsive/js/dataTables.responsive.min.js',
                 'node_modules/admin-lte/plugins/datatables-responsive/js/responsive.bootstrap4.min.js',
                 'resources/js/tableau.js',
-                'node_modules/dhtmlx-gantt/codebase/sources/dhtmlxgantt.js'
+                'node_modules/dhtmlx-gantt/codebase/sources/dhtmlxgantt.js',
+                'node_modules/admin-lte/plugins/icheck-bootstrap/icheck-bootstrap.min.css',
+                'node_modules/admin-lte/plugins/bs-custom-file-input/bs-custom-file-input.min.js'
             ],
-           
+
 
             refresh: true,
         }),
@@ -106,8 +108,10 @@ export default defineConfig({
                 'node_modules/admin-lte/plugins/datatables-responsive/js/dataTables.responsive.min.js',
                 'node_modules/admin-lte/plugins/datatables-responsive/js/responsive.bootstrap4.min.js',
                 'resources/js/tableau.js',
-                'node_modules/dhtmlx-gantt/codebase/sources/dhtmlxgantt.js'
-                
+                'node_modules/dhtmlx-gantt/codebase/sources/dhtmlxgantt.js',
+                'node_modules/admin-lte/plugins/icheck-bootstrap/icheck-bootstrap.min.css',
+                'node_modules/admin-lte/plugins/bs-custom-file-input/bs-custom-file-input.min.js'
+
             ],
         },
     }

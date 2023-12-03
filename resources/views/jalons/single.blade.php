@@ -241,7 +241,9 @@
                                                     href="#edit-{{ $item->id }}-2" role="button">
                                                     <i class="fas fa-pen"></i>
                                                 </a>
-                                                <a class="btn btn-sm bg-warning" href="{{route('demandeJalon.destroy', $item->id) }}" onclick="supprimer(event)"
+                                                <a class="btn btn-sm bg-warning"
+                                                    href="{{ route('demandeJalon.destroy', $item->id) }}"
+                                                    onclick="supprimer(event)"
                                                     demande="Voulez-vous supprimer cette demande '{{ $item->demande->title }}'"
                                                     data-toggle="modal" data-target="#supprimer" title="archiver">
                                                     <i class="fas fa-archive"></i>
@@ -270,33 +272,43 @@
                             </button>
                         </div>
                         <div class="modal-body">
-                            <p>{{$demandesSoumises}}Toutes les demandes doivent être soumises avant de terminer le jalon.</p>
+                            <p>{{ $demandesSoumises }}Toutes les demandes doivent être soumises avant de terminer le jalon.
+                            </p>
                         </div>
                         <div class="modal-footer">
                             <button type="button" class="btn btn-secondary" data-dismiss="modal">Fermer</button>
                         </div>
                     @else
                         <div class="modal-header">
-                            <h5 class="modal-title" id="modal-finish-jalon-label">Confirmation</h5>
+                            <h5 class="modal-title" id="modal-finish-jalon-label">Voulez-vous vraiment cloturer ce jalon?
+                            </h5>
                             <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                                 <span aria-hidden="true">&times;</span>
                             </button>
                         </div>
-                        <form
-                            action="{{ route('jalons.updateStatus', [
-                                'jalon' => Crypt::encrypt($jalon->id),
-                                'option_ttm' => Crypt::encrypt($optionTtm->id),
-                                'project' => Crypt::encrypt($project->id),
-                            ]) }}"
+                        <form action="{{ route('jalons.updateStatus',
+                         ['jalon' => Crypt::encrypt($jalon->id),
+                         'option_ttm' => Crypt::encrypt($optionTtm->id),
+                         'project' => Crypt::encrypt($project->id)]) }}" 
                             method="POST" style="display: inline" enctype="multipart/form-data">
                             @csrf
                             @method('PUT')
                             <div class="modal-body">
-                                <p>Voulez-vous marquer ce jalon comme étant fini ?</p>
                                 <div class="form-group">
-                                    <label for="jalonPv">Sélectionnez un fichier :</label>
-                                    <input type="file" class="form-control-file" name="jalonPv" id="jalonPv"
-                                        required>
+                                    <label for="exampleInputFile">Deposez un PV</label>
+                                    <div class="input-group">
+                                        <div class="custom-file">
+                                            <input type="file" class="custom-file-input" id="jalonPv" name="jalonPv" required>
+                                            <label class="custom-file-label" for="jalonPv">choisir un fichier</label>
+                                        </div>
+                                        <div class="input-group-append">
+                                            <span class="input-group-text">Upload</span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="icheck-primary">
+                                    <input type="checkbox" id="comite" name="comite" checked>
+                                    <label for="comite">Passer au comité</label>
                                 </div>
                             </div>
                             <input type="hidden" name="status" value="{{ env('jalonCloturer') }}">
@@ -403,6 +415,7 @@
 @endpush
 
 @push('page_css')
+    @vite('node_modules/admin-lte/plugins/icheck-bootstrap/icheck-bootstrap.min.css')
     @vite('node_modules/admin-lte/plugins/datatables-responsive/css/responsive.bootstrap4.min.css')
     @vite('node_modules/admin-lte/plugins/select2/css/select2.min.css')
     @vite('node_modules/admin-lte/plugins/datatables-bs4/css/dataTables.bootstrap4.min.css')
@@ -538,8 +551,10 @@
         }
     </script>
 
+
     <script type='module'>
         $(function() {
+            bsCustomFileInput.init();
             $("#tab_demande").DataTable({
                 "responsive": true,
                 "lengthChange": true,
@@ -552,18 +567,18 @@
         });
     </script>
 
-<script>
-    function supprimer(event) {
-        event.preventDefault();
-        a = event.target.closest('a');
+    <script>
+        function supprimer(event) {
+            event.preventDefault();
+            a = event.target.closest('a');
 
-        let deleteForm = document.getElementById('deleteForm');
-        deleteForm.setAttribute('action', a.getAttribute('href'));
-        let textDelete = document.getElementById('textDelete');
-        textDelete.innerHTML = a.getAttribute('demande') + " ?";
+            let deleteForm = document.getElementById('deleteForm');
+            deleteForm.setAttribute('action', a.getAttribute('href'));
+            let textDelete = document.getElementById('textDelete');
+            textDelete.innerHTML = a.getAttribute('demande') + " ?";
 
-        let titleDelete = document.getElementById('titleDelete');
-        titleDelete.innerHTML = "Suppression";
-    }
-</script>
+            let titleDelete = document.getElementById('titleDelete');
+            titleDelete.innerHTML = "Suppression";
+        }
+    </script>
 @endpush

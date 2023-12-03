@@ -237,7 +237,7 @@
                                             <span class="info-box-number">{{ $projetsEncours }}</span>
     
                                             <span class="progress-description">
-                                                {{ $annee }}
+                                                Homme
                                             </span>
                                         </div>
     
@@ -253,7 +253,7 @@
                                             <span class="info-box-number">{{ $projetsPrec }}</span>
     
                                             <span class="progress-description">
-                                                {{ $annePrec }}
+                                                Femme
                                             </span>
                                         </div>
     
