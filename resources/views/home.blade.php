@@ -347,7 +347,7 @@
         $(function() {
             var salesChartCanvas = $('#salesChart').get(0).getContext('2d')
             var salesChartData = {
-                labels: ['Jan', 'Fév', 'Mar', 'Avr', 'Mai', 'Juin', 'Juil', 'Aout', 'Sept', 'Oct', 'Dec'],
+                labels: @json($labels),
                 datasets: [{
                         label: 'Projets soumis',
                         backgroundColor: 'rgba(169, 169, 169, 0.6)',

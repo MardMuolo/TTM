@@ -41,7 +41,7 @@
                                     @if ($echeance->isPast())
                                         <p>Date dépassée, en retard de {{ abs($joursRestants) }} jour(s)</p>
                                     @else
-                                        <p>Date définie</p>
+                                        <p>Date définie </p>
                                     @endif
                                     <p>
                                         <i class="far fa-calendar-alt text-primary"></i>
@@ -73,7 +73,7 @@
                         @if ($jalon['status'] === env('jalonEnCours'))
                             <small class="badge badge-primary">{{ $jalon['status'] }}</small>
                         @elseif ($jalon['status'] === env('jalonCloturer'))
-                            <small class="badge badge-success">{{ $jalon['status'] }}</small>
+                            <small class="badge badge-success">{{ $jalon['status'] }} </small>
                         @else
                             <small class="badge badge-warning">{{ $jalon['status'] }}</small>
                         @endif

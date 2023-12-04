@@ -88,7 +88,7 @@ class HomeController extends Controller
 
 
         }
-        // dd($ongoing);
+        // dd($submittedProjectsPerMonth);
         // dd($ongoingProjectsPerMonth);
 
         // Ajouter les valeurs au tableau des projets par mois pour chaque statut
@@ -102,6 +102,8 @@ class HomeController extends Controller
             $ongoingProjects[] = $ongoingProjectsPerMonth[$monthIndex] ?? 0;
             $completedProjects[] = $completedProjectsPerMonth[$monthIndex] ?? 0;
         }
+        // dd($completedProjects);
+
         // dd($ongoingProjects, $submittedProjects, $completedProjects);
         // Labels pour l'axe des X (mois)
         $labels = ['Jan', 'Fév', 'Mar', 'Avr', 'Mai', 'Juin', 'Juil', 'Août', 'Sep', 'Oct', 'Nov', 'Déc'];
@@ -180,7 +182,6 @@ class HomeController extends Controller
 
         $projetsEncours = Project::whereBetween('endDate', [$annee . '-01-01', $annee . '-12-31'])->get()->count();
         $projetsPrec = Project::whereBetween('endDate', [$annePrec . '-01-01', $annePrec . '-12-31'])->get()->count();
-
 
         return view(
             'home',

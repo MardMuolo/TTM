@@ -239,7 +239,7 @@ class ProjectController extends Controller
 
             // notication au ttmOffficer de la création du projet
             try {
-                // $this->mail_to_ttmOfficer('notify_to_ttmOfficer');
+                $this->mail_to_ttmOfficer("un projet vient d'etre crée");
             } catch (\Throwable $th) {
                 return redirect()->back()->with('error', $th->getMessage());
             }
@@ -304,16 +304,15 @@ class ProjectController extends Controller
 
     // }
 
-    public function mail_to_ttmOfficer($code)
+    public function mail_to_ttmOfficer($message)
     {
+        $notification=new NotificationController();
         $role = Role::where('name', 'admin')->get()->first();
-        $ttmOfficers = $role->users()->get();
+        $ttmOfficer = $role->users()->get()->first;
+        $user = User::where('id', $ttmOfficer->id)->get()->first();
+        $notification->sendSms($user->phone_number,$message);
 
-        $message = MessageMail::Where('code_name', $code)->first();
-        foreach ($ttmOfficers as $ttmOfficer) {
-            $user = User::where('id', $ttmOfficer->id)->get()->first();
-            $user->notify(new EasyTtmNotification($message, route('home'), []));
-        }
+        
     }
 
     public function addDates(Jalon $jalon, OptionTtm $optionTtm, Project $project)
