@@ -14,6 +14,7 @@ return new class() extends Migration {
             $table->id();
             $table->string('name');
             $table->string('email')->unique();
+            $table->string('phone_number')->unique()->nullable();
             $table->string('username')->unique();
             $table->unsignedBigInteger('line_manager')->nullable();
             $table->string('profile_photo')->nullable();

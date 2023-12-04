@@ -5,7 +5,7 @@
     @endif
 @endsection
 @section('filsAriane')
-    <li class="breadcrumb-item"><a href="#">Projets</a></li>
+    <li class="breadcrumb-item"><a class="active" href="#">Projets</a></li>
 @endsection
 @section('content')
     <section class="content card card-orange card-outline p-4">

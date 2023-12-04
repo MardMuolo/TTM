@@ -247,13 +247,13 @@ class JalonController extends Controller
         return redirect()->back()->with('error', 'Projet non trouvé.');
     }
 
-    public function repouserDate(Request $request,$jalon, $option_ttm,$project)
+    public function repouserDate(Request $request, $jalon, $option_ttm, $project)
     {
-        $jalon_id=Crypt::decrypt($jalon);
-        $jalon=Jalon::findOrFail($jalon_id);
-        $option_ttm=Crypt::decrypt($option_ttm);
-        $project_id=Crypt::decrypt($project);
-        $project=Project::findOrFail($project_id);
+        $jalon_id = Crypt::decrypt($jalon);
+        $jalon = Jalon::findOrFail($jalon_id);
+        $option_ttm = Crypt::decrypt($option_ttm);
+        $project_id = Crypt::decrypt($project);
+        $project = Project::findOrFail($project_id);
         // Validation du champ 'echeance' pour s'assurer qu'il contient une date valide
         $request->validate([
             'echeance' => 'required|date',
@@ -332,38 +332,57 @@ class JalonController extends Controller
         return redirect()->route('jalons.single', ['jalon' => Crypt::encrypt($jalon->id), 'option_ttm' => Crypt::encrypt($option_ttm->id), 'project' => Crypt::encrypt($project->id)]);
     }
 
-    public function updateStatus(Request $request, $jalon, $option_ttm,$project)
+    public function updateStatus(Request $request, $jalon, $option_ttm, $project)
     {
-        $jalon=Crypt::decrypt($jalon);
-        $option_ttm=Crypt::decrypt($option_ttm);
-        $project_id=Crypt::decrypt($project);
+        // dd($request->status);
+        //Decryptage des Url
+        $jalon = Crypt::decrypt($jalon);
+        $option_ttm = Crypt::decrypt($option_ttm);
+        $project_id = Crypt::decrypt($project);
 
-        $project=Project::findOrFail($project_id);
-        if ($request->hasFile('jalonPv')) {
-            $jalonPvFile = $request->file('jalonPv');
-            $jalonPvFileName = substr(str_replace([' ', "'"], '', $jalonPvFile->getClientOriginalName()), 0, 6) . date('ymdhis') . '.' . $jalonPvFile->extension();
-            $destinationPath = 'storage/lalonPvs';
-            $jalonPvFile->storeAs($destinationPath, $jalonPvFileName, 'public');
+        $project = Project::findOrFail($project_id);
 
-            // Enregistrement du nom du fichier dans la base de données
-            $projectOptionttmJalon = ProjectOptionttmJalon::where('jalon_id', $jalon)
-                ->where('option_ttm_id', $option_ttm)
-                ->where('project_id', $project->id)
-                ->first();
 
-            if ($projectOptionttmJalon) {
-                $projectOptionttmJalon->status = $request->status;
-                $projectOptionttmJalon->jalonPv = $jalonPvFileName;
-                $projectOptionttmJalon->save();
-                activity()
-                    ->causedBy(auth()->user()->id)
-                    ->performedOn($project)
-                    ->event('endTask')
-                    ->log(auth()->user()->name . ' a déclaré le jalon ' . $jalon . ' comme cloturé');
+
+
+        $projectOptionttmJalon = ProjectOptionttmJalon::where('jalon_id', $jalon)
+            ->where('option_ttm_id', $option_ttm)
+            ->where('project_id', $project->id)
+            ->first();
+
+        if ($request->comite == "on") {
+            $projectOptionttmJalon->status = env('jalonEnComite');
+            $projectOptionttmJalon->save();
+        } else {
+            if ($request->hasFile('jalonPv')) {
+                $jalonPvFile = $request->file('jalonPv');
+                $jalonPvFileName = substr(str_replace([' ', "'"], '', $jalonPvFile->getClientOriginalName()), 0, 6) . date('ymdhis') . '.' . $jalonPvFile->extension();
+                $destinationPath = 'storage/lalonPvs';
+                $jalonPvFile->storeAs($destinationPath, $jalonPvFileName, 'public');
+
+                // Enregistrement du nom du fichier dans la base de données
+
+                if ($projectOptionttmJalon) {
+                    dd($request->comite);
+                    $projectOptionttmJalon->status = env('jalonCloturer');
+                    $projectOptionttmJalon->jalonPv = $jalonPvFileName;
+                    $projectOptionttmJalon->save();
+                    activity()
+                        ->causedBy(auth()->user()->id)
+                        ->performedOn($project)
+                        ->event('endTask')
+                        ->log(auth()->user()->name . ' a déclaré le jalon ' . $jalon . ' comme cloturé');
+                }
             }
         }
 
-        return redirect()->back()->with(['msg'=>'Projet supprimé avec success']);
+
+
+        return redirect()->back()->with(['msg' => 'Status du jalon changé avec success']);
+    }
+    public function passageComite(Request $request)
+    {
+
     }
 
     /**

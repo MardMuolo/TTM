@@ -11,7 +11,7 @@
     <li class="nav-item">
         <a href="{{ route('projects.index') }}" class="nav-link {{ Request::is('projects') ? 'bg-orange' : '' }}">
             <i class="nav-icon fas fa-folder"></i>
-            <p>Projets <span class="badge bg-blue"> {{ Illuminate\Support\Facades\Cache::get('projects') ?? '0' }}</span>
+            <p>Projets <span class="badge bg-secondary"> {{ Illuminate\Support\Facades\Cache::get('projects') ?? '0' }}</span>
             </p>
         </a>
     </li>

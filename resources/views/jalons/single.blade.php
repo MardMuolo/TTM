@@ -280,25 +280,28 @@
                         </div>
                     @else
                         <div class="modal-header">
-                            <h5 class="modal-title" id="modal-finish-jalon-label">Voulez-vous vraiment cloturer ce jalon?
+                            <h5 class="modal-title" id="modal-finish-jalon-label">Voulez-vous vraiment <span id="comiteAlerte">cloturer ce jalon?</span>
                             </h5>
                             <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                                 <span aria-hidden="true">&times;</span>
                             </button>
                         </div>
-                        <form action="{{ route('jalons.updateStatus',
-                         ['jalon' => Crypt::encrypt($jalon->id),
-                         'option_ttm' => Crypt::encrypt($optionTtm->id),
-                         'project' => Crypt::encrypt($project->id)]) }}" 
+                        <form
+                            action="{{ route('jalons.updateStatus', [
+                                'jalon' => Crypt::encrypt($jalon->id),
+                                'option_ttm' => Crypt::encrypt($optionTtm->id),
+                                'project' => Crypt::encrypt($project->id),
+                            ]) }}"
                             method="POST" style="display: inline" enctype="multipart/form-data">
                             @csrf
                             @method('PUT')
                             <div class="modal-body">
-                                <div class="form-group">
+                                <div class="form-group" id="depot">
                                     <label for="exampleInputFile">Deposez un PV</label>
                                     <div class="input-group">
                                         <div class="custom-file">
-                                            <input type="file" class="custom-file-input" id="jalonPv" name="jalonPv" required>
+                                            <input type="file" class="custom-file-input" id="jalonPv"
+                                                name="jalonPv" required>
                                             <label class="custom-file-label" for="jalonPv">choisir un fichier</label>
                                         </div>
                                         <div class="input-group-append">
@@ -307,11 +310,10 @@
                                     </div>
                                 </div>
                                 <div class="icheck-primary">
-                                    <input type="checkbox" id="comite" name="comite" checked>
+                                    <input type="checkbox" id="comite" name="comite">
                                     <label for="comite">Passer au comité</label>
                                 </div>
                             </div>
-                            <input type="hidden" name="status" value="{{ env('jalonCloturer') }}">
                             <div class="modal-footer">
                                 <button type="button" class="btn btn-secondary" data-dismiss="modal"><i
                                         class="fa fa-times"></i></button>
@@ -372,6 +374,13 @@
         {{-- @include('demande.delete') --}}
         {{-- @include('validation.index') --}}
         {{-- @include('jalons.edit') --}}
+        @php
+            $url = route('jalons.updateStatus', [
+                'jalon' => Crypt::encrypt($jalon->id),
+                'option_ttm' => Crypt::encrypt($optionTtm->id),
+                'project' => Crypt::encrypt($project->id),
+            ]);
+        @endphp
     </section>
 @endsection
 @section('scripts')
@@ -515,7 +524,24 @@
                     console.log('Erreur AJAX: ' + error);
                 }
             });
+
+
+
         });
+        $('#comite').on('click', function() {
+            if ($(this).is(':checked')) {
+                $('#jalonPv').removeAttr('required')
+                $('#depot').css('display','none')
+                $('#comiteAlerte').text('faire passer ce jalon au comité')
+                console.log('is checked')
+            }
+            else{
+                // $('#jalonPv').ttr('required')
+                $('#depot').css('display','block')
+                $('#comiteAlerte').text('cloturé ce jalon')
+            }
+
+        })
 
         function supprimer(event) {
             event.preventDefault();

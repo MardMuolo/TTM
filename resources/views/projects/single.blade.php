@@ -7,7 +7,7 @@
     <li class="breadcrumb-item"><a href="#">{{ $project->name }}</a></li>
 @endsection
 @section('content')
-    <div class="card card-primary card-outline p-4">
+    <div class="card card-orange card-outline p-4">
         <div class="card-body">
             <ul class="nav nav-tabs" id="custom-content-below-tab" role="tablist">
                 <li class="nav-item">
@@ -165,7 +165,7 @@
                                 </div>
                             </div>
                             <div class="ol-12 col-md-12 col-lg-4 order-1 order-md-2">
-                                <h3 class="text-primary"><i class="fas fa-paint-brush"></i> {{ $project->name }}</h3>
+                                <h3 class="text-orange"><i class="fas fa-paint-brush"></i> {{ $project->name }}</h3>
                                 <p class="text-muted">{{ $project->description }}</p>
                                 <br>
                                 <div class="text-muted">
