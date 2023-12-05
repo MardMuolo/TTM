@@ -19,9 +19,9 @@ return new class extends Migration
             $table->date('debutDate')->nullable();
             $table->date('echeance')->nullable();
             $table->string('status')->default(env('statusEnAttente'));
+            $table->boolean('on_comity')->default(false);
             $table->timestamps();
             $table->softDeletes();
-
             $table->foreign('project_id')->references('id')->on('projects')->onDelete('cascade');
             $table->foreign('option_ttm_id')->references('id')->on('option_ttms')->onDelete('cascade');
             $table->foreign('jalon_id')->references('id')->on('jalons')->onDelete('cascade');

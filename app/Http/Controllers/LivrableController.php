@@ -101,8 +101,17 @@ class LivrableController extends Controller
         if ($request->Avis == env('livrableRevoquer')) {
             $livrable->pv = $request->description;
         }
+        $statusDemande=[
+            env('livrableValider')=>env('demandeSoumise'),
+            env('livrableRevoquer')=>env('demandeRenvoyer'),
+            env('livrableRejeter')=>env('demandeNonSoumise'),
+            env('livrableEnAttente')=>env('demandeNonSoumise'),
+        ];
+        // dd($statusDemande[ $request->Avis]);
+
+
         $demandeJalon = DemandeJalon::findOrFail($livrable->demande_jalon_id);
-        $demandeJalon->status = $request->Avis;
+        $demandeJalon->status =$statusDemande[ $request->Avis];
         $demandeJalon->save();
         $livrable->save();
         return redirect()->back()->with(['message' => 'validation du livrable avec success']);

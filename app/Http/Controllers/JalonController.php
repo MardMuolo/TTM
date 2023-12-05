@@ -92,7 +92,7 @@ class JalonController extends Controller
         $demande = DemandeJalon::find($demande);
         $livrables = $demande->livrables()->get();
         $i = 1;
-        $color = ['A Corriger' => 'bg-warning', 'Valider' => 'bg-success', 'en attente' => 'bg-secondary', 'Rejeter' => 'bg-danger'];
+        $color = [env('livrableRevoquer') => 'bg-warning', env('livrableValider') => 'bg-success', env('livrableEnAttente') => 'bg-secondary', env('livrableRejeter') => 'bg-danger'];
         return view('jalons.demande', compact('demande', 'livrables', 'i', 'color', 'project', 'optionTtm', 'jalon'));
     }
 
@@ -363,7 +363,9 @@ class JalonController extends Controller
                 // Enregistrement du nom du fichier dans la base de données
 
                 if ($projectOptionttmJalon) {
-                    dd($request->comite);
+
+                    //signaler si un projet est passé en comité
+                    //dd($request->comite);
                     $projectOptionttmJalon->status = env('jalonCloturer');
                     $projectOptionttmJalon->jalonPv = $jalonPvFileName;
                     $projectOptionttmJalon->save();

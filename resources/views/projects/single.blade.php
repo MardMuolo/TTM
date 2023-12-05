@@ -3,8 +3,8 @@
     {{ $project->name }}
 @endsection
 @section('filsAriane')
-    <li class="breadcrumb-item"><a href="{{ route('projects.index') }}">Projets</a></li>
-    <li class="breadcrumb-item"><a href="#">{{ $project->name }}</a></li>
+    <li class="breadcrumb-item"><a href="{{ route('projects.index') }}">Projet</a></li>
+    <li class="breadcrumb-item"><a href="#" class="text-orange" title="{{$project->name}}">{{substr(str_replace([' ', "'"], '', $project->name), 0, 10)}}...</a></li>
 @endsection
 @section('content')
     <div class="card card-orange card-outline p-4">

@@ -3,7 +3,8 @@
     Dépôt du livrable
 @endsection
 @section('filsAriane')
-    <li class="breadcrumb-item"><a href="{{ route('projects.show', $project->id) }}">{{ $project->name }}</a></li>
+    <li class="breadcrumb-item"><a href="{{ route('projects.show', Crypt::encrypt($project->id)) }}" title="{{$project->name}}"
+            class="text-orange">{{ substr(str_replace([' ', "'"], '', $project->name), 0, 10) }}...</a></li>
     <li class="breadcrumb-item text-secondary">{{ $jalon->designation }}</li>
     <li class="breadcrumb-item text-secondary">Livrable</li>
 @endsection
@@ -58,7 +59,8 @@
                                                 <td>{{ $livrable->nom }}</td>
                                                 <td>{{ $livrable->description }}
                                                     @if ($livrable->pv)
-                                                        <p><span class="text-danger bold">Alerte!:</span> {{$livrable->pv}}</p>
+                                                        <p><span class="text-danger bold">Alerte!:</span>
+                                                            {{ $livrable->pv }}</p>
                                                     @endif
                                                 </td>
                                                 <td>
@@ -89,11 +91,11 @@
                                                     @endif
 
                                                     @if (Auth()->user()->roles[0]->name == env('Directeur'))
-                                                    @php
-                                                        $id=Crypt::encrypt( $livrable->id);
-                                                    @endphp
+                                                        @php
+                                                            $id = Crypt::encrypt($livrable->id);
+                                                        @endphp
                                                         <a class="btn btn-secondary btn-sm" title="validation"
-                                                            href="{{ route('valider_livrable',$id) }}"
+                                                            href="{{ route('valider_livrable', $id) }}"
                                                             onclick="edit(event)" item = "{{ $livrable->nom }}"
                                                             description="{{ $livrable->description }}" data-toggle="modal"
                                                             data-target="#validate">
@@ -278,5 +280,9 @@
             document.getElementById('file').innerHTML = "" + a_tag.getAttribute('fichier');
 
         }
+        $(function() {
+            bsCustomFileInput.init();
+            $('.select2').select2()
+        });
     </script>
 @endpush

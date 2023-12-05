@@ -22,6 +22,7 @@ return new class() extends Migration {
             'name' => 'rootadmin',
             'email' => 'admin@example.com',
             'username' => 'rootadmin',
+            'phone_number' => '0844297349',
             'password' => Hash::make('password'),
         ]);
 

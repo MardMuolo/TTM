@@ -238,11 +238,7 @@ class ProjectController extends Controller
             // $this->addStaff($sponsor, $project, 'sponsor');
 
             // notication au ttmOffficer de la création du projet
-            try {
-                $this->mail_to_ttmOfficer("un projet vient d'etre crée");
-            } catch (\Throwable $th) {
-                return redirect()->back()->with('error', $th->getMessage());
-            }
+            // $this->mail_to_ttmOfficer("un projet vient d'etre crée");
 
             if ($request->hasFile('file')) {
                 foreach ($request->file as $file) {
@@ -306,13 +302,13 @@ class ProjectController extends Controller
 
     public function mail_to_ttmOfficer($message)
     {
-        $notification=new NotificationController();
+        $notification = new NotificationController();
         $role = Role::where('name', 'admin')->get()->first();
         $ttmOfficer = $role->users()->get()->first;
         $user = User::where('id', $ttmOfficer->id)->get()->first();
-        $notification->sendSms($user->phone_number,$message);
+        $notification->sendSms($user->phone_number, $message);
 
-        
+
     }
 
     public function addDates(Jalon $jalon, OptionTtm $optionTtm, Project $project)
@@ -413,11 +409,11 @@ class ProjectController extends Controller
 
     public function getProjectToRepport(Request $request)
     {
-        if($request->is_comite){
+        if ($request->is_comite) {
 
-            $projects=Project::where('id',1);
+            $projects = Project::where('id', 1);
         }
-    //    dd($request);
+        //    dd($request);
 
         // Faites ce que vous voulez avec les données récupérées
         // ...
