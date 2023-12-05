@@ -17,7 +17,16 @@ use Illuminate\Support\Facades\Route;
 @include 'webAcl.php';
 
 Route::get('/', function () {
-    return redirect('/home');
+    // dd(Auth::user()->roles[0]->name);
+    $routes=[
+        env('TtmOfficer')=>"route('home')",
+        env('Pm')=>route('projects.index'),
+        env('User')=>route('projects.index'),
+        env('Directeur')=>route('approbationCollaborateur.index'),
+        env('AdminSys')=> route('users.index'),
+    ];
+    
+    return redirect($routes[Auth::user()->roles[0]->name]);
 });
 @include('metierRoutes/web.php');
 @include 'complexityRoutes/web.php';
