@@ -18,6 +18,7 @@ return new class extends Migration
             $table->string('fichier');
             $table->string('status')->default(env('statusEnAttente'));
             $table->string('pv')->nullable();
+            $table->boolean('is_active')->default(true);
             $table->timestamps();
             $table->softDeletes();
         });

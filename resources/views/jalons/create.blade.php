@@ -75,6 +75,7 @@
                     aria-placeholder="nom du contributeur" name="contributeur" id="user">
                     <option></option>
                     <input hidden type="hidden" class="form-control hidden" name="username" id="username">
+                    <input hidden type="hidden" class="form-control hidden" name="phone_number" id="phone_number">
                     <input hidden type="email" class="form-control hidden" id="inputEmail" placeholder="email" name="email">
                     <input hidden type="text" class="form-control hidden" id="name" placeholder="Nom & prenom"
                     name="nom">
@@ -87,6 +88,7 @@
                     aria-placeholder="nom du contributeur" name="manager" id="manager">
                     <option></option>
                     <input hidden type="hidden" class="form-control hidden" name="username_manager" id="username_manager">
+                    <input hidden type="hidden" class="form-control hidden" name="phone_number_manager" id="phone_number_manager">
                     <input hidden type="email" class="form-control hidden" id="inputEmail_manager" placeholder="email" name="email_manager">
                     <input hidden type="text" class="form-control hidden" id="name_manager" placeholder="Nom & prenom"
                     name="nom_manager">

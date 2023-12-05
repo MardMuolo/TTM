@@ -34,6 +34,8 @@
                 </div>
                 <div class="form-group">
                     <input type="text" value="{{ $demande->id }}" hidden name="demande_jalon_id">
+                    <input type="text" value="{{ $jalon->id }}" hidden name="jalon_id">
+                    <input type="text" value="{{ $project->id }}" hidden name="project_id">
                 </div>
                 <div class="form-group">
                     <label>Observation</label>

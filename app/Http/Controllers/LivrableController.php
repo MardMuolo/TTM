@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Models\Demande;
+use App\Models\Jalon;
+use App\Models\Project;
 use App\Models\Livrable;
 use App\Models\DemandeJalon;
 use Illuminate\Http\Request;
@@ -34,21 +36,26 @@ class LivrableController extends Controller
      */
     public function store(Request $request)
     {
+        // dd($request);
+        $project=Project::findOrFail($request->project_id);
+        $jalon=Jalon::findOrFail($request->jalon_id);
         $request->validate([
             'nom' => 'required',
             'description' => 'required',
             'demande_jalon_id' => 'required|integer',
         ]);
-
-
+        $folder_project_name=substr(str_replace([' ', "'"], '', $project->name), 0, 6);
+        $folder_jalon_name=substr(str_replace([' ', "'"], '', $jalon->designation), 0, 6);
+        $long_path=$folder_project_name.'/'.$folder_jalon_name;
         if ($request->hasFile('fichier')) {
 
             $namefile = date('ymdhis') . '.' . $request->fichier->extension();
-            $path = $request->fichier->storeAs('livrable', $namefile);
-            $publicPath = public_path('storage/livrable');
+            $path = $request->fichier->storeAs($long_path.'/livrables', $namefile);
+            $publicPath = public_path('storage/projet/'.$long_path.'/');
             File::ensureDirectoryExists($publicPath);
             File::delete($publicPath . '/' . $namefile);
             File::link(storage_path('app/' . $path), $publicPath . '/' . $namefile);
+
         }
 
         $livrable = Livrable::create([

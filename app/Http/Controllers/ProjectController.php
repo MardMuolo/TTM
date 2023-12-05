@@ -8,6 +8,7 @@ Author: emmenuel badibanga
 
 namespace App\Http\Controllers;
 
+use ZipArchive;
 use Carbon\Carbon;
 use App\Models\Role;
 use App\Models\User;
@@ -38,6 +39,7 @@ class ProjectController extends Controller
 {
     public function index(Request $request)
     {
+       
         $filter = $request->filter ?? null;
         if (isset(Auth()->user()->direction_user->is_director)) {
             $projects = Project::isDirector();
@@ -73,6 +75,7 @@ class ProjectController extends Controller
             'updateTask' => 'fas fa-random',
             'edit' => 'fas fa-edit',
             'endTask' => 'fas fa-clock',
+            'createTask'=>'fas fa-edit',
         ];
 
 
@@ -239,12 +242,12 @@ class ProjectController extends Controller
 
             // notication au ttmOffficer de la création du projet
             // $this->mail_to_ttmOfficer("un projet vient d'etre crée");
-
+            $folder_name=substr(str_replace([' ', "'"], '', $request->name), 0, 6);
             if ($request->hasFile('file')) {
                 foreach ($request->file as $file) {
-                    $namefile = substr(str_replace([' ', "'"], '', $request->name), 0, 6) . '' . date('ymdhis') . '.' . $file->extension();
-                    $path = $file->storeAs('documents', $namefile);
-                    $publicPath = public_path('storage/documents');
+                    $namefile = $folder_name . '' . date('ymdhis') . '.' . $file->extension();
+                    $path = $file->storeAs('projet/'.$folder_name, $namefile);
+                    $publicPath = public_path('storage/projet/'.$folder_name.'/');
                     File::ensureDirectoryExists($publicPath);
                     File::delete($publicPath . '/' . $namefile);
                     File::link(storage_path('app/' . $path), $publicPath . '/' . $namefile);
@@ -479,6 +482,53 @@ class ProjectController extends Controller
         }
     }
 
+
+
+    public function telechargerProjet()
+    {
+
+        // $project=Project::findOrFail($id);
+        // Chemin du répertoire du projet à compresser
+        $cheminProjet = public_path('chemin/vers/le/projet');
+
+        // Nom du fichier ZIP
+        $nomFichierZip = 'projet.zip';
+
+        // Chemin de destination du fichier ZIP
+        $cheminFichierZip = public_path($nomFichierZip);
+
+        // Création d'une instance de la classe ZipArchive
+        $zip = new ZipArchive();
+
+        // Ouverture du fichier ZIP en mode création
+        if ($zip->open($cheminFichierZip, ZipArchive::CREATE | ZipArchive::OVERWRITE) === true) {
+            // Récupération de tous les fichiers du projet
+            $fichiersProjet = File::allFiles($cheminProjet);
+
+            // Ajout de chaque fichier au fichier ZIP
+            foreach ($fichiersProjet as $fichier) {
+                // Chemin absolu du fichier dans le projet
+                $cheminFichier = $fichier->getPathname();
+
+                // Chemin relatif du fichier dans le projet
+                $cheminRelatif = $fichier->getRelativePathname();
+
+                // Ajout du fichier au fichier ZIP en conservant la structure des dossiers
+                $zip->addFile($cheminFichier, $cheminRelatif);
+            }
+
+            // Fermeture du fichier ZIP
+            $zip->close();
+
+            // Téléchargement du fichier ZIP
+            return response()->download($cheminFichierZip)->deleteFileAfterSend(true);
+        }
+
+        // En cas d'erreur lors de la création du fichier ZIP
+        return 'Erreur lors de la création du fichier ZIP.';
+    }
+
+
     public function destroy(Project $project)
     {
         try {
@@ -494,4 +544,8 @@ class ProjectController extends Controller
             return view('errorsPages.error');
         }
     }
+
+
+
+   
 }

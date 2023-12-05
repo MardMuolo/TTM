@@ -20,6 +20,7 @@ return new class() extends Migration {
             $table->date('startDate');
             $table->date('endDate')->nullable();
             $table->bigInteger('score');
+            $table->boolean('is_active')->default(true);
             $table->integer('coast');
             $table->string('projectOwner');
             $table->string('sponsor');

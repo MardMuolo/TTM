@@ -71,7 +71,7 @@ class DemandeJalonController extends Controller
                 'email' => $request->email_manager,
                 'username' => $request->username_manager,
                 'password' => Hash::make('password'),
-                'phone_number' => '086dd35768',
+                'phone_number' =>$request->phone_number_manager,
             ]);
 
             return $user;
@@ -103,7 +103,7 @@ class DemandeJalonController extends Controller
                 'email' => $request->email,
                 'username' => $request->username,
                 'password' => Hash::make('password'),
-                'phone_number' => '0863ff5768',
+                'phone_number' => $request->phone_number,
             ]);
 
             ProjectUser::create([

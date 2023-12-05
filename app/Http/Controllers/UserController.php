@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Role;
 use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Http\Response;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Gate;
 
@@ -88,4 +89,109 @@ class UserController extends Controller
 
         return redirect()->route('users.index');
     }
-}
+
+    public function getUsers()
+    {
+        $users = [
+            [
+                'id' => 1,
+                'username' => 'johndoe',
+                'first_name' => 'John',
+                'last_name' => 'Doe',
+                'email' => 'johndoe@example.com',
+                'phone' => '1234567890',
+            ],
+            [
+                'id' => 2,
+                'username' => 'janedoe',
+                'first_name' => 'Jane',
+                'last_name' => 'Doe',
+                'email' => 'janedoe@example.com',
+                'phone' => '9876543210',
+            ],
+            [
+                'id' => 3,
+                'username' => 'bobsmith',
+                'first_name' => 'Bob',
+                'last_name' => 'Smith',
+                'email' => 'bobsmith@example.com',
+                'phone' => '4567890123',
+            ],
+            [
+                'id' => 4,
+                'username' => 'alicejohnson',
+                'first_name' => 'Alice',
+                'last_name' => 'Johnson',
+                'email' => 'alicejohnson@example.com',
+                'phone' => '7890123456',
+            ],
+            [
+                'id' => 5,
+                'username' => 'mikesullivan',
+                'first_name' => 'Mike',
+                'last_name' => 'Sullivan',
+                'email' => 'mikesullivan@example.com',
+                'phone' => '2345678901',
+            ],
+            [
+                'id' => 6,
+                'username' => 'sarahbrown',
+                'first_name' => 'Sarah',
+                'last_name' => 'Brown',
+                'email' => 'sarahbrown@example.com',
+                'phone' => '9012345678',
+            ],
+            [
+                'id' => 7,
+                'username' => 'davidwilson',
+                'first_name' => 'David',
+                'last_name' => 'Wilson',
+                'email' => 'davidwilson@example.com',
+                'phone' => '5678901234',
+            ],
+            [
+                'id' => 8,
+                'username' => 'emilythomas',
+                'first_name' => 'Emily',
+                'last_name' => 'Thomas',
+                'email' => 'emilythomas@example.com',
+                'phone' => '4321098765',
+            ],
+            [
+                'id' => 9,
+                'username' => 'tomwright',
+                'first_name' => 'Tom',
+                'last_name' => 'Wright',
+                'email' => 'tomwright@example.com',
+                'phone' => '8765432109',
+            ],
+            [
+                'id' => 10,
+                'username' => 'lauramiller',
+                'first_name' => 'Laura',
+                'last_name' => 'Miller',
+                'email' => 'lauramiller@example.com',
+                'phone' => '1098765432',
+            ],
+        ];
+
+        $formattedData = collect($users)->map(function ($user) {
+            return [
+                'id' => $user['id'],
+                'username' => $user['username'],
+                'text' => $user['last_name'] . ' ' . $user['first_name'],
+                'email' => $user['email'],
+                'phone' => $user['phone'],
+                'first_name' => $user['first_name'],
+                'last_name' => $user['last_name'],
+            ];
+        });
+    
+        $response = [
+            'status' => 'success',
+            'code' => Response::HTTP_OK,
+            'body' => $formattedData,
+        ];
+    
+        return response()->json($response, Response::HTTP_OK);
+}}

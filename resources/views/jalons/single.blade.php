@@ -311,7 +311,7 @@
                                 </div>
                                 <div class="icheck-primary">
                                     <input type="checkbox" id="comite" name="comite">
-                                    <label for="comite">Passer au comité</label>
+                                    <label for="comite">Passé au comité</label>
                                 </div>
                             </div>
                             <div class="modal-footer">
@@ -455,12 +455,15 @@
             }
 
             $.ajax({
-                url: 'http://10.143.41.70:8000/promo2/odcapi/?method=getUsers',
+                url: '{{route('getUsers')}}',
+                type:'Get',
                 dataType: 'json',
                 success: function(response) {
+                    console.log(response)
 
-                    if (response.success) {
-                        var data = response.users;
+                    if (response.status==='success') {
+                        var data = response.body;
+                        console.log(data)
 
                         var formattedData = data.map(function(user) {
                             return {
@@ -495,6 +498,7 @@
                             $('#username').val(selectedUser.username);
                             $('#inputEmail').val(selectedUser.email);
                             $('#name').val(selectedUser.text);
+                            $('#phone_number').val(selectedUser.phone);
 
                             var fullName = selectedUser.first_name + ' ' + selectedUser
                                 .last_name;
@@ -510,6 +514,7 @@
                             $('#username_manager').val(selectedUser.username);
                             $('#inputEmail_manager').val(selectedUser.email);
                             $('#name_manager').val(selectedUser.text);
+                            $('#phone_number_manager').val(selectedUser.phone);
 
                             var fullName = selectedUser.first_name + ' ' + selectedUser
                                 .last_name;
@@ -528,20 +533,20 @@
 
 
         });
-        $('#comite').on('click', function() {
-            if ($(this).is(':checked')) {
-                $('#jalonPv').removeAttr('required')
-                $('#depot').css('display','none')
-                $('#comiteAlerte').text('faire passer ce jalon au comité')
-                console.log('is checked')
-            }
-            else{
-                // $('#jalonPv').ttr('required')
-                $('#depot').css('display','block')
-                $('#comiteAlerte').text('cloturé ce jalon')
-            }
+        // $('#comite').on('click', function() {
+        //     if ($(this).is(':checked')) {
+        //         $('#jalonPv').removeAttr('required')
+        //         $('#depot').css('display','none')
+        //         $('#comiteAlerte').text('faire passer ce jalon au comité')
+        //         console.log('is checked')
+        //     }
+        //     else{
+        //         // $('#jalonPv').ttr('required')
+        //         $('#depot').css('display','block')
+        //         $('#comiteAlerte').text('cloturé ce jalon')
+        //     }
 
-        })
+        // })
 
         function supprimer(event) {
             event.preventDefault();
