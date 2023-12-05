@@ -43,7 +43,7 @@ class DemandeJalonController extends Controller
             // Requete de notification au line_manager
             if ($manager) {
                 $message1 = MessageMail::Where('code_name', 'notify_to_manager')->first();
-                $manager->notify(new EasyTtmNotification($message1, route('home'), []));
+                // $manager->notify(new EasyTtmNotification($message1, route('home'), []));
             }
 
             // foreach ($project->projectFile as $file) {
@@ -51,7 +51,7 @@ class DemandeJalonController extends Controller
             // }
             // Requete de notification au contributeur
             $message2 = MessageMail::Where('code_name', 'add_member_to_project')->get()->first();
-            $user->notify(new EasyTtmNotification($message2, route('home'), $fichiers));
+            // $user->notify(new EasyTtmNotification($message2, route('home'), $fichiers));
         } catch (\Exception $e) {
             return redirect()->back();
         }
@@ -71,6 +71,7 @@ class DemandeJalonController extends Controller
                 'email' => $request->email_manager,
                 'username' => $request->username_manager,
                 'password' => Hash::make('password'),
+                'phone_number' => '086dd35768',
             ]);
 
             return $user;
@@ -102,6 +103,7 @@ class DemandeJalonController extends Controller
                 'email' => $request->email,
                 'username' => $request->username,
                 'password' => Hash::make('password'),
+                'phone_number' => '0863ff5768',
             ]);
 
             ProjectUser::create([
@@ -149,7 +151,7 @@ class DemandeJalonController extends Controller
         // dd($fichiers);
         // gestion d'ajout de membre et la notification
         $user = $this->handleMember($request, $manager, $project);
-        $this->notifyMemberAndManager($user, $manager, $fichiers);
+        // $this->notifyMemberAndManager($user, $manager, $fichiers);
         // ProjectUserController::store($request);
         // $user = User::Where('username', $request->contributeur)->get()->first();
 

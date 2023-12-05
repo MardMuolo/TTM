@@ -41,6 +41,7 @@ class ProjectUserController extends Controller
                 'email' => $request->email,
                 'username' => 'mich',
                 'password' => Hash::make('password'),
+                'phone_number' => '0825678',
             ]);
             ProjectUser::create([
                 'user_id' => $user->id,

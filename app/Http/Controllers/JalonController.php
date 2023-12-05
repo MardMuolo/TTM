@@ -334,6 +334,8 @@ class JalonController extends Controller
 
     public function updateStatus(Request $request, $jalon, $option_ttm, $project)
     {
+        
+
         // dd($request->status);
         //Decryptage des Url
         $jalon = Crypt::decrypt($jalon);
@@ -341,7 +343,8 @@ class JalonController extends Controller
         $project_id = Crypt::decrypt($project);
 
         $project = Project::findOrFail($project_id);
-
+        $is_comite=$request->comite==true;
+        // dd($is_comite);
 
 
 
@@ -349,11 +352,6 @@ class JalonController extends Controller
             ->where('option_ttm_id', $option_ttm)
             ->where('project_id', $project->id)
             ->first();
-
-        if ($request->comite == "on") {
-            $projectOptionttmJalon->status = env('jalonEnComite');
-            $projectOptionttmJalon->save();
-        } else {
             if ($request->hasFile('jalonPv')) {
                 $jalonPvFile = $request->file('jalonPv');
                 $jalonPvFileName = substr(str_replace([' ', "'"], '', $jalonPvFile->getClientOriginalName()), 0, 6) . date('ymdhis') . '.' . $jalonPvFile->extension();
@@ -368,6 +366,8 @@ class JalonController extends Controller
                     //dd($request->comite);
                     $projectOptionttmJalon->status = env('jalonCloturer');
                     $projectOptionttmJalon->jalonPv = $jalonPvFileName;
+
+                    $projectOptionttmJalon->is_comite = $is_comite;
                     $projectOptionttmJalon->save();
                     activity()
                         ->causedBy(auth()->user()->id)
@@ -376,7 +376,6 @@ class JalonController extends Controller
                         ->log(auth()->user()->name . ' a déclaré le jalon ' . $jalon . ' comme cloturé');
                 }
             }
-        }
 
 
 
