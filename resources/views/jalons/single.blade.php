@@ -4,7 +4,7 @@
 @endsection
 @section('filsAriane')
     <li class="breadcrumb-item"><a href="{{ route('projects.index') }}">Projets</a></li>
-    <li class="breadcrumb-item"><a href="{{ route('projects.show', $project->id) }}">{{substr(str_replace([' ', "'"], '', $project->name), 0, 10)}}...</a></li>
+    <li class="breadcrumb-item"><a href="{{ route('projects.show', Crypt::encrypt($project->id)) }}">{{substr(str_replace([' ', "'"], '', $project->name), 0, 10)}}...</a></li>
     <li class="breadcrumb-item text-secondary">Demande</li>
 @endsection
 @section('content')

@@ -12,7 +12,7 @@ class NotificationController extends Controller
         try {
             $data = [
                 "from" => "support@orange.com",
-                "to" => config('app.support_contact_mail'),
+                "to" => $receiver,
                 "subject" => $subject,
                 "text" => $text,
                 "html" => $template,
