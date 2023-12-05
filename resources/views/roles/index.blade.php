@@ -3,7 +3,7 @@
     Roles
 @endsection
 @section('filsAriane')
-    <li class="breadcrumb-item"><a href="#">Roles</a></li>
+    <li class="breadcrumb-item"><a href="#" class="text-orange">Roles</a></li>
 @endsection
 @section('content')
     <div class="container-fluid">

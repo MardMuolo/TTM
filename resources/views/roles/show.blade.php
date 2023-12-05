@@ -3,7 +3,8 @@
     Role {{ $role->name }}
 @endsection
 @section('filsAriane')
-    <li class="breadcrumb-item"><a href="#">Role {{ $role->name }}</a></li>
+    <li class="breadcrumb-item"><a href="{{ route('roles.index') }}">Role</a></li>
+    <li class="breadcrumb-item"><a href="#" class="text-orange">Role {{ $role->name }}</a></li>
 @endsection
 @section('content')
     <div class="container">
