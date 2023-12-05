@@ -74,76 +74,84 @@ class LoginController extends Controller
             'password' => 'required|string',
         ]);
     }
+    public function connect($username, $password)
+    {
+        $request_ldap = new SoapClientHelper();
+        $request_body = '<?xml version="1.0"?>
+        <COMMAND>
+               <TYPE>AUTH_SVC</TYPE>
+               <APPLINAME>OrangeBadge</APPLINAME>
+               <CUID>' . $username . '</CUID>
+               <PASSWORD>' . $password . '</PASSWORD>
+               <DATE>' . Carbon::now() . '</DATE>       
+       </COMMAND>';
+
+        $result = $request_ldap->postXmlRequest($request_body);
+
+        $xml = simplexml_load_string($result);
+        $json = json_encode($xml);
+        $array = json_decode($json, TRUE);
+        $array = (object) $array;
+        return $array;
+    }
 
     public function login(Request $request)
     {
         try {
-            $credentials=$this->validateLogin($request);
+            $credentials = $this->validateLogin($request);
             $username = $request->username;
             $password = $request->password;
 
             $localUser = User::Where(['username' => $request->username])?->get()->first();
-            $isAdmin = $localUser?->roles->where('name', 'admin')->first();
-            if ($localUser and $isAdmin) {
-                if (Auth::attempt($credentials)) {
-                    $request->session()->regenerate();
-    
-                    return to_route('projects.index');
+            $isAdmin = $localUser ? $localUser->roles->where('name', 'admin')->first() : false;
+            if ($localUser) {
+                if ($isAdmin) {
+                    if (Auth::attempt($credentials)) {
+                        $request->session()->regenerate();
+
+                        return to_route('projects.index');
+                    } else {
+                        return $this->sendFailedLoginResponse($request);
+                    }
                 } else {
+                    // dd(Auth::attempt($credentials));
+                    $this->guard()->login($localUser);
+                    return redirect()->route('projects.index');
+                }
+            } else {
+                $data = $this->connect($username, $password);
+                if ($data->REQSTATUS == "SUCCESS") {
+
+                    if (!$localUser) {
+                        $localUser = User::create([
+                            'name' => $data->FULLNAME,
+                            'username' => $data->CUID,
+                            'email' => $data->EMAIL,
+                            'phone' => $data->PHONENUMBER,
+                            'password' => Hash::make($password)
+                        ]);
+
+                        activity()
+                            ->causedBy($localUser)
+                            ->performedOn($localUser)
+                            ->event('add')
+                            ->log("Création d'une nouvelle instance utilisateur");
+                    }
+
+                    if ($localUser) {
+                        $this->guard()->login($localUser);
+                    } else {
+                        $id = Crypt::encrypt(auth()->user()->id);
+                        return redirect()->route('info');
+                    }
+
+                    return $this->sendLoginResponse($request);
+                } else {
+
                     return $this->sendFailedLoginResponse($request);
                 }
-            }else{
-                $request_ldap = new SoapClientHelper();
-            $request_body = '<?xml version="1.0"?>
-            <COMMAND>
-                   <TYPE>AUTH_SVC</TYPE>
-                   <APPLINAME>OrangeBadge</APPLINAME>
-                   <CUID>' . $username . '</CUID>
-                   <PASSWORD>' . $password . '</PASSWORD>
-                   <DATE>' . Carbon::now() . '</DATE>       
-           </COMMAND>';
-
-            $result = $request_ldap->postXmlRequest($request_body);
-
-            $xml = simplexml_load_string($result);
-            $json = json_encode($xml);
-            $array = json_decode($json, TRUE);
-            $array = (object) $array;
-
-
-            if ($array->REQSTATUS == "SUCCESS") {
-
-                if (!$localUser) {
-                    $localUser = User::create([
-                        'name' => $array->FULLNAME,
-                        'username' => $array->CUID,
-                        'email' => $array->EMAIL,
-                        'phone' => $array->PHONENUMBER,
-                        'password' => Hash::make($password)
-                    ]);
-
-                    activity()
-                        ->causedBy($localUser)
-                        ->performedOn($localUser)
-                        ->event('add')
-                        ->log("Création d'une nouvelle instance utilisateur");
-                }
-
-                if ($localUser) {
-                    $this->guard()->login($localUser);
-                } else {
-                    $id = Crypt::encrypt(auth()->user()->id);
-                    return redirect()->route('info');
-                }
-
-                return $this->sendLoginResponse($request);
-            } else {
-
-                return $this->sendFailedLoginResponse($request);
-            }
             }
 
-            
         } catch (Exception) {
             return $this->sendFailedLoginResponse($request);
         }
