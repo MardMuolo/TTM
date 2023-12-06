@@ -182,7 +182,7 @@ class HomeController extends Controller
 
         $projetsEncours = Project::whereBetween('endDate', [$annee . '-01-01', $annee . '-12-31'])->get()->count();
         $projetsPrec = Project::whereBetween('endDate', [$annePrec . '-01-01', $annePrec . '-12-31'])->get()->count();
-
+        $projets=($projets)?$projets:1;
         return view(
             'home',
             compact(

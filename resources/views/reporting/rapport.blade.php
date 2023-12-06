@@ -1,6 +1,6 @@
 @extends('layouts.app')
 @section('title')
-    Rapport
+Rapport
 @endsection
 @section('filsAriane')
     {{-- <li class="breadcrumb-item"><a href="#"></a></li> --}}
@@ -11,7 +11,6 @@
         <div class="row">
             <div class="col-12">
                 <h4>
-                    <i class="fas fa-globe"></i> Rapports
                     <small class="float-right">{{ \Carbon\Carbon::now() }}</small>
                 </h4>
             </div>
@@ -19,20 +18,21 @@
         </div>
         <!-- info row -->
         <div class="row invoice-info py-4">
-            <div class="col-sm-4 invoice-col">
-                <label for="debut">Du</label>
-                <input type="date" name="debut" id="debut">
+            <div class="col-sm-6 invoice-col">
+                <label for="debut co-1">Du</label>
+                <input type="date" class="form-control" name="debut" id="debut">
             </div>
             <!-- /.col -->
-            <div class="col-sm-4 invoice-col">
+            <div class="col-sm-6 invoice-col">
                 <label for="fin">AU</label>
-                <input type="date" name="fin" id="fin">
+                <input type="date" class="form-control" name="fin" id="fin">
+                <div class="col-sm-3 py-3 float-right invoice-col">
+                    <input type="checkbox" name="comite" id="comite">
+                    <label for="comite">COMCOM</label>
+                </div>
             </div>
             <!-- /.col -->
-            <div class="col-sm-4 invoice-col">
-                <input type="checkbox" name="comite" id="comite">
-                <label for="comite">COMCOM</label>
-            </div>
+            
             <!-- /.col -->
         </div>
         <!-- /.row -->
@@ -40,11 +40,11 @@
         <!-- Table row -->
         <div class="row">
             <div class="col-12 table-responsive">
-                <table class="table table-bordered table-hover" id="tab_reporting">
-                    <thead>
+                <table class="table table-striped" id="tab_reporting">
+                    <thead class="thead-color">
                         <th style="width: 50%">Nom</th>
-                        <th style="width: 40%">Équipe</th>
                         <th class="text-center" style="width: 20%">Statut</th>
+                        <th class="text-center" style="width: 20%"></th>
                     </thead>
                     <tbody>
                         @forelse ($projets as $item)
@@ -56,20 +56,12 @@
                                             class="text-black-50">Au:</b> {{ $item->endDate }}
                                     </small>
                                 </td>
-                                <td>
-                                    @forelse ($item->users as $membres)
-                                        <li class="list-inline-item">
-                                            <span title="{{ $membres->pivot->role }}"
-                                                class="badge bg-{{ $tab[array_rand(array_keys($tab), 1)] }}  text-center">{{ $membres->username }}</span>
-                                        </li>
-                                    @empty
-                                        <ul class="list-inline">
-                                            <li class="list-inline-item text-black-50 h6">Aucun membre pour l'instant</li>
-                                        </ul>
-                                    @endforelse
-                                </td>
+                             
                                 <td class="project-state">
                                     <span class="badge ">{{ $item->status }}</span>
+                                </td>
+                                <td>
+                                    <a href="{{route('telecharger',$item->id)}}" class="btn btn-light btn-sm"><i class="fas fa-file-export"></i></a>
                                 </td>
                             </tr>
                         @empty
@@ -88,25 +80,13 @@
             </div>
             <!-- /.col -->
             <div class="col-6 float-right">
-                <p class="lead">Amount Due 2/22/2014</p>
+                <p class="lead">Date {{ \Carbon\Carbon::now() }}</p>
 
                 <div class="table-responsive">
                     <table class="table">
                         <tr>
-                            <th style="width:50%">Subtotal:</th>
-                            <td>$250.30</td>
-                        </tr>
-                        <tr>
-                            <th>Tax (9.3%)</th>
-                            <td>$10.34</td>
-                        </tr>
-                        <tr>
-                            <th>Shipping:</th>
-                            <td>$5.80</td>
-                        </tr>
-                        <tr>
-                            <th>Total:</th>
-                            <td>$265.24</td>
+                            <th style="width:50%">Total:</th>
+                            <td id="count">{{count($projets)}}</td>
                         </tr>
                     </table>
                 </div>
@@ -124,13 +104,11 @@
         <!-- this row will not appear when printing -->
         <div class="row no-print">
             <div class="col-12">
-                <a href="invoice-print.html" rel="noopener" target="_blank" class="btn btn-default"><i
+                <a href="invoice-print.html" rel="noopener" target="_blank" class="btn btn-default disabled"><i
                         class="fas fa-print"></i> Print</a>
-                <button type="button" class="btn btn-success float-right"><i class="far fa-credit-card"></i> Submit
-                    Payment
-                </button>
-                <button type="button" class="btn btn-primary float-right" style="margin-right: 5px;">
-                    <i class="fas fa-download"></i> Generate PDF
+               
+                <button type="button" class="btn btn-primary float-right disabled" style="margin-right: 5px;">
+                    <i class="fas fa-download"></i> Generer PDF
                 </button>
             </div>
         </div>
@@ -200,6 +178,7 @@
                         //     param2: 'valeur2'
                         // },
                         success: function(response) {
+                            var count=response.length
                             table.destroy()
                             console.log(response)
                             table=$("#tab_reporting").DataTable({
@@ -213,6 +192,10 @@
                                     "data": response
                                 },
                             });
+                            count=response.length
+                            
+                            $('#count').text(0)
+                            $('#count').text(count)
 
                         },
                         error: function(xhr, status, error) {
@@ -221,6 +204,7 @@
                     });
                 } else {
                     table.clear().rows.add(initialData).draw()
+                    $('#count').text(initialData.length)
                 }
             });
         });

@@ -18,7 +18,7 @@
                                 <h4>Votre Avis</h4>
                                 <select class="custom-select form-control-border" id="exampleSelectBorder" name="Avis">
                                     <option value={{env('livrableValider')}}>Valider</option>
-                                    <option value={{env('livrableRevoquer')}}>A Corriger</option>
+                                    <option value="A corriger">A Corriger</option>
                                     <option value={{env('livrableRejeter')}}>Rejeter</option>
                                 </select>
                             </div>

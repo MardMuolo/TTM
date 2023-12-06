@@ -343,7 +343,7 @@ class JalonController extends Controller
         $project_id = Crypt::decrypt($project);
 
         $project = Project::findOrFail($project_id);
-        $is_comite=$request->comite==true;
+        // $is_comite=$request->comite==true;
         // dd($request->dateEffective);
         $dateEffective=$request->dateEffective;
 
@@ -367,7 +367,7 @@ class JalonController extends Controller
                     $projectOptionttmJalon->status = env('jalonCloturer');
                     $projectOptionttmJalon->jalonPv = $jalonPvFileName;
                     $projectOptionttmJalon->echeance = $dateEffective;
-                    $projectOptionttmJalon->is_comite = $is_comite;
+                    // $projectOptionttmJalon->is_comite = $is_comite;
                     $projectOptionttmJalon->save();
                     activity()
                         ->causedBy(auth()->user()->id)

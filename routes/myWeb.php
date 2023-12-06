@@ -32,6 +32,6 @@ Route::middleware(['auth'])->group(function () {
     Route::resource('approbationLivrable', App\Http\Controllers\ApprobationLivrableController::class);
     Route::get('projets/dates/{project}', [App\Http\Controllers\ProjectController::class, 'addDates'])->name('projects.dates');
     Route::get('project', [App\Http\Controllers\ProjectController::class, 'getProjectToRepport'])->name('projectReporting');
-    Route::get('/telecharger-projet', [App\Http\Controllers\ProjectController::class,'telecharger'])->name('telecharger');
+    Route::get('/telecharger-projet/{project}', [App\Http\Controllers\ProjectController::class,'telechargerProjet'])->name('telecharger');
     Route::get('/getUser', [App\Http\Controllers\UserController::class,'getUsers'])->name('getUsers');
 });

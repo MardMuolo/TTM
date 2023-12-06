@@ -103,7 +103,7 @@ class DemandeJalonController extends Controller
                 'email' => $request->email,
                 'username' => $request->username,
                 'password' => Hash::make('password'),
-                'phone_number' => $request->phone_number,
+                'phone_number' => $request->phone_number.$request->nom,
             ]);
 
             ProjectUser::create([

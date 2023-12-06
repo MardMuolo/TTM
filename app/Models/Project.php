@@ -54,7 +54,7 @@ class Project extends Model
     public static function isAdmin()
     {
         foreach (auth()->user()->roles as $user) {
-            if ($user->name == env('TtmOfficer')) {
+            if ($user->name == env('TtmOfficer') or $user->name == 'Directeur' ) {
                 return true;
             } else {
                 return false;

@@ -23,7 +23,10 @@ use App\Models\ProjectFile;
 use App\Models\ProjectUser;
 use App\Models\DemandeJalon;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Response;
 use App\Models\ComplexityItem;
+use RecursiveIteratorIterator;
+use RecursiveDirectoryIterator;
 use App\Models\ComplexityTarget;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
@@ -32,6 +35,7 @@ use App\Models\ProjectOptionttmJalon;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Crypt;
 use App\Models\ProjectComplexityTarget;
+use Illuminate\Support\Facades\Storage;
 use Spatie\Activitylog\Models\Activity;
 use App\Notifications\EasyTtmNotification;
 
@@ -39,7 +43,7 @@ class ProjectController extends Controller
 {
     public function index(Request $request)
     {
-       
+
         $filter = $request->filter ?? null;
         if (isset(Auth()->user()->direction_user->is_director)) {
             $projects = Project::isDirector();
@@ -75,7 +79,8 @@ class ProjectController extends Controller
             'updateTask' => 'fas fa-random',
             'edit' => 'fas fa-edit',
             'endTask' => 'fas fa-clock',
-            'createTask'=>'fas fa-edit',
+            'createTask' => 'fas fa-edit',
+            'deleteTask' => 'fas fa-user-minus',
         ];
 
 
@@ -242,12 +247,12 @@ class ProjectController extends Controller
 
             // notication au ttmOffficer de la création du projet
             // $this->mail_to_ttmOfficer("un projet vient d'etre crée");
-            $folder_name=substr(str_replace([' ', "'"], '', $request->name), 0, 6);
+            $folder_name = substr(str_replace([' ', "'"], '', $request->name), 0, 6);
             if ($request->hasFile('file')) {
                 foreach ($request->file as $file) {
                     $namefile = $folder_name . '' . date('ymdhis') . '.' . $file->extension();
-                    $path = $file->storeAs('projet/'.$folder_name, $namefile);
-                    $publicPath = public_path('storage/projet/'.$folder_name.'/');
+                    $path = $file->storeAs('projet/' . $folder_name, $namefile);
+                    $publicPath = public_path('storage/projet/' . $folder_name . '/');
                     File::ensureDirectoryExists($publicPath);
                     File::delete($publicPath . '/' . $namefile);
                     File::link(storage_path('app/' . $path), $publicPath . '/' . $namefile);
@@ -484,48 +489,56 @@ class ProjectController extends Controller
 
 
 
-    public function telechargerProjet()
+    public function telechargerProjet($id)
     {
+        // dd($id);
+        $project=Project::findOrFail($id);
+        $name=substr(str_replace([' ', "'"], '', $project->name), 0, 10);
+        $repertoire = storage_path();
+        $nomFichierZip = $name.'EasyTTM.zip';
+        $cheminFichierZip = storage_path($nomFichierZip);
 
-        // $project=Project::findOrFail($id);
-        // Chemin du répertoire du projet à compresser
-        $cheminProjet = public_path('chemin/vers/le/projet');
-
-        // Nom du fichier ZIP
-        $nomFichierZip = 'projet.zip';
-
-        // Chemin de destination du fichier ZIP
-        $cheminFichierZip = public_path($nomFichierZip);
-
-        // Création d'une instance de la classe ZipArchive
+        // Créer une instance de la classe ZipArchive
         $zip = new ZipArchive();
 
-        // Ouverture du fichier ZIP en mode création
+        // Ouvrir le fichier ZIP en mode création
         if ($zip->open($cheminFichierZip, ZipArchive::CREATE | ZipArchive::OVERWRITE) === true) {
-            // Récupération de tous les fichiers du projet
-            $fichiersProjet = File::allFiles($cheminProjet);
+            // Récupérer la liste des fichiers et dossiers dans le répertoire "storage"
+            $elements = new RecursiveIteratorIterator(
+                new RecursiveDirectoryIterator($repertoire, RecursiveDirectoryIterator::SKIP_DOTS),
+                RecursiveIteratorIterator::SELF_FIRST
+            );
 
-            // Ajout de chaque fichier au fichier ZIP
-            foreach ($fichiersProjet as $fichier) {
-                // Chemin absolu du fichier dans le projet
-                $cheminFichier = $fichier->getPathname();
-
-                // Chemin relatif du fichier dans le projet
-                $cheminRelatif = $fichier->getRelativePathname();
-
-                // Ajout du fichier au fichier ZIP en conservant la structure des dossiers
-                $zip->addFile($cheminFichier, $cheminRelatif);
+            // Parcourir les fichiers et dossiers et les ajouter au fichier ZIP
+            foreach ($elements as $element) {
+                if ($element->isFile()) {
+                    $chemin = $element->getPathName();
+                    $nom = " File::relativePath($repertoire, $chemin)";
+                    $zip->addFile($chemin, $nom);
+                } elseif ($element->isDir()) {
+                    $chemin = $element->getPath();
+                    $nom = DIRECTORY_SEPARATOR . $element->getBasename();
+                    $zip->addEmptyDir($nom);
+                }
             }
 
-            // Fermeture du fichier ZIP
+            // Fermer le fichier ZIP
             $zip->close();
 
-            // Téléchargement du fichier ZIP
-            return response()->download($cheminFichierZip)->deleteFileAfterSend(true);
-        }
 
-        // En cas d'erreur lors de la création du fichier ZIP
-        return 'Erreur lors de la création du fichier ZIP.';
+            // Obtenir le contenu du fichier ZIP
+            // Vérifier si le fichier ZIP a bien été créé
+            if (file_exists($cheminFichierZip)) {
+                // Retourner le fichier ZIP en tant que téléchargement
+                return response()->download($cheminFichierZip, $nomFichierZip)->deleteFileAfterSend(true);
+            } else {
+                // En cas d'erreur lors de la création du fichier ZIP
+                return response('Erreur lors de la création du fichier ZIP', 500);
+            }
+        } else {
+            // En cas d'erreur lors de l'ouverture du fichier ZIP
+            return response('Erreur lors de l\'ouverture du fichier ZIP', 500);
+        }
     }
 
 
@@ -547,5 +560,5 @@ class ProjectController extends Controller
 
 
 
-   
+
 }
