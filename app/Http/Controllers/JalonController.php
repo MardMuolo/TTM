@@ -344,8 +344,8 @@ class JalonController extends Controller
 
         $project = Project::findOrFail($project_id);
         $is_comite=$request->comite==true;
-        // dd($is_comite);
-
+        // dd($request->dateEffective);
+        $dateEffective=$request->dateEffective;
 
 
         $projectOptionttmJalon = ProjectOptionttmJalon::where('jalon_id', $jalon)
@@ -366,7 +366,7 @@ class JalonController extends Controller
                     //dd($request->comite);
                     $projectOptionttmJalon->status = env('jalonCloturer');
                     $projectOptionttmJalon->jalonPv = $jalonPvFileName;
-
+                    $projectOptionttmJalon->echeance = $dateEffective;
                     $projectOptionttmJalon->is_comite = $is_comite;
                     $projectOptionttmJalon->save();
                     activity()

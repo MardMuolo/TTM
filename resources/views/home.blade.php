@@ -94,16 +94,16 @@
                                 <span class="float-right"><b>{{ $projetSoumis }}</b>/{{ $projets }}</span>
                                 <div class="progress progress-sm">
                                 <span class="float-right"></span>
-                                    <div class="progress-bar bg-secondary" style="width: {{($projetSoumis*$projets)/100}}%"></div>
+                                    <div class="progress-bar bg-secondary" style="width: {{($projetSoumis*100)/$projets}}%"></div>
                                 </div>
                             </div>
                             <!-- /.progress-group -->
 
                             <div class="progress-group">
                                 Projet En cours
-                                <span class="float-right"><b>{{ $projetEncours }}</b>/{{ $projets }}</span>
+                                <span class="float-right"><b>{{ $projetEncours }}</b>/{{ $projets }} </span>
                                 <div class="progress progress-sm">
-                                    <div class="progress-bar bg-warning" style="width: {{($projetEncours*$projets)/100}}%"></div>
+                                    <div class="progress-bar bg-warning" style="width: {{($projetEncours*100)/$projets}}%"></div>
                                 </div>
                             </div>
                             <!-- /.progress-group -->
@@ -111,7 +111,7 @@
                                 Projet Cloturé
                                 <span class="float-right"><b>{{ $projetFinis }}</b>/{{ $projets }}</span>
                                 <div class="progress progress-sm">
-                                    <div class="progress-bar bg-success" style="width: {{($projetFinis*$projets)/100}}%"></div>
+                                    <div class="progress-bar bg-success" style="width: {{($projetFinis*100)/$projets}}%"></div>
                                 </div>
                             </div>
                             <!-- /.progress-group -->
@@ -177,7 +177,7 @@
     </section>
     <section class="row">
         <div class="col-5">
-            <p data-graphique="<?php echo $data; ?>" id="data-graphique"> </p>
+            {{-- <p data-graphique="<?php echo $data; ?>" id="data-graphique"> </p>
             <p data-graphique2="<?php echo $data2; ?>" id="data-graphique2"></p>
             <input type="hidden" value="{{ $datadonut }}" id="data-donut">
             <section class="connectedSortable ui-sortable">
@@ -266,13 +266,13 @@
     
                     </div>
     
-            </section>
+            </section> --}}
            
         </div>
         <div class="col-7">
             <div class="card">
                 <div class="card-header">
-                    <h3 class="card-title">Reppartion de projet</h3>
+                    <h3 class="card-title">Statistique</h3>
                 </div>
                 <!-- /.card-header -->
                 <div class="card-body">

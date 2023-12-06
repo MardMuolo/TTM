@@ -309,10 +309,23 @@
                                         </div>
                                     </div>
                                 </div>
+                                <div class="form-group" id="depot">
+                                    <label for="exampleInputFile">Date effective</label>
+                                    <div class="input-group">
+                                        <div class="custom-file">
+                                            <input type="date" class="form-control"
+                                            min="{{ $echeance ?? '' }}"
+                                            id="dateEffective"
+                                            name="dateEffective" required>
+                                        </div>
+                                    </div>
+                                </div>
+                                @if ($jalon->designation=="T0")
                                 <div class="icheck-primary">
                                     <input type="checkbox" id="comite" name="comite">
                                     <label for="comite">Passé au comité</label>
                                 </div>
+                                @endif
                             </div>
                             <div class="modal-footer">
                                 <button type="button" class="btn btn-secondary" data-dismiss="modal"><i

@@ -66,7 +66,7 @@
                                 style="width: {{ $jalon['status'] ? $jalon['progression'] : 0 }}%"
                                 aria-valuenow="{{ $jalon['status'] ? $jalon['progression'] : 0 }}" aria-valuemin="0"
                                 aria-valuemax="100">
-                                {{ $jalon['status'] ? number_format($jalon['progression'], 1) . '%' : '0%' }}</div>
+                                {{ $jalon['status'] ? number_format($jalon['progression'], 0) . '%' : '0%' }}</div>
                         </div>
                     </div>
                     <div class="d-flex justify-content-center mb-2">
