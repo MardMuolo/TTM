@@ -90,108 +90,136 @@ class UserController extends Controller
         return redirect()->route('users.index');
     }
 
-    public function getUsers()
+    public function getUsers(Request $request)
     {
-        $users = [
-            [
-                'id' => 1,
-                'username' => 'emmanuelbdb',
-                'first_name' => 'emmanuel',
-                'last_name' => 'badibanga',
-                'email' => 'ebadibanga.ext@orange.com',
-                'phone' => '124567890',
-            ],
-            [
-                'id' => 2,
-                'username' => 'momo',
-                'first_name' => 'mardochee',
-                'last_name' => 'muolo',
-                'email' => 'mmuolo.ext@orange.com',
-                'phone' => '986543210',
-            ],
-            [
-                'id' => 3,
-                'username' => 'michael',
-                'first_name' => 'michael',
-                'last_name' => 'nyinzi',
-                'email' => 'mnyinzi.ext@orange.com',
-                'phone' => '456890123',
-            ],
-            [
-                'id' => 4,
-                'username' => 'choupole',
-                'first_name' => 'franck',
-                'last_name' => 'kapuya',
-                'email' => 'fkapuya.ext@orange.com',
-                'phone' => '789123456',
-            ],
-            [
-                'id' => 5,
-                'username' => 'channel',
-                'first_name' => 'pierrot',
-                'last_name' => 'nsiemwe',
-                'email' => 'cnsiemwe.ext@orange.com',
-                'phone' => '234678901',
-            ],
-            [
-                'id' => 6,
-                'username' => 'chist',
-                'first_name' => 'katumba',
-                'last_name' => 'katumba',
-                'email' => 'ckatumba.ext@orange.com',
-                'phone' => '901245678',
-            ],
-            [
-                'id' => 7,
-                'username' => 'davidwilson',
-                'first_name' => 'David',
-                'last_name' => 'Wilson',
-                'email' => 'davidwilson.ext@orange.com',
-                'phone' => '567801234',
-            ],
-            [
-                'id' => 8,
-                'username' => 'emilythomas',
-                'first_name' => 'Emily',
-                'last_name' => 'Thomas',
-                'email' => 'emilythomas.ext@orange.com',
-                'phone' => '432198765',
-            ],
-            [
-                'id' => 9,
-                'username' => 'tomwright',
-                'first_name' => 'Tom',
-                'last_name' => 'Wright',
-                'email' => 'tomwright.ext@orange.com',
-                'phone' => '8765432109',
-            ],
-            [
-                'id' => 10,
-                'username' => 'lauramiller',
-                'first_name' => 'Laura',
-                'last_name' => 'Miller',
-                'email' => 'lauramiller.ext@orange.com',
-                'phone' => '1098765432',
-            ],
-            [
-                'id' => 10,
-                'username' => 'rootadmin',
-                'first_name' => 'rootadmin',
-                'last_name' => 'rootadmin',
-                'email' => 'admin@example.com   ',
-                'phone' => '0844297349',
-            ],
-        ];
+        $adServer 		= "OPADCOCD04.orangerdc.cd";
+        $adUser			= "adc1\LVBG0520";
+        $adPass			= "Manyr@2023";
+        $ldapConn 		= ldap_connect($adServer) or die ("Impossible de se connecter Ã  l'AD : {$adServer}") ;
+        ldap_set_option($ldapConn,LDAP_OPT_PROTOCOL_VERSION,3);
+        ldap_set_option($ldapConn,LDAP_OPT_REFERRALS,0);
+        $ldapBind 		= ldap_bind($ldapConn, $adUser, $adPass);
+        // dd($ldapConn);
+        $person			= "*ma*";
+        $filter 		= "(&(objectCategory=person)(objectClass=user)(|(sn={$person})(displayname={$person})))";
+        $attributes = array("sAMAccountName","cn", "mail");
+        $ldapResult 	= ldap_search($ldapConn,"DC=ORANGERDC,DC=CD",$filter, $attributes);
+        $ldapEntries 	= ldap_get_entries($ldapConn,$ldapResult);
+        $Tot            = count($ldapEntries);
+        ldap_close($ldapConn);
+        $users=[];
+        for ($i=0; $i < $Tot-1; $i++) { 
+            if(isset($ldapEntries[$i]['mail'][0])){
+                $users[]= [
+                    'id' => count($users)+1,
+                    'username' => $ldapEntries[$i]['samaccountname'][0],
+                    'name' => $ldapEntries[$i]['cn'][0],
+                    'email' => $ldapEntries[$i]['mail'][0],
+                    'phone' => '124567890',
+                ];
+            }
+           
+        }
+        
+        // $users = [
+        //     [
+        //         'id' => 1,
+        //         'username' => 'emmanuelbdb',
+        //         'first_name' => 'emmanuel',
+        //         'last_name' => 'badibanga',
+        //         'email' => 'ebadibanga.ext@orange.com',
+               
+                
+        //     ],
+        //     [
+        //         'id' => 2,
+        //         'username' => 'momo',
+        //         'first_name' => 'mardochee',
+        //         'last_name' => 'muolo',
+        //         'email' => 'mmuolo.ext@orange.com',
+        //         'phone' => '986543210',
+        //     ],
+        //     [
+        //         'id' => 3,
+        //         'username' => 'michael',
+        //         'first_name' => 'michael',
+        //         'last_name' => 'nyinzi',
+        //         'email' => 'mnyinzi.ext@orange.com',
+        //         'phone' => '456890123',
+        //     ],
+        //     [
+        //         'id' => 4,
+        //         'username' => 'choupole',
+        //         'first_name' => 'franck',
+        //         'last_name' => 'kapuya',
+        //         'email' => 'fkapuya.ext@orange.com',
+        //         'phone' => '789123456',
+        //     ],
+        //     [
+        //         'id' => 5,
+        //         'username' => 'channel',
+        //         'first_name' => 'pierrot',
+        //         'last_name' => 'nsiemwe',
+        //         'email' => 'cnsiemwe.ext@orange.com',
+        //         'phone' => '234678901',
+        //     ],
+        //     [
+        //         'id' => 6,
+        //         'username' => 'chist',
+        //         'first_name' => 'katumba',
+        //         'last_name' => 'katumba',
+        //         'email' => 'ckatumba.ext@orange.com',
+        //         'phone' => '901245678',
+        //     ],
+        //     [
+        //         'id' => 7,
+        //         'username' => 'davidwilson',
+        //         'first_name' => 'David',
+        //         'last_name' => 'Wilson',
+        //         'email' => 'davidwilson.ext@orange.com',
+        //         'phone' => '567801234',
+        //     ],
+        //     [
+        //         'id' => 8,
+        //         'username' => 'emilythomas',
+        //         'first_name' => 'Emily',
+        //         'last_name' => 'Thomas',
+        //         'email' => 'emilythomas.ext@orange.com',
+        //         'phone' => '432198765',
+        //     ],
+        //     [
+        //         'id' => 9,
+        //         'username' => 'tomwright',
+        //         'first_name' => 'Tom',
+        //         'last_name' => 'Wright',
+        //         'email' => 'tomwright.ext@orange.com',
+        //         'phone' => '8765432109',
+        //     ],
+        //     [
+        //         'id' => 10,
+        //         'username' => 'lauramiller',
+        //         'first_name' => 'Laura',
+        //         'last_name' => 'Miller',
+        //         'email' => 'lauramiller.ext@orange.com',
+        //         'phone' => '1098765432',
+        //     ],
+        //     [
+        //         'id' => 10,
+        //         'username' => 'rootadmin',
+        //         'first_name' => 'rootadmin',
+        //         'last_name' => 'rootadmin',
+        //         'email' => 'admin@example.com   ',
+        //         'phone' => '0844297349',
+        //     ],
+        // ];
 
         $formattedData = collect($users)->map(function ($user) {
             return [
                 'id' => $user['id'],
                 'username' => $user['username'],
-                'text' => $user['last_name'] . ' ' . $user['first_name'],
+                'name' => $user['name'],
                 'email' => $user['email'],
                 'phone' => $user['phone'],
-                'first_name' => $user['first_name'],
-                'last_name' => $user['last_name'],
             ];
         });
     

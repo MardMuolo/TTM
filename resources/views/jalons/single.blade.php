@@ -422,17 +422,18 @@
 
 
 @push('third_party_scripts')
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
     <script type='module' src="{{ Vite::asset('node_modules/admin-lte/plugins/datatables/jquery.dataTables.min.js') }}">
     </script>
     <script type='module'
         src="{{ Vite::asset('node_modules/admin-lte/plugins/datatables-buttons/js/buttons.bootstrap4.min.js') }}"></script>
-    <script type="module" src="{{ Vite::asset('node_modules/admin-lte/plugins/select2/js/select2.full.min.js') }}">
+    <script  src="{{ Vite::asset('node_modules/admin-lte/plugins/select2/js/select2.full.min.js') }}">
     </script>
-    <script type="module" src="{{ Vite::asset('node_modules/admin-lte/plugins/sweetalert2/sweetalert2.min.js') }}">
+    <script  src="{{ Vite::asset('node_modules/admin-lte/plugins/sweetalert2/sweetalert2.min.js') }}">
     </script>
-    <script type="module"
+    <script 
         src="{{ Vite::asset('node_modules/admin-lte/plugins/datatables-buttons/js/dataTables.buttons.min.js') }}"></script>
-    <script type="module"
+    <script 
         src="{{ Vite::asset('node_modules/admin-lte/plugins/datatables-bs4/js/dataTables.bootstrap4.min.js') }}"></script>
 @endpush
 
@@ -444,29 +445,28 @@
     @vite('node_modules/admin-lte/plugins/datatables-buttons/css/buttons.bootstrap4.min.css')
 @endpush
 @push('page_scripts')
-    <script type="module">
+    <script >
         $(document).ready(function() {
-            if (true) {
-                (async () => {
+            // if (true) {
+            //     (async () => {
 
-                    /* inputOptions can be an object or Promise */
-                    const inputOptions = new Promise((resolve) => {
-                        setTimeout(() => {
-                            resolve({
-                                'd': 2
-                            })
-                        }, 800)
-                    })
-                    const {
-                        value: sondage
-                    } = await Swal.fire({
-                        icon: 'success',
-                        title: '<h2 class="text-success">Création avec Succès</h2> ',
-                        html: 'Le score est de <span class="text-black-50 h6">{{ $score ?? 'N/A' }}</span> et le projet est retenu en mode <span class="text-black-50 h6">{{ $options->nom ?? 'N/A' }}</span><br> Veuillez préciser les dates des jalons du projet',
-                    })
-                })()
-            }
-
+            //         /* inputOptions can be an object or Promise */
+            //         const inputOptions = new Promise((resolve) => {
+            //             setTimeout(() => {
+            //                 resolve({
+            //                     'd': 2
+            //                 })
+            //             }, 800)
+            //         })
+            //         const {
+            //             value: sondage
+            //         } = await Swal.fire({
+            //             icon: 'success',
+            //             title: '<h2 class="text-success">Création avec Succès</h2> ',
+            //             html: 'Le score est de <span class="text-black-50 h6">{{ $score ?? 'N/A' }}</span> et le projet est retenu en mode <span class="text-black-50 h6">{{ $options->nom ?? 'N/A' }}</span><br> Veuillez préciser les dates des jalons du projet',
+            //         })
+            //     })()
+            // }
             $.ajax({
                 url: '{{route('getUsers')}}',
                 type:'Get',
@@ -482,11 +482,10 @@
                             return {
                                 id: user.id,
                                 username: user.username,
-                                text: user.last_name + ' ' + user.first_name,
+                                text: user.name,
                                 email: user.email,
                                 phone: user.phone,
-                                first_name: user.first_name,
-                                last_name: user.last_name,
+                               
                             };
                         });
 
@@ -513,9 +512,9 @@
                             $('#name').val(selectedUser.text);
                             $('#phone_number').val(selectedUser.phone);
 
-                            var fullName = selectedUser.first_name + ' ' + selectedUser
-                                .last_name;
-                            $('#name').val(fullName);
+                            // var fullName = selectedUser.first_name + ' ' + selectedUser
+                            //     .last_name;
+                            // $('#name').val(fullName);
                         });
 
                         // Événement de sélection d'utilisateur

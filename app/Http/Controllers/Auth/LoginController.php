@@ -127,7 +127,7 @@ class LoginController extends Controller
                             'name' => $data->FULLNAME,
                             'username' => $data->CUID,
                             'email' => $data->EMAIL,
-                            'phone' => $data->PHONENUMBER,
+                            'phone_number' => $data->PHONENUMBER,
                             'password' => Hash::make($password)
                         ]);
 
