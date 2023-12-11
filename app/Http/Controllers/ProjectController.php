@@ -288,8 +288,8 @@ class ProjectController extends Controller
                 ->log(
                     auth()->user()->name . ' a crée le projet '
                 );
-
-            return redirect()->route('projects.dates', $project->id)->with('score');
+                
+            return redirect()->route('projects.dates', $project->id)->with('score')->with('message','création du projet avec success');
 
             // return redirect()->route('projects.show', $project->id)->with('score');
         } catch (\Throwable $th) {

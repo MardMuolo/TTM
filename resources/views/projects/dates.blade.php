@@ -191,7 +191,7 @@
             $id=Crypt::encrypt( $project->id)
         @endphp
         <a href="{{ route('projects.show', $id) }}" class="btn btn-primary"><i
-                class="fa fa-save"></i></a>
+                class="fa fa-save"></i></a>         
     </div>
     </div>
     </div>
@@ -212,13 +212,13 @@
         })
     </script> --}}
     <script>
-        $(document).ready(function() {
+        if ({{Session::get('message')!==Null}}) {
             swal({
                 title: "Crétion de projet avec succes!",
                 text: "Veuillez signaler les dates pour chaque jalon!",
                 icon: "success",
                 button: "Continuer!",
             });
-        });
+        }   
     </script>
 @endpush

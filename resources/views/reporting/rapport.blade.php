@@ -1,6 +1,6 @@
 @extends('layouts.app')
 @section('title')
-Rapport
+    Rapport
 @endsection
 @section('filsAriane')
     {{-- <li class="breadcrumb-item"><a href="#"></a></li> --}}
@@ -32,7 +32,7 @@ Rapport
                 </div>
             </div>
             <!-- /.col -->
-            
+
             <!-- /.col -->
         </div>
         <!-- /.row -->
@@ -56,12 +56,13 @@ Rapport
                                             class="text-black-50">Au:</b> {{ $item->endDate }}
                                     </small>
                                 </td>
-                             
+
                                 <td class="project-state">
                                     <span class="badge ">{{ $item->status }}</span>
                                 </td>
                                 <td>
-                                    <a href="{{route('telecharger',$item->id)}}" class="btn btn-light btn-sm"><i class="fas fa-file-export"></i></a>
+                                    <a href="{{ route('telecharger', $item->id) }}" class="btn btn-light btn-sm"><i
+                                            class="fas fa-file-export"></i></a>
                                 </td>
                             </tr>
                         @empty
@@ -86,7 +87,7 @@ Rapport
                     <table class="table">
                         <tr>
                             <th style="width:50%">Total:</th>
-                            <td id="count">{{count($projets)}}</td>
+                            <td id="count">{{ count($projets) }}</td>
                         </tr>
                     </table>
                 </div>
@@ -106,7 +107,7 @@ Rapport
             <div class="col-12">
                 <a href="invoice-print.html" rel="noopener" target="_blank" class="btn btn-default disabled"><i
                         class="fas fa-print"></i> Print</a>
-               
+
                 <button type="button" class="btn btn-primary float-right disabled" style="margin-right: 5px;">
                     <i class="fas fa-download"></i> Generer PDF
                 </button>
@@ -141,7 +142,7 @@ Rapport
         src="{{ Vite::asset('node_modules/admin-lte/plugins/datatables-buttons/js/buttons.colVis.min.js') }}"></script>
     <script type='module'>
         $(function() {
-            
+
             var table = $("#tab_reporting").DataTable({
                 "responsive": true,
                 "lengthChange": true,
@@ -162,8 +163,8 @@ Rapport
                     extend: 'print',
                     title: 'les projects '
                 }, "colvis"]
-            });
-            var initialData=table.data().toArray();
+            }).buttons().container().appendTo('#tab_reporting_wrapper .col-md-6:eq(0)');
+            var initialData = table.data().toArray();
             $('#comite').on('click', function() {
                 // alert('bonjour')
                 // Vérifier si la case à cocher est cochée ou décochée
@@ -178,10 +179,10 @@ Rapport
                         //     param2: 'valeur2'
                         // },
                         success: function(response) {
-                            var count=response.length
+                            var count = response.length
                             table.destroy()
                             console.log(response)
-                            table=$("#tab_reporting").DataTable({
+                            table = $("#tab_reporting").DataTable({
                                 "responsive": true,
                                 "lengthChange": true,
                                 "autoWidth": true,
@@ -191,9 +192,21 @@ Rapport
                                 "data": {
                                     "data": response
                                 },
-                            });
-                            count=response.length
-                            
+                                "buttons": [{
+                                    extend: 'csv',
+                                    title: 'les projects ',
+
+                                }, "excel", {
+                                    extend: 'pdf',
+                                    title: 'les projects ',
+
+                                }, {
+                                    extend: 'print',
+                                    title: 'les projects '
+                                }, "colvis"]
+                            }).buttons().container().appendTo('#tab_reporting_wrapper .col-md-6:eq(0)');
+                            count = response.length
+
                             $('#count').text(0)
                             $('#count').text(count)
 

@@ -19,14 +19,19 @@ use Illuminate\Support\Facades\Route;
 Route::get('/', function () {
     // dd(Auth::user()->roles[0]->name);
     $routes=[
-        env('TtmOfficer')=>"route('home')",
+        env('TtmOfficer')=>route('home'),
         env('Pm')=>route('projects.index'),
         env('User')=>route('projects.index'),
         env('Directeur')=>route('approbationCollaborateur.index'),
         env('AdminSys')=> route('users.index'),
+        
     ];
+    if(isset(Auth::user()->roles[0]->name)){
+
+        return redirect()->$routes[Auth::user()->roles[0]->name];
+    }
+    return redirect()->route('login');   
     
-    return redirect($routes[Auth::user()->roles[0]->name]);
 });
 @include('metierRoutes/web.php');
 @include 'complexityRoutes/web.php';
