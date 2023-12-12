@@ -247,12 +247,15 @@ class ProjectController extends Controller
 
             // notication au ttmOffficer de la création du projet
             // $this->mail_to_ttmOfficer("un projet vient d'etre crée");
-            $folder_name = substr(str_replace([' ', "'"], '', $request->name), 0, 6);
+            $folder_name = $project->id ;
+
+
+            //Enregistrement des documents constitutifs et descriptifs du projet
             if ($request->hasFile('file')) {
                 foreach ($request->file as $file) {
                     $namefile = $folder_name . '' . date('ymdhis') . '.' . $file->extension();
-                    $path = $file->storeAs('projet/' . $folder_name, $namefile);
-                    $publicPath = public_path('storage/projet/' . $folder_name . '/');
+                    $path = $file->storeAs('projets/' . $folder_name.'/documents', $namefile);
+                    $publicPath = public_path('storage/projets/' . $folder_name . '/documents');
                     File::ensureDirectoryExists($publicPath);
                     File::delete($publicPath . '/' . $namefile);
                     File::link(storage_path('app/' . $path), $publicPath . '/' . $namefile);
@@ -288,7 +291,7 @@ class ProjectController extends Controller
                 ->log(
                     auth()->user()->name . ' a crée le projet '
                 );
-                
+
             return redirect()->route('projects.dates', $project->id)->with('score')->with('message','création du projet avec success');
 
             // return redirect()->route('projects.show', $project->id)->with('score');
