@@ -2,20 +2,21 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Requests\UpdateDemandeJalonRequest;
-use App\Models\CategoryDemande;
-use App\Models\Demande;
-use App\Models\DemandeJalon;
-use App\Models\MessageMail;
-use App\Models\Project;
-use App\Models\ProjectOptionttmJalon;
-use App\Models\ProjectUser;
-use App\Models\User;
-use App\Notifications\EasyTtmNotification;
 use Carbon\Carbon;
+use App\Models\User;
+use App\Models\Jalon;
+use App\Models\Demande;
+use App\Models\Project;
+use App\Models\MessageMail;
+use App\Models\ProjectUser;
+use App\Models\DemandeJalon;
 use Illuminate\Http\Request;
+use App\Models\CategoryDemande;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Hash;
+use App\Models\ProjectOptionttmJalon;
+use App\Notifications\EasyTtmNotification;
+use App\Http\Requests\UpdateDemandeJalonRequest;
 
 class DemandeJalonController extends Controller
 {
@@ -71,7 +72,7 @@ class DemandeJalonController extends Controller
                 'email' => $request->email_manager,
                 'username' => $request->username_manager,
                 'password' => Hash::make('password'),
-                'phone_number' =>$request->phone_number_manager,
+                'phone_number' => $request->phone_number_manager,
             ]);
 
             return $user;
@@ -103,7 +104,7 @@ class DemandeJalonController extends Controller
                 'email' => $request->email,
                 'username' => $request->username,
                 'password' => Hash::make('password'),
-                'phone_number' => $request->phone_number.$request->nom,
+                'phone_number' => $request->phone_number,
             ]);
 
             ProjectUser::create([
@@ -113,10 +114,10 @@ class DemandeJalonController extends Controller
             ]);
         }
         activity()
-        ->causedBy(auth()->user()->id)
-        ->performedOn($project)
-        ->event('addUser')
-        ->log(auth()->user()->name.' a ajouté comme '.$request->role.' '.$request->noms);
+            ->causedBy(auth()->user()->id)
+            ->performedOn($project)
+            ->event('addUser')
+            ->log(auth()->user()->name . ' a ajouté comme ' . $request->role . ' ' . $request->nom);
         // Notification au contributeur pour son affectation au projet
 
         return $user;
@@ -125,39 +126,46 @@ class DemandeJalonController extends Controller
     public function store(Request $request)
     {
         // dd($request->all());
-
+        $jalon=Jalon::find($request->jalon_id);
         $project = Project::find($request->project_id);
+        $folder_name = $project->id ;
+        $folder_jalon_name = $jalon->designation ;
         // dd($project);
-        // Gestion d'ajout de membres et les notification
-        $manager = $this->handleManager($request);
-        $fichiers = [];
 
+        // $fichiers = [];
         // sauvegardages des fichiers
         if ($request->hasFile('file')) {
-            $files = $request->file('file');
+            $file = $request->file('file');
+            $namefile = $folder_jalon_name.''.date('ymdhis') . '.' . $file->extension();
+            $fichier = $file->storeAs('projets/' . $folder_name.'/'.$folder_jalon_name.'/demandes', $namefile);
 
-            foreach ($files as $file) {
-                $namefile = date('ymdhis').'.'.$file->extension();
-                $fichier = $file->storeAs('demandes', $namefile);
-
-                $publicPath = public_path('storage/demandes');
-                File::ensureDirectoryExists($publicPath);
-                File::delete($publicPath.'/'.$namefile);
-                File::link(storage_path('app/'.$fichier), $publicPath.'/'.$namefile);
-
-                $fichiers[] = $fichier;
-            }
+            $publicPath = public_path('storage/projets/'.$folder_name.'/'.$folder_jalon_name.'/demandes');
+            File::ensureDirectoryExists($publicPath);
+            File::delete($publicPath . '/' . $namefile);
+            File::link(storage_path('app/' . $fichier), $publicPath . '/' . $namefile);
         }
-        // dd($fichiers);
-        // gestion d'ajout de membre et la notification
+        // dd($publicPath);
+        $fichier_path=storage_path('app/demandes/').''.$namefile;
+        // $publicPath.''.$namefile;
+        // dd($fichier);
+
+
+        // Vérification des informations du Line manager et le crée s'il n'existe pas
+        $manager = $this->handleManager($request);
+
+        // Vérification des informations du contributeur et le crée s'il n'existe pas
         $user = $this->handleMember($request, $manager, $project);
-        // $this->notifyMemberAndManager($user, $manager, $fichiers);
-        // ProjectUserController::store($request);
-        // $user = User::Where('username', $request->contributeur)->get()->first();
+
+        // Envoi du mail à la persone que l'on a assignée la demande
+        $res=NotificationController::sendMail($user->email, "bonjour", "<a>bonjour</a>", "test",$fichier_path);
+
+        // Envoi du mail au Line de persone que l'on a assignée la demande
+        $res=NotificationController::sendMail($manager->email, "bonjour", "<a>bonjour</a>", "test", $fichier_path);
+        // dd($res);
 
         $deadLine = $request->input('deadLine');
         $deadlineUnit = $request->input('deadline_unit');
-        $deadlineCombinee = $deadLine.' '.$deadlineUnit;
+        $deadlineCombinee = $deadLine . ' ' . $deadlineUnit;
 
         $delai = $request->input('deadLine');
         $uniteDelai = $request->input('deadline_unit');
@@ -171,7 +179,7 @@ class DemandeJalonController extends Controller
         $demandeJalon = new DemandeJalon();
         $demandeJalon->demande_id = $request->input('demande');
         $demandeJalon->description = $request->input('description');
-        $demandeJalon->pathTask = implode(',', $fichiers);
+        $demandeJalon->pathTask = $fichier;
         $demandeJalon->contributeur = $user->id;
         $demandeJalon->deadLine = $deadlineCombinee;
         $demandeJalon->date_prevue = $datePrevue;
@@ -184,12 +192,12 @@ class DemandeJalonController extends Controller
             ->causedBy(auth()->user()->id)
             ->performedOn($project)
             ->event('createTask')
-            ->log(auth()->user()->name.' a ajouté une demande '.implode(', ', $fichiers));
+            ->log(auth()->user()->name . ' a ajouté une demande ' . $fichier);
 
         $message = MessageMail::Where('code_name', 'add_member_to_project')->get()->first();
         // $user->notify(new EasyTtmNotification($message,route('home'), $fichiers));
 
-        return redirect()->back();
+        return redirect()->back()->with('message', "Créactrion de la demande avec success");
     }
 
     /**
@@ -218,7 +226,7 @@ class DemandeJalonController extends Controller
         $delai = $request->input('deadLine');
         $uniteDelai = $request->input('deadline_unit');
 
-        $deadlineCombinee = $delai.' '.$uniteDelai;
+        $deadlineCombinee = $delai . ' ' . $uniteDelai;
 
         $datePrevue = null;
 
@@ -235,10 +243,10 @@ class DemandeJalonController extends Controller
         ]);
         $project = Project::find(ProjectOptionttmJalon::where('id', $demandeJalon->project_optionttm_jalon_id)->get()->first()->project_id);
         activity()
-        ->causedBy(auth()->user()->id)
-        ->performedOn($project)
-        ->event('updateTask')
-        ->log(auth()->user()->name.'a modifier la demande '.$demandeJalon->title);
+            ->causedBy(auth()->user()->id)
+            ->performedOn($project)
+            ->event('updateTask')
+            ->log(auth()->user()->name . 'a modifier la demande ' . $demandeJalon->title);
 
         return redirect()->back()->with('success', 'Point de complexité modifié avec succes');
     }
@@ -252,10 +260,10 @@ class DemandeJalonController extends Controller
         $project = Project::find(ProjectOptionttmJalon::where('id', $demandeJalon->project_optionttm_jalon_id)->get()->first()->project_id);
         $demandeJalon->delete();
         activity()
-        ->causedBy(auth()->user()->id)
-        ->performedOn($project)
-        ->event('deleteTask')
-        ->log(auth()->user()->name.'a supprimé la demande '.$demandeJalon->title);
+            ->causedBy(auth()->user()->id)
+            ->performedOn($project)
+            ->event('deleteTask')
+            ->log(auth()->user()->name . 'a supprimé la demande ' . $demandeJalon->title);
 
         return redirect()->back();
     }
