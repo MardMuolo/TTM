@@ -4,7 +4,9 @@
 @endsection
 @section('filsAriane')
     <li class="breadcrumb-item"><a href="{{ route('projects.index') }}">Projets</a></li>
-    <li class="breadcrumb-item"><a href="{{ route('projects.show', Crypt::encrypt($project->id)) }}">{{substr(str_replace([' ', "'"], '', $project->name), 0, 10)}}...</a></li>
+    <li class="breadcrumb-item"><a
+            href="{{ route('projects.show', Crypt::encrypt($project->id)) }}">{{ substr(str_replace([' ', "'"], '', $project->name), 0, 10) }}...</a>
+    </li>
     <li class="breadcrumb-item text-secondary">Demande</li>
 @endsection
 @section('content')
@@ -191,7 +193,7 @@
                                 </td>
 
                                 <td class="text-center"><a
-                                        href="{{ asset('storage/demandes/' . basename($item->pathTask)) }}"
+                                        href="{{ asset('storage/' . $item->pathTask) }}"
                                         download>Telecharger<i class="fas fa-download"></i></a>
                                 </td>
 
@@ -280,7 +282,8 @@
                         </div>
                     @else
                         <div class="modal-header">
-                            <h5 class="modal-title" id="modal-finish-jalon-label">Voulez-vous vraiment <span id="comiteAlerte">cloturer ce jalon?</span>
+                            <h5 class="modal-title" id="modal-finish-jalon-label">Voulez-vous vraiment <span
+                                    id="comiteAlerte">cloturer ce jalon?</span>
                             </h5>
                             <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                                 <span aria-hidden="true">&times;</span>
@@ -313,18 +316,16 @@
                                     <label for="exampleInputFile">Date effective</label>
                                     <div class="input-group">
                                         <div class="custom-file">
-                                            <input type="date" class="form-control"
-                                            min="{{ $echeance ?? '' }}"
-                                            id="dateEffective"
-                                            name="dateEffective" required>
+                                            <input type="date" class="form-control" min="{{ $echeance ?? '' }}"
+                                                id="dateEffective" name="dateEffective" required>
                                         </div>
                                     </div>
                                 </div>
-                                @if ($jalon->designation=="T0")
-                                <div class="icheck-primary">
-                                    <input type="checkbox" id="comite" name="comite">
-                                    <label for="comite">Passé au comité</label>
-                                </div>
+                                @if ($jalon->designation == 'T0')
+                                    <div class="icheck-primary">
+                                        <input type="checkbox" id="comite" name="comite">
+                                        <label for="comite">Passé au comité</label>
+                                    </div>
                                 @endif
                             </div>
                             <div class="modal-footer">
@@ -422,18 +423,21 @@
 
 
 @push('third_party_scripts')
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
     <script type='module' src="{{ Vite::asset('node_modules/admin-lte/plugins/datatables/jquery.dataTables.min.js') }}">
+    </script>
+    <script type='module' src="{{ Vite::asset('node_modules/admin-lte/plugins/inputmask/jquery.inputmask.min.js') }}">
+    </script>
+    <script type='module' src="{{ Vite::asset('node_modules/admin-lte/plugins/moment/moment.min.js') }}">
     </script>
     <script type='module'
         src="{{ Vite::asset('node_modules/admin-lte/plugins/datatables-buttons/js/buttons.bootstrap4.min.js') }}"></script>
-    <script type="module" src="{{ Vite::asset('node_modules/admin-lte/plugins/select2/js/select2.full.min.js') }}">
+    <script src="{{ Vite::asset('node_modules/admin-lte/plugins/select2/js/select2.full.min.js') }}"></script>
+    <script src="{{ Vite::asset('node_modules/admin-lte/plugins/sweetalert2/sweetalert2.min.js') }}"></script>
+    <script src="{{ Vite::asset('node_modules/admin-lte/plugins/datatables-buttons/js/dataTables.buttons.min.js') }}">
     </script>
-    <script type="module" src="{{ Vite::asset('node_modules/admin-lte/plugins/sweetalert2/sweetalert2.min.js') }}">
+    <script src="{{ Vite::asset('node_modules/admin-lte/plugins/datatables-bs4/js/dataTables.bootstrap4.min.js') }}">
     </script>
-    <script type="module"
-        src="{{ Vite::asset('node_modules/admin-lte/plugins/datatables-buttons/js/dataTables.buttons.min.js') }}"></script>
-    <script type="module"
-        src="{{ Vite::asset('node_modules/admin-lte/plugins/datatables-bs4/js/dataTables.bootstrap4.min.js') }}"></script>
 @endpush
 
 @push('page_css')
@@ -444,37 +448,37 @@
     @vite('node_modules/admin-lte/plugins/datatables-buttons/css/buttons.bootstrap4.min.css')
 @endpush
 @push('page_scripts')
-    <script type="module">
+    <script>
         $(document).ready(function() {
-            if (true) {
-                (async () => {
+            $('[data-mask]').inputmask()
+            // if (true) {
+            //     (async () => {
 
-                    /* inputOptions can be an object or Promise */
-                    const inputOptions = new Promise((resolve) => {
-                        setTimeout(() => {
-                            resolve({
-                                'd': 2
-                            })
-                        }, 800)
-                    })
-                    const {
-                        value: sondage
-                    } = await Swal.fire({
-                        icon: 'success',
-                        title: '<h2 class="text-success">Création avec Succès</h2> ',
-                        html: 'Le score est de <span class="text-black-50 h6">{{ $score ?? 'N/A' }}</span> et le projet est retenu en mode <span class="text-black-50 h6">{{ $options->nom ?? 'N/A' }}</span><br> Veuillez préciser les dates des jalons du projet',
-                    })
-                })()
-            }
-
+            //         /* inputOptions can be an object or Promise */
+            //         const inputOptions = new Promise((resolve) => {
+            //             setTimeout(() => {
+            //                 resolve({
+            //                     'd': 2
+            //                 })
+            //             }, 800)
+            //         })
+            //         const {
+            //             value: sondage
+            //         } = await Swal.fire({
+            //             icon: 'success',
+            //             title: '<h2 class="text-success">Création avec Succès</h2> ',
+            //             html: 'Le score est de <span class="text-black-50 h6">{{ $score ?? 'N/A' }}</span> et le projet est retenu en mode <span class="text-black-50 h6">{{ $options->nom ?? 'N/A' }}</span><br> Veuillez préciser les dates des jalons du projet',
+            //         })
+            //     })()
+            // }
             $.ajax({
-                url: '{{route('getUsers')}}',
-                type:'Get',
+                url: '{{ route('getUsers') }}',
+                type: 'Get',
                 dataType: 'json',
                 success: function(response) {
                     console.log(response)
 
-                    if (response.status==='success') {
+                    if (response.status === 'success') {
                         var data = response.body;
                         console.log(data)
 
@@ -482,11 +486,10 @@
                             return {
                                 id: user.id,
                                 username: user.username,
-                                text: user.last_name + ' ' + user.first_name,
+                                text: user.name,
                                 email: user.email,
                                 phone: user.phone,
-                                first_name: user.first_name,
-                                last_name: user.last_name,
+
                             };
                         });
 
@@ -505,6 +508,7 @@
                         // Événement de sélection d'utilisateur
                         $('#user').on('select2:select', function(e) {
                             var selectedUser = e.params.data;
+                            console.log(`name ${selectedUser.text}`)
 
                             // Mettre à jour la valeur de l'input "Email" avec l'e-mail de l'utilisateur sélectionné
                             // $('#user').val(selectedUser.username);
@@ -513,15 +517,14 @@
                             $('#name').val(selectedUser.text);
                             $('#phone_number').val(selectedUser.phone);
 
-                            var fullName = selectedUser.first_name + ' ' + selectedUser
-                                .last_name;
-                            $('#name').val(fullName);
+                            // var fullName = selectedUser.first_name + ' ' + selectedUser
+                            //     .last_name;
+                            // $('#name').val(fullName);
                         });
 
                         // Événement de sélection d'utilisateur
                         $('#manager').on('select2:select', function(e) {
                             var selectedUser = e.params.data;
-
                             // Mettre à jour la valeur de l'input "Email" avec l'e-mail de l'utilisateur sélectionné
                             // $('#user').val(selectedUser.username);
                             $('#username_manager').val(selectedUser.username);
@@ -529,9 +532,9 @@
                             $('#name_manager').val(selectedUser.text);
                             $('#phone_number_manager').val(selectedUser.phone);
 
-                            var fullName = selectedUser.first_name + ' ' + selectedUser
-                                .last_name;
-                            $('#name').val(fullName);
+                            // var fullName = selectedUser.first_name + ' ' + selectedUser
+                            //     .last_name;
+                            // $('#name').val(name);
                         });
 
                     } else {

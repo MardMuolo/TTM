@@ -4,7 +4,8 @@
 @endsection
 @section('filsAriane')
     <li class="breadcrumb-item"><a href="{{ route('projects.index') }}">Projet</a></li>
-    <li class="breadcrumb-item"><a href="#" class="text-orange" title="{{$project->name}}">{{substr(str_replace([' ', "'"], '', $project->name), 0, 10)}}...</a></li>
+    <li class="breadcrumb-item"><a href="#" class="text-orange"
+            title="{{ $project->name }}">{{ substr(str_replace([' ', "'"], '', $project->name), 0, 10) }}...</a></li>
 @endsection
 @section('content')
     <div class="card card-orange card-outline p-4">
@@ -183,8 +184,8 @@
                                     <h5 class="mt-5 text-muted">Document du projet</h5>
                                     <ul class="list-unstyled">
                                         @forelse ($file as $item)
-                                            <li><a href="{{ asset('storage/documents/' . basename($item->filePath)) }}"
-                                                    download class="btn-link text-secondary"><i
+                                            <li><a href="{{ asset('storage/' . $item->filePath) }}" download
+                                                    class="btn-link text-secondary"><i
                                                         class="far fa-fw fa-file-word"></i>{{ basename($item->filePath) }}</a>
                                             </li>
                                         @empty
@@ -346,7 +347,7 @@
                     console.log('Erreur AJAX: ' + error);
                 }
             });
-            
+
         });
 
         function supprimer(event) {

@@ -64,7 +64,7 @@
                                                     @endif
                                                 </td>
                                                 <td>
-                                                    <a href="{{ asset('storage/livrable/' . basename($livrable->fichier)) }}"
+                                                    <a href="{{ asset('storage/' . $livrable->fichier) }}"
                                                         download>Telecharger <i class="fas fa-download"></i></a>
                                                 </td>
                                                 <td class="badge {{ $color[$livrable->status] }}">{{ $livrable->status }}
