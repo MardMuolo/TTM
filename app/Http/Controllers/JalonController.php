@@ -240,7 +240,7 @@ class JalonController extends Controller
             ]);
 
             // Redirection vers la page précédente
-            return redirect()->back();
+            return redirect()->back()->with('dateJalon', "Date de jalo fixée avec success");
         }
 
         // Redirection vers la page précédente avec un message d'erreur si aucun ProjectOptionttmJalon n'a été trouvé
@@ -347,7 +347,8 @@ class JalonController extends Controller
         // dd($request->dateEffective);
         $dateEffective=$request->dateEffective;
 
-
+        $folder_name = $project->id ;
+        $folder_jalon_name = $jalon->id ;
         $projectOptionttmJalon = ProjectOptionttmJalon::where('jalon_id', $jalon)
             ->where('option_ttm_id', $option_ttm)
             ->where('project_id', $project->id)
@@ -355,8 +356,8 @@ class JalonController extends Controller
             if ($request->hasFile('jalonPv')) {
                 $jalonPvFile = $request->file('jalonPv');
                 $jalonPvFileName = substr(str_replace([' ', "'"], '', $jalonPvFile->getClientOriginalName()), 0, 6) . date('ymdhis') . '.' . $jalonPvFile->extension();
-                $destinationPath = 'storage/lalonPvs';
-                $jalonPvFile->storeAs($destinationPath, $jalonPvFileName, 'public');
+                $jalonPvFile->storeAs('storage/projets/' . $folder_name.'/'.$folder_jalon_name.'/PV', $jalonPvFileName);
+                // $jalonPvFile->storeAs($destinationPath, $jalonPvFileName, 'public');
 
                 // Enregistrement du nom du fichier dans la base de données
 
