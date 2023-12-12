@@ -8,6 +8,7 @@ use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
@@ -95,42 +96,67 @@ class LoginController extends Controller
         return $array;
     }
 
+    //Cette methode vefifie si la personne qui tente de se connecter est autorisée à acceder à l'application
+    public function is_onWriteList($username)
+    {
+        $is_onWriteList = DB::table('writelists')->where('username', $username)->exists();
+        return $is_onWriteList;
+    }
+
     public function login(Request $request)
     {
         try {
+
             $credentials = $this->validateLogin($request);
             $username = $request->username;
             $password = $request->password;
 
-            $localUser = User::Where(['username' => $request->username])?->get()->first();
-            $isAdmin = $localUser ? $localUser->roles->where('name', 'admin')->first() : false;
+            //on verifie s'il existe une instance de cet utilisateur dans l'application
+            $localUser = User::Where(['username' => $request->username])->get()->first();
+
+            //on vérifier si l'utilisateur qui se connecte a le rôle superAdmin
+            $isAdmin = $localUser? $localUser->roles->where('name', 'admin')->first():false;
+            // dd(!$isAdmin);
+
+            // dd($isAdmin);
             if ($localUser) {
                 if ($isAdmin) {
                     if (Auth::attempt($credentials)) {
                         $request->session()->regenerate();
 
-                        return to_route('projects.index');
+                        return to_route('roles.index');
                     } else {
-                        return $this->sendFailedLoginResponse($request);
+                        return redirect()->back()->withErrors(['username' => 'Ouups! une erreur est survenue']);;
                     }
                 } else {
+                    $is_onWriteList = $this->is_onWriteList($username);
+                    if ($is_onWriteList) {
+                        $this->guard()->login($localUser);
+                        return redirect()->route('projects.index');
+                    } else {
+                        return redirect()->back()->withErrors(['username' => 'Vous n\'êtes pas autorisé.e à se connecter. Veuillez contacter l\'administrateur']);
+                    }
+
                     // dd(Auth::attempt($credentials));
-                    $this->guard()->login($localUser);
-                    return redirect()->route('projects.index');
+
                 }
             } else {
+                //on connecte le User sur le Ldap afin de recuperer ces information
                 $data = $this->connect($username, $password);
-                if ($data->REQSTATUS == "SUCCESS") {
+                //"data" stocke les infomations de ce dernier qui ne sont pas encore dans l'applications
 
+                if ($data->REQSTATUS == "SUCCESS") {
                     if (!$localUser) {
+                        //Création d'une instance pour ce dernier en se servant des données recuperer via Ldap "data"
                         $localUser = User::create([
                             'name' => $data->FULLNAME,
                             'username' => $data->CUID,
                             'email' => $data->EMAIL,
-                            'phone_number' => $data->PHONENUMBER,
+                            'phone_number' =>$data->PHONENUMBER,
                             'password' => Hash::make($password)
                         ]);
-
+                        
+                        //on sauvegarde l'evenement
                         activity()
                             ->causedBy($localUser)
                             ->performedOn($localUser)
@@ -138,22 +164,29 @@ class LoginController extends Controller
                             ->log("Création d'une nouvelle instance utilisateur");
                     }
 
-                    if ($localUser) {
-                        $this->guard()->login($localUser);
-                    } else {
-                        $id = Crypt::encrypt(auth()->user()->id);
-                        return redirect()->route('info');
-                    }
+                    //appel à la methode is_onWriteList pour verifier si le User a acces sur l'application
+                    $is_onWriteList = DB::table('writelists')->where('username', $localUser->username)->exists();
+                    // dd($is_onWriteList);
 
-                    return $this->sendLoginResponse($request);
+                    if ($is_onWriteList) {
+                        if ($localUser->profile_photo) {
+                            $this->guard()->login($localUser);
+                        } else {
+                            $id = Crypt::encrypt(auth()->user()->id);
+                            return redirect()->route('info');
+                        }
+                    } else {
+                        return redirect()->back()->withErrors(['username' => 'Vous n\'êtes pas autorisé.e à se connecter. Veuillez contacter l\'administrateur']);
+                    }
+                    // return "erreur4";
                 } else {
 
-                    return $this->sendFailedLoginResponse($request);
+                    return redirect()->back()->withErrors(['username' => 'cuid ou mot de passe incorrect']);
                 }
             }
-
-        } catch (Exception) {
-            return $this->sendFailedLoginResponse($request);
+        } catch (Exception $e) {
+            Log::error($e);
+            return abort(500);
         }
     }
 
