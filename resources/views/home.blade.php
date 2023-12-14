@@ -305,7 +305,7 @@
     </section>
 @endsection
 @push('third_party_scripts')
-    <script src="{{ Vite::asset('node_modules/admin-lte/plugins/jquery/jquery.min.js') }}"></script>
+    <script src="{{ Vite::asset('node_modules/admin-lte/plugins/jquery/jquery.min.js?commonjs-entry') }}"></script>
 @endpush
 
 @push('page_scripts')
@@ -313,34 +313,34 @@
     @vite('node_modules/admin-lte/plugins/datatables-bs4/css/dataTables.bootstrap4.min.css')
     @vite('node_modules/admin-lte/plugins/datatables-responsive/css/responsive.bootstrap4.min.css')
     @vite('node_modules/admin-lte/plugins/datatables-buttons/css/buttons.bootstrap4.min.css')
-    <script type="module" src={{ Vite::asset('node_modules/admin-lte/plugins/bootstrap/js/bootstrap.bundle.min.js') }}>
+    <script type="module" src={{ Vite::asset('node_modules/admin-lte/plugins/bootstrap/js/bootstrap.bundle.min.js?commonjs-entry') }}>
     </script>
-    <script type="module" src={{ Vite::asset('node_modules/admin-lte/plugins/chart.js/Chart.min.js') }}></script>
-    {{-- <script type="module" src={{ Vite::asset('resources/js/dashboard.js') }}></script> --}}
-    <script type="module" src={{ Vite::asset('node_modules/admin-lte/plugins/summernote/summernote-bs4.min.js') }}>
+    <script type="module" src={{ Vite::asset('node_modules/admin-lte/plugins/chart.js/Chart.min.js?commonjs-entry') }}></script>
+    {{-- <script type="module" src={{ Vite::asset('resources/js/dashboard.js?commonjs-entry') }}></script> --}}
+    <script type="module" src={{ Vite::asset('node_modules/admin-lte/plugins/summernote/summernote-bs4.min.js?commonjs-entry') }}>
     </script>
     <script type="module" src={{ Vite::asset('resources/js/graphique.js') }}></script>
-    <script type="module" src={{ Vite::asset('node_modules/admin-lte/plugins/datatables/jquery.dataTables.min.js') }}>
+    <script type="module" src={{ Vite::asset('node_modules/admin-lte/plugins/datatables/jquery.dataTables.min.js?commonjs-entry') }}>
     </script>
     <script type="module"
-        src={{ Vite::asset('node_modules/admin-lte/plugins/datatables-bs4/js/dataTables.bootstrap4.min.js') }}></script>
+        src={{ Vite::asset('node_modules/admin-lte/plugins/datatables-bs4/js/dataTables.bootstrap4.min.js?commonjs-entry') }}></script>
     <script type="module"
-        src={{ Vite::asset('node_modules/admin-lte/plugins/datatables-responsive/js/dataTables.responsive.min.js') }}>
+        src={{ Vite::asset('node_modules/admin-lte/plugins/datatables-responsive/js/dataTables.responsive.min.js?commonjs-entry') }}>
     </script>
     <script type="module"
-        src={{ Vite::asset('node_modules/admin-lte/plugins/datatables-responsive/js/responsive.bootstrap4.min.js') }}>
+        src={{ Vite::asset('node_modules/admin-lte/plugins/datatables-responsive/js/responsive.bootstrap4.min.js?commonjs-entry') }}>
     </script>
     <script type="module"
-        src={{ Vite::asset('node_modules/admin-lte/plugins/datatables-buttons/js/dataTables.buttons.min.js') }}></script>
+        src={{ Vite::asset('node_modules/admin-lte/plugins/datatables-buttons/js/dataTables.buttons.min.js?commonjs-entry') }}></script>
     <script type="module"
-        src={{ Vite::asset('node_modules/admin-lte/plugins/datatables-buttons/js/buttons.bootstrap4.min.js') }}></script>
-    <script type="module" src={{ Vite::asset('node_modules/admin-lte/plugins/jszip/jszip.min.js') }}></script>
-    <script type="module" src={{ Vite::asset('node_modules/admin-lte/plugins/pdfmake/pdfmake.min.js') }}></script>
+        src={{ Vite::asset('node_modules/admin-lte/plugins/datatables-buttons/js/buttons.bootstrap4.min.js?commonjs-entry') }}></script>
+    <script type="module" src={{ Vite::asset('node_modules/admin-lte/plugins/jszip/jszip.min.js?commonjs-entry') }}></script>
+    <script type="module" src={{ Vite::asset('node_modules/admin-lte/plugins/pdfmake/pdfmake.min.js?commonjs-entry') }}></script>
     <script type="module" src={{ Vite::asset('node_modules/admin-lte/plugins/pdfmake/vfs_fonts.js') }}></script>
     <script type="module"
-        src={{ Vite::asset('node_modules/admin-lte/plugins/datatables-buttons/js/buttons.html5.min.js') }}></script>
+        src={{ Vite::asset('node_modules/admin-lte/plugins/datatables-buttons/js/buttons.html5.min.js?commonjs-entry') }}></script>
     <script type="module"
-        src={{ Vite::asset('node_modules/admin-lte/plugins/datatables-buttons/js/buttons.print.min.js') }}></script>
+        src={{ Vite::asset('node_modules/admin-lte/plugins/datatables-buttons/js/buttons.print.min.js?commonjs-entry') }}></script>
     <script type="module" src={{ Vite::asset('resources/js/tableau.js') }}></script>
 
     <script type="module">
