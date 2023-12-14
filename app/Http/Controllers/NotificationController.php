@@ -7,20 +7,21 @@ use Illuminate\Support\Facades\Http;
 
 class NotificationController extends Controller
 {
-    public function sendMail($receiver, $text, $template, $attachement,$subject)
+    public function sendMail($receiver, $text, $template,$subject)
     {
         try {
             $data = [
                 "from" => "support@orange.com",
-                "to" => $receiver,
+                "to" => [$receiver],
                 "subject" => $subject,
                 "text" => $text,
                 "html" => $template,
                 "attachement" => []
             ];
             $response = Http::withBody(json_encode($data),'application/json')
-            ->post("" . config('app.send_alert_url') . "mail");
-            // info("Send error alert mail response: " . $response . "");
+            ->post("".env('MAIL_URL')."mail");
+            // info(" " . $response . "");
+            return $response;
 
         } catch (\Throwable $th) {
             return redirect()->back()->withErrors(['erros' => "erreur d'envoi du mail"]);
@@ -31,11 +32,13 @@ class NotificationController extends Controller
         try {
             $data = [
                 "from" => "easyTTM",
-                "to" =>  $receiver,
+                "to" =>  [$receiver],
                 "message" => $message
             ];
             $response = Http::withBody(json_encode($data),'application/json'
-            )->post("" .  config('app.send_alert_url') . "sms");
+            )->post("" .env('MAIL_URL'). "sms");
+            return $response;
+
 
         } catch (\Throwable $th) {
             return redirect()->back()->withErrors(['erros' => "erreur d'envoi du SMS"]);
