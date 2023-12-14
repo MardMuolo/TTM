@@ -1,6 +1,7 @@
 <div id="gantt-chart" style="width: 100%; height: 500px;"></div>
-{{-- @vite('node_modules/dhtmlx-gantt/codebase/sources/dhtmlxgantt.css')
-<script src="{{ Vite::asset('node_modules/dhtmlx-gantt/codebase/sources/dhtmlxgantt.js') }}"></script> --}}
+{{-- @vite('node_modules/dhtmlx-gantt/codebase/sources/dhtmlxgantt.css') --}}
+<script src="https://cdn.jsdelivr.net/npm/dhtmlx-gantt@8.0.6/codebase/dhtmlxgantt.min.js"></script>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/dhtmlx-gantt@8.0.6/codebase/dhtmlxgantt.min.css">
 <script>
     const parentData = @json($projectOptionttmJalon); // Données des tâches parents
     const childData = @json($demandeByJalon); // Données des tâches enfants
