@@ -9,7 +9,7 @@
     <ul class="navbar-nav ml-auto">
         <li class="nav-item dropdown user-menu">
             <a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown">
-                <img src="@if (Auth::user()?->profile_photo == null) {{ Vite::asset('resources/images/logo.svg') }}
+                <img src="@if (Auth::user()?->profile_photo == null) {{ asset('/icone.jpg') }}
                 @else
                 {{ asset('storage/profiles/' . Auth::user()?->profile_photo) }} @endif"
                     class="user-image img-circle elevation-2" alt="User Image">
@@ -18,7 +18,7 @@
             <ul class="dropdown-menu dropdown-menu-lg dropdown-menu-right">
                 <!-- User image -->
                 <li class="user-header bg-primary">
-                    <img src="@if (Auth::user()?->profile_photo == null) {{ Vite::asset('resources/images/logo.svg') }}
+                    <img src="@if (Auth::user()?->profile_photo == null) {{ asset('/icone.jpg') }}
                 @else
                 {{ asset('storage/profiles/' . Auth::user()?->profile_photo) }} @endif"
                         class="user-image img-circle elevation-2" alt="User Image">
