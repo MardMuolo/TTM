@@ -50,7 +50,6 @@ class ProjectController extends Controller
         } else {
             // Variable project: nous permet de recuperer tous les projets selon le rôle de l'utilisateur connecté
             $projects = isset($filter) ? Project::where('status', $filter)->get() : Project::get(Project::isAdmin());
-
         }
         //dd($projects[0]->with('users', 'optionsJalons')->get());
         Cache::forever('projects', count($projects));
@@ -247,14 +246,14 @@ class ProjectController extends Controller
 
             // notication au ttmOffficer de la création du projet
             // $this->mail_to_ttmOfficer("un projet vient d'etre crée");
-            $folder_name = $project->id ;
+            $folder_name = $project->id;
 
 
             //Enregistrement des documents constitutifs et descriptifs du projet
             if ($request->hasFile('file')) {
                 foreach ($request->file as $file) {
                     $namefile = $folder_name . '' . date('ymdhis') . '.' . $file->extension();
-                    $path = $file->storeAs('projets/' . $folder_name.'/documents', $namefile);
+                    $path = $file->storeAs('projets/' . $folder_name . '/documents', $namefile);
                     $publicPath = public_path('storage/projets/' . $folder_name . '/documents');
                     File::ensureDirectoryExists($publicPath);
                     File::delete($publicPath . '/' . $namefile);
@@ -292,7 +291,7 @@ class ProjectController extends Controller
                     auth()->user()->name . ' a crée le projet '
                 );
 
-            return redirect()->route('projects.dates', $project->id)->with('score')->with('message','création du projet avec success');
+            return redirect()->route('projects.dates', $project->id)->with('score')->with('message', 'création du projet avec success');
 
             // return redirect()->route('projects.show', $project->id)->with('score');
         } catch (\Throwable $th) {
@@ -318,8 +317,6 @@ class ProjectController extends Controller
         $ttmOfficer = $role->users()->get()->first;
         $user = User::where('id', $ttmOfficer->id)->get()->first();
         $notification->sendSms($user->phone_number, $message);
-
-
     }
 
     public function addDates(Jalon $jalon, OptionTtm $optionTtm, Project $project)
@@ -495,11 +492,13 @@ class ProjectController extends Controller
     public function telechargerProjet($id)
     {
         // dd($id);
-        $project=Project::findOrFail($id);
-        $name=substr(str_replace([' ', "'"], '', $project->name), 0, 10);
-        $repertoire = storage_path();
-        $nomFichierZip = $name.'EasyTTM.zip';
-        $cheminFichierZip = storage_path($nomFichierZip);
+        $project = Project::findOrFail($id);
+        $name = substr(str_replace([' ', "'"], '', $project->name), 0, 10);
+        $repertoire = storage_path('app\projets\\' . $project->id);
+        // dd($repertoire);
+        $nomFichierZip = $name . 'EasyTTM.zip';
+        $cheminFichierZip =  storage_path($nomFichierZip);
+        // dd($cheminFichierZip);
 
         // Créer une instance de la classe ZipArchive
         $zip = new ZipArchive();
@@ -511,17 +510,19 @@ class ProjectController extends Controller
                 new RecursiveDirectoryIterator($repertoire, RecursiveDirectoryIterator::SKIP_DOTS),
                 RecursiveIteratorIterator::SELF_FIRST
             );
-
             // Parcourir les fichiers et dossiers et les ajouter au fichier ZIP
             foreach ($elements as $element) {
                 if ($element->isFile()) {
                     $chemin = $element->getPathName();
-                    $nom = " File::relativePath($repertoire, $chemin)";
+
+                    $nom = $element->getBasename();
+                    // dd($element->getPath());
                     $zip->addFile($chemin, $nom);
                 } elseif ($element->isDir()) {
                     $chemin = $element->getPath();
-                    $nom = DIRECTORY_SEPARATOR . $element->getBasename();
+                    $nom = $element->getBasename();
                     $zip->addEmptyDir($nom);
+                    // dd($chemin);
                 }
             }
 
@@ -560,8 +561,4 @@ class ProjectController extends Controller
             return view('errorsPages.error');
         }
     }
-
-
-
-
 }

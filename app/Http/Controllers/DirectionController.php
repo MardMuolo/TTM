@@ -7,7 +7,9 @@ use App\Models\User;
 use App\Models\Direction;
 use Illuminate\Http\Request;
 use App\Models\DirectionUser;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Hash;
+use App\Http\Controllers\Auth\LoginController;
 use Illuminate\Validation\ValidationException;
 use App\Http\Controllers\ActiveDirectoryController;
 
@@ -20,10 +22,9 @@ class DirectionController extends Controller
     {
         //Return the view index related to directions
         $directions = Direction::orderBy('name')->paginate(5);
-    
-        $req = ActiveDirectoryController::getUsers();
-        $users = $req->users;
-        return view("directions.index", ['directions' => $directions, 'users'=>$users]);
+
+        $users = User::all();
+        return view("directions.index", ['directions' => $directions, 'users' => $users]);
     }
 
     /**
@@ -41,41 +42,33 @@ class DirectionController extends Controller
      */
     public function store(Request $request)
     {
-        
-        
-        $request->validate([
-            'name' => 'required|unique:directions|max:255',
-        ]);
-        
-        $req = ActiveDirectoryController::getUserByEmail($request->user);
+        try {
+            $request->validate([
+                'name' => 'required|unique:directions|max:255',
+            ]);
+            $user_in_db = User::Where(['username' => 'rootadmin'])?->get()->first();
+            // dd($user_in_db);
+            
+            // if (!$user_in_db) {
+            //     $user_in_db = User::create([
+            //         'name' => '$user',
+            //         'email' => '$user->emai',
+            //         'password' => 'test',
+            //         'phone_number' => ' $user->username',
+            //         'username' => ' $user->username',
+            //     ]);
+            // }
+            $test=Direction::create([
+                'name' => 'drh',
+                'user_id' => '1'
+            ]);
 
-        if(isset($req->user))
-        {
-            $user = $req->user;
-            $user_in_db = User::Where(['email' => $user->email])?->get()->first();
-
-            if(!$user_in_db){
-                $user_in_db = User::create([
-                    'name' => $user->first_name.' '.$user->last_name,
-                    'email' => $user->email,
-                    'username' => $user->username,
-                    'password' => Hash::make('password'),
-                ]);
-            }
-        }else{
-            throw ValidationException::withMessages(["error_serveur" => 'User not found']);
+            return redirect()->back()->with('success','création de la direction avec success');
+        } catch (\Throwable $th) {
+            Log::error($th->getMessage());
+            return redirect()->back()->with('error','création de la direction a échouée');
         }
 
-        $direction = Direction::create([
-            'name'=>$request->name
-        ]);
-
-        $direction->direction_users()?->create([
-            'user_id'=>$user_in_db->id,
-            'is_director'=>true
-        ]);
-
-        return redirect()->back();
     }
 
     /**
@@ -103,45 +96,42 @@ class DirectionController extends Controller
         $request->validate([
             'name' => 'required|max:255'
         ]);
-        
+
         $req = ActiveDirectoryController::getUserByEmail($request->email);
 
-        if(isset($req->user))
-        {
+        if (isset($req->user)) {
             $user = $req->user;
             $user_in_db = User::Where(['email' => $user->email])?->get()->first();
 
-            if(!$user_in_db){
+            if (!$user_in_db) {
                 $user_in_db = User::create([
-                    'name' => $user->first_name.' '.$user->last_name,
+                    'name' => $user->first_name . ' ' . $user->last_name,
                     'email' => $user->email,
                     'username' => $user->username,
                     'password' => Hash::make('password'),
                 ]);
             }
-        }else{
+        } else {
             throw ValidationException::withMessages(["error_serveur" => 'User not found']);
         }
 
-        $former_direction_user = DirectionUser::Where(['user_id'=> $user_in_db->id, 'is_director'=>true])->first();
-        
-        if($former_direction_user){
+        $former_direction_user = DirectionUser::Where(['user_id' => $user_in_db->id, 'is_director' => true])->first();
+
+        if ($former_direction_user) {
             $former_direction_user->update([
                 'user_id' => null
             ]);
         }
-        
+
         $direction->update([
-            'name'=>$request->name
+            'name' => $request->name
         ]);
 
-        $direction->direction_users()?->Where('is_director',true)->first()->update([
-            'user_id'=>$user_in_db->id
+        $direction->direction_users()?->Where('is_director', true)->first()->update([
+            'user_id' => $user_in_db->id
         ]);
 
         return redirect()->back();
-
-            
     }
 
     /**
