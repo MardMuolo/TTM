@@ -64,8 +64,7 @@
                     
                         <label for="exampleInputFile">Model</label>
                         <div class="custom-file">
-                            <input type="file" class="form-control" id="" name="file[]"
-                                multiple>
+                            <input type="file" class="form-control" id="" name="file">
                         </div>
                     
                 </div>

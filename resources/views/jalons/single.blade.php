@@ -424,19 +424,19 @@
 
 @push('third_party_scripts')
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
-    <script type='module' src="{{ Vite::asset('node_modules/admin-lte/plugins/datatables/jquery.dataTables.min.js') }}">
+    <script type='module' src="{{ Vite::asset('node_modules/admin-lte/plugins/datatables/jquery.dataTables.min.js?commonjs-entry') }}">
     </script>
-    <script type='module' src="{{ Vite::asset('node_modules/admin-lte/plugins/inputmask/jquery.inputmask.min.js') }}">
+    {{-- <script type='module' src="{{ Vite::asset('node_modules/admin-lte/plugins/inputmask/jquery.inputmask.min.js?commonjs-entry') }}">
     </script>
-    <script type='module' src="{{ Vite::asset('node_modules/admin-lte/plugins/moment/moment.min.js') }}">
-    </script>
+    <script type='module' src="{{ Vite::asset('node_modules/admin-lte/plugins/moment/moment.min.js?commonjs-entry') }}">
+    </script> --}}
     <script type='module'
-        src="{{ Vite::asset('node_modules/admin-lte/plugins/datatables-buttons/js/buttons.bootstrap4.min.js') }}"></script>
-    <script src="{{ Vite::asset('node_modules/admin-lte/plugins/select2/js/select2.full.min.js') }}"></script>
-    <script src="{{ Vite::asset('node_modules/admin-lte/plugins/sweetalert2/sweetalert2.min.js') }}"></script>
-    <script src="{{ Vite::asset('node_modules/admin-lte/plugins/datatables-buttons/js/dataTables.buttons.min.js') }}">
+        src="{{ Vite::asset('node_modules/admin-lte/plugins/datatables-buttons/js/buttons.bootstrap4.min.js?commonjs-entry') }}"></script>
+    <script type="module" src="{{ Vite::asset('node_modules/admin-lte/plugins/select2/js/select2.full.min.js?commonjs-entry') }}"></script>
+    <script type="module" src="{{ Vite::asset('node_modules/admin-lte/plugins/sweetalert2/sweetalert2.min.js?commonjs-entry') }}"></script>
+    <script type="module" src="{{ Vite::asset('node_modules/admin-lte/plugins/datatables-buttons/js/dataTables.buttons.min.js?commonjs-entry') }}">
     </script>
-    <script src="{{ Vite::asset('node_modules/admin-lte/plugins/datatables-bs4/js/dataTables.bootstrap4.min.js') }}">
+    <script type="module" src="{{ Vite::asset('node_modules/admin-lte/plugins/datatables-bs4/js/dataTables.bootstrap4.min.js?commonjs-entry') }}">
     </script>
 @endpush
 

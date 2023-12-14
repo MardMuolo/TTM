@@ -16,7 +16,10 @@
             </div>
         @endforeach
     @endif
-    <form action="{{ route('projects.update', $project->id) }}" method="post" enctype="multipart/form-data">
+    @php
+        $id=Crypt::encrypt($project->id);
+    @endphp
+    <form action="{{ route('projects.update', $id) }}" method="post" enctype="multipart/form-data">
         @csrf
         @method('PUT')
         <div class="col-md-10 container my-4">
@@ -174,9 +177,9 @@
     </form>
 @endsection
 @push('third_party_scripts')
-    <script src="{{ Vite::asset('node_modules/admin-lte/plugins/jquery/jquery.min.js') }}"></script>
-    <script src="{{ Vite::asset('node_modules/admin-lte/plugins/select2/js/select2.full.min.js') }}"></script>
-    <script src="{{ Vite::asset('node_modules/admin-lte/plugins/bs-stepper/js/bs-stepper.min.js') }}"></script>
+    <script src="{{ Vite::asset('node_modules/admin-lte/plugins/jquery/jquery.min.js?commonjs-entry') }}"></script>
+    <script src="{{ Vite::asset('node_modules/admin-lte/plugins/select2/js/select2.full.min.js?commonjs-entry') }}"></script>
+    <script src="{{ Vite::asset('node_modules/admin-lte/plugins/bs-stepper/js/bs-stepper.min.js?commonjs-entry') }}"></script>
     @vite('node_modules/admin-lte/plugins/select2/css/select2.min.css');
     @vite('node_modules/admin-lte/plugins/bs-stepper/css/bs-stepper.min.css');
 @endpush

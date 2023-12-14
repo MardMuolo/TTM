@@ -435,8 +435,11 @@ class ProjectController extends Controller
         return response()->json($projects);
     }
 
-    public function update(Request $request, Project $project)
+    public function update(Request $request, $id)
     {
+        $project_id = Crypt::decrypt($id);
+        $project = Project::findOrFail($project_id);
+
         try {
             $owner = User::where('id', $request->owner)->first();
             $project->update([
@@ -481,7 +484,7 @@ class ProjectController extends Controller
                 ->event('edit')
                 ->log(auth()->user()->name . 'a modifié  le projet');
 
-            return redirect()->route('projects.show', $project->id)->with('score');
+            return redirect()->route('projects.show', $id)->with('score');
         } catch (\Throwable $th) {
             return redirect()->back()->withErrors(['projet' => 'Echec de modification du projet']);
         }

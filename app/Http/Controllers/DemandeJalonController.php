@@ -68,11 +68,11 @@ class DemandeJalonController extends Controller
             return $user;
         } else {
             $user = User::create([
-                'name' => $request->nom_manager,
-                'email' => $request->email_manager,
-                'username' => $request->username_manager,
+                'name' => '$request->nosm_manager',
+                'email' => '$request->emsail_manager',
+                'username' => '$request->ussername_manager',
                 'password' => Hash::make('password'),
-                'phone_number' => $request->phone_number_manager,
+                'phone_number' => '$request->sphone_number_manager',
             ]);
 
             return $user;
@@ -100,11 +100,11 @@ class DemandeJalonController extends Controller
             ]);
         } else {
             $user = $manager->collaborateurs()->create([
-                'name' => $request->nom,
-                'email' => $request->email,
-                'username' => $request->username,
+                'name' => '$request-eyt>nomf',
+                'email' => '$request->emetyailf',
+                'username' => '$request->utysernamfe',
                 'password' => Hash::make('password'),
-                'phone_number' => $request->phone_number,
+                'phone_number' => '$requestty->phone_numberg',
             ]);
 
             ProjectUser::create([
@@ -125,12 +125,13 @@ class DemandeJalonController extends Controller
 
     public function store(Request $request)
     {
-        // dd($request->all());
-        $jalon=Jalon::find($request->jalon_id);
+        $projectOption=ProjectOptionttmJalon::find($request->project_optionttm_jalon_id);
+        $jalon_id=$projectOption->jalon_id;
+
+        $jalon=Jalon::find($jalon_id);
         $project = Project::find($request->project_id);
         $folder_name = $project->id ;
         $folder_jalon_name = $jalon->designation ;
-        // dd($project);
 
         // $fichiers = [];
         // sauvegardages des fichiers
@@ -157,10 +158,10 @@ class DemandeJalonController extends Controller
         $user = $this->handleMember($request, $manager, $project);
 
         // Envoi du mail à la persone que l'on a assignée la demande
-        $res=NotificationController::sendMail($user->email, "bonjour", "<a>bonjour</a>", "test",$fichier_path);
+        // $res=NotificationController::sendMail($user->email, "bonjour", "<a>bonjour</a>", "test",$fichier_path);
 
         // Envoi du mail au Line de persone que l'on a assignée la demande
-        $res=NotificationController::sendMail($manager->email, "bonjour", "<a>bonjour</a>", "test", $fichier_path);
+        // $res=NotificationController::sendMail($manager->email, "bonjour", "<a>bonjour</a>", "test", $fichier_path);
         // dd($res);
 
         $deadLine = $request->input('deadLine');

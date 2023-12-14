@@ -1,6 +1,6 @@
 <div id="gantt-chart" style="width: 100%; height: 500px;"></div>
-@vite('node_modules/dhtmlx-gantt/codebase/sources/dhtmlxgantt.css')
-<script src="{{ Vite::asset('node_modules/dhtmlx-gantt/codebase/sources/dhtmlxgantt.js') }}"></script>
+{{-- @vite('node_modules/dhtmlx-gantt/codebase/sources/dhtmlxgantt.css')
+<script src="{{ Vite::asset('node_modules/dhtmlx-gantt/codebase/sources/dhtmlxgantt.js') }}"></script> --}}
 <script>
     const parentData = @json($projectOptionttmJalon); // Données des tâches parents
     const childData = @json($demandeByJalon); // Données des tâches enfants
