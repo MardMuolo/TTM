@@ -7,52 +7,52 @@ use Illuminate\Http\Request;
 
 class SendMailController extends NotificationController
 {
-    public function to_sysAdmin()
+    public static function to_sysAdmin()
     {
         $users = User::all();
         foreach ($users as $user) {
             foreach ($user->roles as $is_admin) {
                 if ($is_admin->name == env('AdminSys')) {
-                    $this->sendMail($user->email, "Bonjour", "<del>hello admin </del>", "Access request");
+                    NotificationController::sendMail($user->email, "Bonjour", "<del>hello admin </del>", "Access request");
                 }
             }
         }
         return true;
     }
-    public function to_ttmOfficer()
+    public static function to_ttmOfficer()
     {
         $users = User::all();
         foreach ($users as $user) {
             foreach ($user->roles as $is_admin) {
                 if ($is_admin->name == env('TtmOfficer')) {
-                    $this->sendMail($user->email, "Bonjour", "<del>hello admin </del>", "Access request");
+                    NotificationController::sendMail($user->email, "Bonjour", "<del>hello admin </del>", "Access request");
                 }
             }
 
             return true;
         }
     }
-    public function to_contributeur($receiver, $text, $template)
+    public static function to_contributeur($receiver, $text, $template)
     {
-        $response = $this->sendMail($receiver, $text, $template,env('to_contributeur'));
+        $response = NotificationController::sendMail($receiver, $text, $template,env('sub_contributeur'));
 
         return $response;
     }
-    public function to_directeur($receiver, $text, $template)
+    public static function to_directeur($receiver, $text, $template)
     {
-        $response = $this->sendMail($receiver, $text, $template,env('to_directeur_App'));
+        $response = NotificationController::sendMail($receiver, $text, $template,env('sub_directeur_App'));
 
         return $response;
     }
-    public function to_sponsor($receiver, $text, $template)
+    public static function to_sponsor($receiver, $text, $template)
     {
-        $response = $this->sendMail($receiver, $text, $template,env('to_sponsor'));
+        $response = NotificationController::sendMail($receiver, $text, $template,env('sub_sponsor'));
 
         return $response;
     }
-    public function to_projectOwner($receiver, $text, $template)
+    public static function to_projectOwner($receiver, $text, $template)
     {
-        $response = $this->sendMail($receiver, $text, $template,env('to_projectOwner'));
+        $response = NotificationController::sendMail($receiver, $text, $template,env('sub_projectOwner'));
 
         return $response;
     }

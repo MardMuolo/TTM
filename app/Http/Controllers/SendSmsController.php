@@ -7,34 +7,34 @@ use Illuminate\Http\Request;
 
 class SendSmsController extends NotificationController
 {
-    public function to_sysAdmin()
+    public static function to_sysAdmin()
     {
-        $this->sendSms("0844297349", env('to_sysAdmin'));
+        NotificationController::sendSms("0844297349", env('to_sysAdmin'));
         return true;
     }
-    public function to_ttmOfficer()
+    public static function to_ttmOfficer()
     {
-        $this->sendSms("0844297349", env('to_ttmOfficher'));
+        NotificationController::sendSms("0844297349", env('to_ttmOfficher'));
         return true;
     }
-    public function to_contributeur($receiver)
+    public static function to_contributeur($receiver)
     {
-        $this->sendSms("0844297349", env('to_contributeur'));
+        NotificationController::sendSms("0844297349", env('to_contributeur'));
         return true;
     }
-    public function to_directeur($receiver)
+    public static function to_directeur($receiver)
     {
-        $this->sendSms("0844297349", env('to_directeur_App'));
+        NotificationController::sendSms("0844297349", env('to_directeur_App'));
         return true;
     }
-    public function to_sponsor($receiver)
+    public static function to_sponsor($receiver)
     {
-        $this->sendSms("0844297349", env('to_sponsor'));
+        NotificationController::sendSms("0843185472", env('to_sponsor'));
         return true;
     }
-    public function to_projectOwner($receiver)
+    public static function to_projectOwner($receiver)
     {
-        $this->sendSms("0844297349", env('to_projectOwner'));
+        NotificationController::sendSms("0844297349", env('to_projectOwner'));
         return true;
     }
 }

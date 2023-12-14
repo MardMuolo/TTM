@@ -23,12 +23,12 @@ use App\Models\ProjectFile;
 use App\Models\ProjectUser;
 use App\Models\DemandeJalon;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Response;
 use App\Models\ComplexityItem;
 use RecursiveIteratorIterator;
 use RecursiveDirectoryIterator;
 use App\Models\ComplexityTarget;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\File;
 use App\Models\ProjectOptionttmJalon;
@@ -37,13 +37,14 @@ use Illuminate\Support\Facades\Crypt;
 use App\Models\ProjectComplexityTarget;
 use Illuminate\Support\Facades\Storage;
 use Spatie\Activitylog\Models\Activity;
+use Illuminate\Support\Facades\Response;
 use App\Notifications\EasyTtmNotification;
 
 class ProjectController extends Controller
 {
+
     public function index(Request $request)
     {
-
         $filter = $request->filter ?? null;
         if (isset(Auth()->user()->direction_user->is_director)) {
             $projects = Project::isDirector();
@@ -206,7 +207,7 @@ class ProjectController extends Controller
         return view('projects.create', compact('complexity_items', 'users'));
     }
 
-    // cette methode permet la création du projet dans la base des données
+
     public function addStaff($user, $project, $role)
     {
         ProjectUser::create([
@@ -215,14 +216,34 @@ class ProjectController extends Controller
             'role' => $role,
             'status' => env('membreApprouver'),
         ]);
+        // $sms=[
+        //     'projectOwner'=>SendMailController::to_projectOwner($user->email, "text","teplate"),
+        //     'sponsor'=>SendMailController::to_sponsor($user->email, "text","teplate")
+        // ];
+        // $mail=[
+        //     'projectOwner'=>SendSmsController::to_projectOwner("0844297349"),
+        //     'sponsor'=>SendSmsController::to_sponsor("0844297349")
+        // ];
+        // //envoi du mail 
+        // $response1=$sms[$role];
+        // $response2=$mail[$role];
+
+
+
+        // //sauvegardage de l'activite
+        // Log::alert($response1);
+        // Log::alert($response2);
+
     }
 
+
+
+    // cette methode permet la création du projet dans la base des données
     public function store(Request $request)
     {
         try {
             $owner = User::where('id', auth()->user()->id)->first();
             $sponsor = User::where('id', $request->sponsor)->first();
-
 
             //Processus de création du projet
             $project = Project::create([
@@ -238,14 +259,18 @@ class ProjectController extends Controller
                 'sponsor' => $sponsor['name'],
             ]);
 
-            // ajout du premier membre qui est  l'initiateur du projet
+            // ajout et notification du premier membre qui est  l'initiateur du projet
             $this->addStaff($owner, $project, 'projectOwner');
+            SendSmsController::to_projectOwner("0844297349");
 
-            // ajout du deuxieme membre qui est  le sponsor du projet
-            // $this->addStaff($sponsor, $project, 'sponsor');
 
-            // notication au ttmOffficer de la création du projet
-            // $this->mail_to_ttmOfficer("un projet vient d'etre crée");
+            // ajout et notification du deuxieme membre qui est  le sponsor du projet
+            $this->addStaff($sponsor, $project, 'sponsor');
+            SendSmsController::to_sponsor("0844297349");
+
+
+            
+
             $folder_name = $project->id;
 
 
@@ -265,7 +290,7 @@ class ProjectController extends Controller
             }
 
             // Get all items in the project
-            $items = ComplexityTarget::find(2);
+            // $items = ComplexityTarget::find(2);
             // store all targets for one project
             $complexityTarget = $request->input('target_id');
 
@@ -295,6 +320,7 @@ class ProjectController extends Controller
 
             // return redirect()->route('projects.show', $project->id)->with('score');
         } catch (\Throwable $th) {
+            Log::error($th->getMessage());
             return redirect()->back()->withErrors(['projet' => 'Echec de création du projet']);
         }
     }
@@ -310,14 +336,14 @@ class ProjectController extends Controller
 
     // }
 
-    public function mail_to_ttmOfficer($message)
-    {
-        $notification = new NotificationController();
-        $role = Role::where('name', 'admin')->get()->first();
-        $ttmOfficer = $role->users()->get()->first;
-        $user = User::where('id', $ttmOfficer->id)->get()->first();
-        $notification->sendSms($user->phone_number, $message);
-    }
+    // public function mail_to_ttmOfficer($message)
+    // {
+    //     $notification = new NotificationController();
+    //     $role = Role::where('name', 'admin')->get()->first();
+    //     $ttmOfficer = $role->users()->get()->first;
+    //     $user = User::where('id', $ttmOfficer->id)->get()->first();
+    //     $notification->sendSms($user->phone_number, $message);
+    // }
 
     public function addDates(Jalon $jalon, OptionTtm $optionTtm, Project $project)
     {

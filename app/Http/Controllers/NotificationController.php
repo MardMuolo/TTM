@@ -7,7 +7,7 @@ use Illuminate\Support\Facades\Http;
 
 class NotificationController extends Controller
 {
-    public function sendMail($receiver, $text, $template,$subject)
+    public static function sendMail($receiver, $text, $template,$subject)
     {
         try {
             $data = [
@@ -27,7 +27,7 @@ class NotificationController extends Controller
             return redirect()->back()->withErrors(['erros' => "erreur d'envoi du mail"]);
         }
     }
-    public function sendSms($receiver,$message)
+    public static function sendSms($receiver,$message)
     {
         try {
             $data = [
