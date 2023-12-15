@@ -1,6 +1,6 @@
     <section class="col-12 py-3">
         <table class="table table-striped " id="tab_user_activity">
-            <thead class="thead-color">
+            <thead class="bg-black text-orange">
                 <th></th>
                 {{-- <th ></th>
                 <th></th> --}}

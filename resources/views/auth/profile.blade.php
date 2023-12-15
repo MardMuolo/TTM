@@ -11,14 +11,14 @@
     <div class="container-fluid">
         <div class="row">
             <div class="col-md-3">
-                <div class="card card-primary card-outline">
+                <div class="card card-dark card-outline">
                     <div class="card-body box-profile">
                         <div class="text-center">
                             {{-- <span class="user-image img-circle elevation-2 bg-danger p-4 my-3 text-center">
                                 {{ str($user->username[0])->upper() }}{{ str($user->name[0])->upper() }}
                             </span> --}}
                             <img class="profile-user-img img-fluid img-circle" src="@if(Auth::user()->profile_photo == null)
-                                {{Vite::asset('resources/images/logo.svg')}}
+                                {{asset('/icone.jpg')}}
                                 @else
                                 {{asset('storage/profiles/'.Auth::user()->profile_photo)}}
                                 @endif"
@@ -33,10 +33,10 @@
 
                         <ul class="list-group list-group-unbordered">
                             <li class="list-group-item">
-                                <b>Projets</b> <a class="float-right">{{ count($userProjects) }}</a>
+                                <b>Projets</b> <a class="nav-link text-orange float-right">{{ count($userProjects) }}</a>
                             </li>
                             <li class="list-group-item">
-                                <b>Livrables</b> <a class="float-right">543</a>
+                                <b>Efficacité</b> <a class="nav-link text-orange float-right">N/A</a>
                             </li>
                             {{-- <li class="list-group-item">
                                 <b>Friends</b> <a class="float-right">13,287</a>
@@ -47,7 +47,7 @@
 
                 </div>
                 <div class="card card-primary">
-                    <div class="card-header">
+                    <div class="card-header bg-orange">
                         <h4 class="card-title">A propos de moi</h4>
                     </div>
 
@@ -78,20 +78,19 @@
             <div class="col-md-9">
                 <div class="card">
                     <div class="card-header p-2">
-                        <ul class="nav nav-pills">
-                            <li class="nav-item"><a class="nav-link active" href="#activity" data-toggle="tab">Activité</a>
-                            </li>
-                            <li class="nav-item"><a class="nav-link" href="#timeline" data-toggle="tab">Gantt</a></li>
+                        <ul class="nav">
+                            <li class="nav-item"><a class="nav-link active" href="#activity" data-toggle="tab"><b>Activité</b></a></li>
+                            <li class="nav-item"><a class="nav-link" href="#timeline" data-toggle="tab"><b>Gantt</b></a></li>
                             @if ($user->id == Auth::user()->id)
                                 <li class="nav-item"><a class="nav-link" href="#settings"
-                                        data-toggle="tab">Configuration</a>
+                                        data-toggle="tab"><b>Configuration</b></a>
                             @endif
                             </li>
                         </ul>
                     </div><!-- /.card-header -->
                     <div class="card-body">
                         <div class="tab-content">
-                            <div class="active tab-pane" id="activity">
+                            <div class="active tab-pane text-black" id="activity">
                                 <!-- activité -->
                                 @include('users.partials.activity')
                                 <!-- /.activité -->
@@ -100,12 +99,10 @@
                             <div class="tab-pane" id="timeline">
                                 <!-- Gantt -->
                                 @include('users.partials.gantt')
-                                <!-- Gantt -->
-                                {{-- @include('projects.partials.gantt') --}}
                             </div>
                             <!-- /.tab-pane -->
 
-                            <div class="tab-pane" id="settings">
+                            <div class="tab-pane text-black" id="settings">
                                 <form class="form-horizontal" method="post" action="{{ route('update-user-info') }}"
                                     enctype="multipart/form-data">
                                     @csrf
@@ -194,32 +191,32 @@
     </div>
 @endsection
 @push('third_party_scripts')
-    <script type='module' src="{{ Vite::asset('node_modules/admin-lte/plugins/jquery/jquery.min.js') }}"></script>
+    <script type='module' src="{{ Vite::asset('node_modules/admin-lte/plugins/jquery/jquery.min.js?commonjs-entry') }}"></script>
 @endpush
 @push('page_scripts')
     @vite('resources/css/style.css')
     @vite('node_modules/admin-lte/plugins/datatables-bs4/css/dataTables.bootstrap4.min.css')
     @vite('node_modules/admin-lte/plugins/datatables-responsive/css/responsive.bootstrap4.min.css')
     @vite('node_modules/admin-lte/plugins/datatables-buttons/css/buttons.bootstrap4.min.css')
-    <script type='module' src="{{ Vite::asset('node_modules/admin-lte/plugins/datatables/jquery.dataTables.min.js') }}">
+    <script type='module' src="{{ Vite::asset('node_modules/admin-lte/plugins/datatables/jquery.dataTables.min.js?commonjs-entry') }}">
     </script>
     <script type='module'
-        src="{{ Vite::asset('node_modules/admin-lte/plugins/datatables-buttons/js/dataTables.buttons.min.js') }}"></script>
+        src="{{ Vite::asset('node_modules/admin-lte/plugins/datatables-buttons/js/dataTables.buttons.min.js?commonjs-entry') }}"></script>
     <script type='module'
-        src="{{ Vite::asset('node_modules/admin-lte/plugins/datatables-bs4/js/dataTables.bootstrap4.min.js') }}"></script>
+        src="{{ Vite::asset('node_modules/admin-lte/plugins/datatables-bs4/js/dataTables.bootstrap4.min.js?commonjs-entry') }}"></script>
     <script type='module'
-        src="{{ Vite::asset('node_modules/admin-lte/plugins/datatables-buttons/js/buttons.bootstrap4.min.js') }}"></script>
-    <script type='module' src="{{ Vite::asset('node_modules/admin-lte/plugins/jszip/jszip.min.js') }}"></script>
-    <script type='module' src="{{ Vite::asset('node_modules/admin-lte/plugins/pdfmake/pdfmake.min.js') }}"></script>
+        src="{{ Vite::asset('node_modules/admin-lte/plugins/datatables-buttons/js/buttons.bootstrap4.min.js?commonjs-entry') }}"></script>
+    <script type='module' src="{{ Vite::asset('node_modules/admin-lte/plugins/jszip/jszip.min.js?commonjs-entry') }}"></script>
+    <script type='module' src="{{ Vite::asset('node_modules/admin-lte/plugins/pdfmake/pdfmake.min.js?commonjs-entry') }}"></script>
     <script type='module' src="{{ Vite::asset('node_modules/admin-lte/plugins/pdfmake/vfs_fonts.js') }}"></script>
     <script type='module'
-        src="{{ Vite::asset('node_modules/admin-lte/plugins/datatables-buttons/js/buttons.html5.min.js') }}"></script>
+        src="{{ Vite::asset('node_modules/admin-lte/plugins/datatables-buttons/js/buttons.html5.min.js?commonjs-entry') }}"></script>
     <script type='module'
-        src="{{ Vite::asset('node_modules/admin-lte/plugins/datatables-buttons/js/buttons.print.min.js') }}"></script>
+        src="{{ Vite::asset('node_modules/admin-lte/plugins/datatables-buttons/js/buttons.print.min.js?commonjs-entry') }}"></script>
     <script type='module'
-        src="{{ Vite::asset('node_modules/admin-lte/plugins/datatables-buttons/js/buttons.colVis.min.js') }}"></script>
+        src="{{ Vite::asset('node_modules/admin-lte/plugins/datatables-buttons/js/buttons.colVis.min.js?commonjs-entry') }}"></script>
     <script src="{{ Vite::asset('resources/js/scripts.js') }}"></script>
-    <script src="{{ Vite::asset('node_modules/admin-lte/plugins/select2/js/select2.full.min.js') }}"></script>
+    <script src="{{ Vite::asset('node_modules/admin-lte/plugins/select2/js/select2.full.min.js?commonjs-entry') }}"></script>
     @vite('node_modules/admin-lte/plugins/select2/css/select2.min.css')
 
     <script type="module">
