@@ -1,0 +1,86 @@
+:root {
+    --primary: #4BB4E6;
+    --pink: #FFB4E6;
+    --purple: #A885D8;
+    --yellow: #FFD200;
+    --secondary: #d8d9db;
+    --orange: #FF7900;
+    --success:#50BE87;
+    --dark:#000000;
+    --white:#FFFFFF;
+}
+
+.sidebar-dark-primary{
+   background-color: var(--dark) !important;
+   color: var(--white) !important;
+}
+
+
+.bg-blue, li>a>.active, strong>a{
+    color: var(--orange) !important;
+}
+.active{
+    color: var(--orange) !important;
+}
+
+ol>li>a{
+    text-decoration: none !important;
+    color: var(--dark) !important;
+}
+
+ol>li>a:hover{
+    color: var(--orange) !important;
+}
+
+/* Definition des couleurs de fond */
+.bg-black{
+    background-color: var(--dark) !important;
+}
+.bg-orange{
+    background-color: var(--orange) !important;
+}
+.bg-yellow{
+    background-color: var(--yellow) !important;
+}
+.bg-blue{
+    background-color: var(--primary) !important;
+}
+.bg-success{
+    background-color: var(--success) !important;
+}
+.bg-pink{
+    background-color: var(--pink) !important;
+}
+.bg-secondary{
+    background-color: var(--secondary) !important;
+}
+.bg-purple{
+    background-color: var(--purple) !important;
+}
+
+/* definition des couleurs de text */
+
+.text-black{
+    color: var(--dark) !important;
+}
+.text-orange{
+    color: var(--orange) !important;
+}
+.text-yellow{
+    color: var(--yellow) !important;
+}
+.text-blue{
+    color: var(--primary) !important;
+}
+.text-success{
+    color: var(--success) !important;
+}
+.text-pink{
+    color: var(--pink) !important;
+}
+.text-secondary{
+    color: var(--secondary) !important;
+}
+.text-purple{
+    color: var(--purple) !important;
+}
