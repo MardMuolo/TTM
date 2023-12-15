@@ -5,39 +5,38 @@
     @endif
 @endsection
 @section('filsAriane')
-    <li class="breadcrumb-item"><a class="active" href="#">Projets</a></li>
+    <li class="breadcrumb-item"><a class="active text-orange" href="#">Projet</a></li>
 @endsection
 @section('content')
     <section class="content card card-orange card-outline p-4">
         @access('create', 'Project')
             <div class="text-right mx-4">
-                <a class="btn m-2 bg-dark " href="{{ route('projects.create') }}"><i class="fas fa-plus-circle icon"></i></a>
+                <a class="btn m-2 bg-black" href="{{ route('projects.create') }}"><i
+                        class="fas fa-plus-circle icon text-orange "></i></a>
             </div>
         @endaccess
         <div class="card">
 
-            <div class="card-header">
-                <h3 class="card-title">Total:{{ count($projects) }}</h3>
+            <div class="card-header bg-black">
+                <h3 class="card-title text-orange">Total ({{ count($projects) }})</h3>
             </div>
         </div>
         <div class="card-body p-0">
             <table class="table table-striped projects" id="tab_project">
-                <thead class="text-left thead-color">
-                    <tr>
-                        <th style="width: 1%"></th>
-                        <th style="width: 20%">Nom</th>
-                        <th style="width: 30%">Equipe</th>
-                        <th>Progression</th>
-                        <th style="width: 8%" class="text-center">Statut</th>
-                        <th style="width: 20%"></th>
-                    </tr>
+                <thead class="text-left text-orange">
+                    <th style="width: 1%"></th>
+                    <th style="width: 20%">Nom</th>
+                    <th style="width: 30%">Equipe</th>
+                    <th>Progression</th>
+                    <th style="width: 8%" class="text-center">Statut</th>
+                    <th style="width: 20%"></th>
                 </thead>
                 <tbody>
                     @forelse ($projects as $project)
                         <tr>
                             <td>{{ $i++ }}</td>
                             <td>
-                                <strong class="text-black">{{ $project->name }}
+                                <strong>{{ $project->name }}
                                     @if (auth()->user()->name == $project->projectOwner)
                                         <i class="fas fa-user-tie text-orange"></i>
                                     @else
@@ -101,20 +100,20 @@
                             </td>
                             <td class="item-actions text-right">
                                 @access('read', 'Project')
-                                @php
-                                    $id=Crypt::encrypt($project->id)
-                                @endphp
+                                    @php
+                                        $id = Crypt::encrypt($project->id);
+                                    @endphp
 
-                                    <a class="btn btn-light btn-sm" href="{{ route('projects.show',$id) }}"
-                                        title="voir"><i class="fas fa-eye"></i></a>
+                                    <a class="btn btn-light btn-sm" href="{{ route('projects.show', $id) }}" title="voir"><i
+                                            class="fas fa-eye"></i></a>
                                 @endaccess
 
                                 @access('update', 'Project')
-                                @php
-                                    $id=Crypt::encrypt($project->id);
-                                @endphp
+                                    @php
+                                        $id = Crypt::encrypt($project->id);
+                                    @endphp
                                     @if (auth()->user()->name == $project->projectOwner)
-                                        <a class="btn btn-light btn-sm" href="{{ route('projects.edit',$id) }}"><i
+                                        <a class="btn btn-light btn-sm" href="{{ route('projects.edit', $id) }}"><i
                                                 class="fas fa-pencil-alt" title="editer"></i></a>
                                     @endif
                                 @endaccess
@@ -139,30 +138,40 @@
     </section>
 @endsection
 @push('third_party_scripts')
-    <script type='module' src="{{ Vite::asset('node_modules/admin-lte/plugins/jquery/jquery.min.js?commonjs-entry') }}"></script>
+    <script type='module' src="{{ Vite::asset('node_modules/admin-lte/plugins/jquery/jquery.min.js?commonjs-entry') }}">
+    </script>
 @endpush
 @push('page_scripts')
     @vite('resources/css/style.css')
     @vite('node_modules/admin-lte/plugins/datatables-bs4/css/dataTables.bootstrap4.min.css')
     @vite('node_modules/admin-lte/plugins/datatables-responsive/css/responsive.bootstrap4.min.css')
     @vite('node_modules/admin-lte/plugins/datatables-buttons/css/buttons.bootstrap4.min.css')
-    <script type='module' src="{{ Vite::asset('node_modules/admin-lte/plugins/datatables/jquery.dataTables.min.js?commonjs-entry') }}">
+    <script type='module'
+        src="{{ Vite::asset('node_modules/admin-lte/plugins/datatables/jquery.dataTables.min.js?commonjs-entry') }}">
     </script>
     <script type='module'
-        src="{{ Vite::asset('node_modules/admin-lte/plugins/datatables-buttons/js/dataTables.buttons.min.js?commonjs-entry') }}"></script>
+        src="{{ Vite::asset('node_modules/admin-lte/plugins/datatables-buttons/js/dataTables.buttons.min.js?commonjs-entry') }}">
+    </script>
     <script type='module'
-        src="{{ Vite::asset('node_modules/admin-lte/plugins/datatables-bs4/js/dataTables.bootstrap4.min.js?commonjs-entry') }}"></script>
+        src="{{ Vite::asset('node_modules/admin-lte/plugins/datatables-bs4/js/dataTables.bootstrap4.min.js?commonjs-entry') }}">
+    </script>
     <script type='module'
-        src="{{ Vite::asset('node_modules/admin-lte/plugins/datatables-buttons/js/buttons.bootstrap4.min.js?commonjs-entry') }}"></script>
-    <script type='module' src="{{ Vite::asset('node_modules/admin-lte/plugins/jszip/jszip.min.js?commonjs-entry') }}"></script>
-    <script type='module' src="{{ Vite::asset('node_modules/admin-lte/plugins/pdfmake/pdfmake.min.js?commonjs-entry') }}"></script>
+        src="{{ Vite::asset('node_modules/admin-lte/plugins/datatables-buttons/js/buttons.bootstrap4.min.js?commonjs-entry') }}">
+    </script>
+    <script type='module' src="{{ Vite::asset('node_modules/admin-lte/plugins/jszip/jszip.min.js?commonjs-entry') }}">
+    </script>
+    <script type='module' src="{{ Vite::asset('node_modules/admin-lte/plugins/pdfmake/pdfmake.min.js?commonjs-entry') }}">
+    </script>
     <script type='module' src="{{ Vite::asset('node_modules/admin-lte/plugins/pdfmake/vfs_fonts.js') }}"></script>
     <script type='module'
-        src="{{ Vite::asset('node_modules/admin-lte/plugins/datatables-buttons/js/buttons.html5.min.js?commonjs-entry') }}"></script>
+        src="{{ Vite::asset('node_modules/admin-lte/plugins/datatables-buttons/js/buttons.html5.min.js?commonjs-entry') }}">
+    </script>
     <script type='module'
-        src="{{ Vite::asset('node_modules/admin-lte/plugins/datatables-buttons/js/buttons.print.min.js?commonjs-entry') }}"></script>
+        src="{{ Vite::asset('node_modules/admin-lte/plugins/datatables-buttons/js/buttons.print.min.js?commonjs-entry') }}">
+    </script>
     <script type='module'
-        src="{{ Vite::asset('node_modules/admin-lte/plugins/datatables-buttons/js/buttons.colVis.min.js?commonjs-entry') }}"></script>
+        src="{{ Vite::asset('node_modules/admin-lte/plugins/datatables-buttons/js/buttons.colVis.min.js?commonjs-entry') }}">
+    </script>
     <script type='module'>
         $(function() {
             $("#tab_project").DataTable({
