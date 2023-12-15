@@ -7,7 +7,7 @@
     <li class="breadcrumb-item"><a
             href="{{ route('projects.show', Crypt::encrypt($project->id)) }}">{{ substr(str_replace([' ', "'"], '', $project->name), 0, 10) }}...</a>
     </li>
-    <li class="breadcrumb-item text-secondary">Demande</li>
+    <li class="breadcrumb-item text-orange">Demande</li>
 @endsection
 @section('content')
     <section class="content">
@@ -27,8 +27,8 @@
                 <div class="col">
                     <div class="text-right mr-2">
                         @if (auth()->user()->name == $project->projectOwner)
-                            <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#modal-default">
-                                <i class="far fa-calendar-alt"></i>
+                            <button type="button" class="btn btn-primary bg-primary" data-toggle="modal" data-target="#modal-default">
+                                <i class="far fa-calendar-alt "></i>
                             </button>
                         @endif
 
@@ -43,7 +43,7 @@
                         <div class="col">
                             @if (!empty($debutDate))
                                 <div class="info-box">
-                                    <span class="info-box-icon bg-info"><i class="far fa-calendar-alt"></i></span>
+                                    <span class="info-box-icon bg-primary"><i class="far fa-calendar-alt"></i></span>
                                     <div class="info-box-content">
                                         <span class="info-box-text">Date Début</span>
                                         <span
@@ -113,7 +113,7 @@
 
                         <div class="col-md-3 col-sm-6 col-12">
                             <div class="info-box">
-                                <span class="info-box-icon bg-danger"><i class="fas fa-history"></i></span>
+                                <span class="info-box-icon bg-yellow"><i class="fas fa-history"></i></span>
                                 <div class="info-box-content">
                                     <span class="info-box-number">
                                         <div class="card-tools">
@@ -144,6 +144,9 @@
         </div>
     </section>
     <section class="content">
+        <div class="card-header bg-black">
+            <h3 class="card-title text-orange">Total Demande ({{ count($jalonDemande) }})</h3>
+        </div>
         <div class="row justify-content-end text-right">
             @if (auth()->user()->name == $project->projectOwner)
                 <div class="col-sm-12 col-md-6">
@@ -156,7 +159,7 @@
                             </button>
                         @endif
                     @else
-                        <button class="btn btn-light m-2 bg-dark" title="Ajouter une demande" data-toggle="modal"
+                        <button class="btn btn-light m-2 bg-black text-orange" title="Ajouter une demande" data-toggle="modal"
                             data-target="#create_modal">
                             <i class="fas fa-plus-circle"></i>
                         </button>
@@ -167,7 +170,7 @@
         <div class="row">
             <div class="col-sm-12">
                 <table id="tab_demande" class="table table-striped" aria-describedby="example1_info">
-                    <thead>
+                    <thead class="bg-black text-orange">
                         <th style="width: 3%"></th>
                         <th style="width: 35%">Demande</th>
                         <th>Modèle</th>

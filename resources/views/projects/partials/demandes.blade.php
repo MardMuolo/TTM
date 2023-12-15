@@ -1,6 +1,6 @@
 <div class="col-12 p-2">
     <table class="table table-striped" id="tab_demande2">
-        <thead class="thead-color">
+        <thead class="text-orange bg-black">
             {{-- <th style="width: 1%"></th> --}}
             <th style="width: 30%"></th>
             <th style="width: 30%"></th>

@@ -18,16 +18,16 @@
                         <div class="step" data-target="#information-part">
                             <button type="button" class="step-trigger" role="tab" aria-controls="information-part"
                                 id="information-part-trigger">
-                                <span class="bs-stepper-circle">2</span>
-                                <span class="bs-stepper-label">Contributeur</span>
+                                <span class="bs-stepper-circle bg-orange text-black">1</span>
+                                <span class="bs-stepper-label text-black">Contributeur</span>
                             </button>
                         </div>
                         <div class="line"></div>
                         <div class="step" data-target="#logins-part">
                             <button type="button" class="step-trigger" role="tab" aria-controls="logins-part"
                                 id="logins-part-trigger">
-                                <span class="bs-stepper-circle">1</span>
-                                <span class="bs-stepper-label">Demande</span>
+                                <span class="bs-stepper-circle bg-orange text-black">2</span>
+                                <span class="bs-stepper-label text-black">Demande</span>
                             </button>
                         </div>
 
@@ -38,7 +38,7 @@
                         <div id="information-part" class="content" role="tabpanel"
                             aria-labelledby="information-part-trigger">
                             <div class="form-group">
-                                <label for="inputEmail3" class="col-form-label">Contributeur</label>
+                                <label for="inputEmail3" class="col-form-label text-black">Contributeur</label>
                                 <select class="form-control select2 col-sm-10" style="width: 100%;"
                                     aria-placeholder="nom du contributeur" name="contributeur" id="user">
                                     <option></option>
@@ -55,7 +55,7 @@
                             </div>
 
                             <div class="form-group">
-                                <label for="inputEmail3" class="col-form-label">Line manager</label>
+                                <label for="inputEmail3" class="col-form-label text-black">Line manager</label>
                                 <select class="form-control select2 col-sm-10" style="width: 100%;"
                                     aria-placeholder="nom du contributeur" name="manager" id="manager">
                                     <option></option>
@@ -72,7 +72,7 @@
                             </div>
                             <div class="col-xm-6">
                                 <div class="form-group">
-                                    <label for="role" class="col-sm-12 col-form-label">Rôle</label>
+                                    <label for="role" class="col-sm-12 col-form-label text-black">Rôle</label>
                                     <select class="form-control  col-sm-12" style="width: 100%;" aria-placeholder="role"
                                         name="role" id="role">
                                         <option value="Contributeur">Contributeur</option>
@@ -83,7 +83,7 @@
                             </div>
                             <div class="col-xm-6">
                                 <div class="form-group">
-                                    <label for="name">Délais <span class="text-danger">*</span></label>
+                                    <label for="name" class="col-sm-12 col-form-label text-black">Délais <span class="text-danger">*</span></label>
                                     <div class="input-group">
                                         <input type="number" name="deadLine" class="form-control" min="1" required>
                                         <select class="form-control" name="deadline_unit">
@@ -94,7 +94,7 @@
                                     </div>
                                 </div>
                             </div>
-                            <a class="btn btn-primary" onclick="stepper.next()">Suivant</a>
+                            <a class="btn btn-primary bg-black text-orange" onclick="stepper.next()">Suivant</a>
                         </div>
                         {{-- fin de la partie 1 --}}
 
@@ -102,7 +102,7 @@
                          <div id="logins-part" class="content" role="tabpanel" aria-labelledby="logins-part-trigger">
                             <div class="col-xm-6">
                                 <div class="form-group">
-                                    <label for="category">Catégorie <span class="text-danger">*</span></label>
+                                    <label for="category" class="col-sm-12 col-form-label text-black">Catégorie <span class="text-danger">*</span></label>
                                     <select name="category" id="category" class="form-control" style="width: 100%;"
                                         required>
                                         <option value="">Sélectionnez une catégorie</option>
@@ -115,7 +115,7 @@
                             </div>
                             <div class="col-xm-6">
                                 <div class="form-group">
-                                    <label for="demande">Demande <span class="text-danger">*</span></label>
+                                    <label for="demande" class="col-sm-12 col-form-label text-black">Demande <span class="text-danger">*</span></label>
                                     <select name="demande" id="demande" class="form-control" style="width: 100%;"
                                         required>
                                         <option value="" class="item">Sélectionnez une demande</option>
@@ -136,7 +136,7 @@
                             </div>
                             <div class="form-group">
 
-                                <label for="exampleInputFile">Model</label>
+                                <label for="exampleInputFile" class="col-sm-12 col-form-label text-black">Model</label>
                                 <div class="custom-file">
                                     <input type="file" class="form-control" id="" name="file">
                                 </div>
@@ -144,12 +144,12 @@
                             </div>
                             <div class="col-xm-6">
                                 <div class="form-group">
-                                    <label for="description">Description <span class="text-danger">*</span></label>
+                                    <label for="description" class="col-sm-12 col-form-label text-black">Description <span class="text-danger">*</span></label>
                                     <textarea class="form-control" name="description" rows="5" placeholder="Enter ..." required></textarea>
                                 </div>
                             </div>
-                            <a class="btn btn-primary" onclick="stepper.previous()">Précedent</a>
-                            <button class="btn btn-primary" id="test" type="submit">Soumettre</button>
+                            <a class="btn btn-primary bg-black text-orange" onclick="stepper.previous()">Précedent</a>
+                            <button class="btn btn-success " id="test" type="submit">Soumettre</button>
                             
                         </div>
                         {{-- fin de la partie 2 --}}

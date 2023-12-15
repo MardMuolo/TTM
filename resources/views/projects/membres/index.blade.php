@@ -21,7 +21,7 @@
     </div>
     <section class="content p-4">
         <table class="table table-striped " id="example1">
-            <thead class="text-orange">
+            <thead class="text-orange bg-black">
                 <th></th>
                 <th style="">Noms</th>
                 <th class="text-center">Contribution</th>

@@ -20,10 +20,10 @@
                             @if ($joursRestants > 0)
                                 @if ($jalon['status'] === env('jalonEnCours'))
                                     <p class="{{ $joursRestants <= 3 ? 'text-danger' : '' }}">
-                                        <span class="font-weight-bold">{{ $joursRestants }}</span> jour(s) restant(s)
+                                        <span class="font-weight-bold">{{ $joursRestants }}</span> <span class="text-orange">jour(s) restant(s)</span>
                                     </p>
                                     <p>
-                                        <i class="far fa-calendar-alt text-primary"></i>
+                                        <i class="far fa-calendar-alt text-orange"></i>
                                         <span class="font-weight-normal small">{{ $debutDate->format('d/m/Y') }} au
                                             {{ $echeance->format('d/m/Y') }}</span>
                                     </p>
@@ -71,11 +71,11 @@
                     </div>
                     <div class="d-flex justify-content-center mb-2">
                         @if ($jalon['status'] === env('jalonEnCours'))
-                            <small class="badge badge-primary">{{ $jalon['status'] }}</small>
+                            <small class="badge badge-primary bg-primary p-2">{{ $jalon['status'] }}</small>
                         @elseif ($jalon['status'] === env('jalonCloturer'))
-                            <small class="badge badge-success">{{ $jalon['status'] }} </small>
+                            <small class="badge badge-success bg-success p-2">{{ $jalon['status'] }} </small>
                         @else
-                            <small class="badge badge-warning">{{ $jalon['status'] }}</small>
+                            <small class="badge badge-warning bg-yellow p-2">{{ $jalon['status'] }}</small>
                         @endif
                     </div>
                     <div class="icon">
@@ -86,13 +86,13 @@
                     (auth()->check() && auth()->user()->hasRoles(['admin', 'ttofficer', 'project_owner'])))
 
                             <a href="{{ route('jalons.single',['jalon' => Crypt::encrypt($jalon['jalon']->id), 'option_ttm' => Crypt::encrypt($options->id), 'project' =>Crypt::encrypt( $project->id)]) }}"
-                                class="small-box-footer">
-                                Plus d'infos <i class="fas fa-arrow-circle-right"></i>
+                                class="small-box-footer text-orange bg-black ">
+                                <span class="text-orange">Plus d'infos</span> <i class="fas fa-arrow-circle-right text-orange"></i>
                             </a>
                         
                         @else
-                            <a href="#" class="small-box-footer disabled">
-                                Plus d'infos <i class="fas fa-arrow-circle-right"></i>
+                            <a href="#" class="small-box-footer bg-black disabled">
+                                <span class="text-orange">Plus d'infos</span> <i class="fas fa-arrow-circle-right text-orange"></i>
                             </a>
                         @endif
                     @endaccess

@@ -3,7 +3,8 @@
     Dépôt du livrable
 @endsection
 @section('filsAriane')
-    <li class="breadcrumb-item"><a href="{{ route('projects.show', Crypt::encrypt($project->id)) }}" title="{{$project->name}}"
+    <li class="breadcrumb-item"><a href="{{ route('projects.show', Crypt::encrypt($project->id)) }}"
+            title="{{ $project->name }}"
             class="text-orange">{{ substr(str_replace([' ', "'"], '', $project->name), 0, 10) }}...</a></li>
     <li class="breadcrumb-item text-secondary">{{ $jalon->designation }}</li>
     <li class="breadcrumb-item text-secondary">Livrable</li>
@@ -14,7 +15,7 @@
             <div class="row">
                 <div class="col-12">
                     <div class="callout callout-info">
-                        <h5><i class="fas fa-info"></i> Note:</h5>
+                        <h5><i class="fas fa-info "></i> Note:</h5>
                         {{ $demande->description }}
                     </div>
                     <!-- Main content -->
@@ -23,7 +24,7 @@
                         <div class="row">
                             <div class="col-12">
                                 <h4>
-                                    <i class="fas fa-paper-plane"></i> Livrable
+                                    <i class="fas fa-paper-plane"></i> <span class="text-orange">Livrable</span>
                                     <small class="float-right">Date prévue: {{ $demande->date_prevue }}</small>
                                 </h4>
                             </div>
@@ -32,9 +33,12 @@
                         <!-- info row -->
                         <div class="row invoice-info">
                             <div class="col-sm-10 invoice-col">
-                                Categorie
-                                <p>{{ $demande->demande->title }}</p>
+                                <b>Categorie</b>
+                                <p>{{ $demande->demande->title}}</p>
                             </div>
+                        </div>
+                        <div class="row invoice-info">
+                            
                         </div>
                         <!-- /.row -->
 
@@ -42,19 +46,17 @@
                         <div class="row">
                             <div class="col-12 table-responsive">
                                 <table class="table table-striped">
-                                    <thead>
-                                        <tr>
-                                            <th></th>
-                                            <th>Titre</th>
-                                            <th>Note</th>
-                                            <th>Fichier</th>
-                                            <th>Status</th>
-                                            <th></th>
-                                        </tr>
+                                    <thead class="bg-black text-orange">
+                                        <th></th>
+                                        <th>Titre</th>
+                                        <th>Note</th>
+                                        <th>Fichier</th>
+                                        <th>Status</th>
+                                        <th></th>
                                     </thead>
                                     <tbody>
                                         @forelse ($livrables as $livrable)
-                                            <tr>
+                                            <tr class="{{$livrable->status==env('livrableRejeter')?'bg-red':''}}">
                                                 <td>{{ $i++ }}</td>
                                                 <td>{{ $livrable->nom }}</td>
                                                 <td>{{ $livrable->description }}
@@ -129,7 +131,7 @@
                                     <i class="far fa-envelope-open">
                                     </i>  
                                 </a> --}}
-                                @if (auth()->user()->id == $demande->contributeur)
+                                @if (auth()->user()->id == $demande->contributeur and $livrable->status!=env('livrableEnAttente') and $livrable->status!=env('livrableValider'))
                                     <button type="button" class="btn btn-primary float-right" style="margin-right: 5px;"
                                         data-toggle="modal" data-target="#create_modal">
                                         <i class="fas fa-pencil-alt"></i></button>
