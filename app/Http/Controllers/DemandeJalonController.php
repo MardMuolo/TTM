@@ -125,28 +125,29 @@ class DemandeJalonController extends Controller
 
     public function store(Request $request)
     {
-        $projectOption=ProjectOptionttmJalon::find($request->project_optionttm_jalon_id);
-        $jalon_id=$projectOption->jalon_id;
+        $projectOption = ProjectOptionttmJalon::find($request->project_optionttm_jalon_id);
+        $jalon_id = $projectOption->jalon_id;
 
-        $jalon=Jalon::find($jalon_id);
+        $jalon = Jalon::find($jalon_id);
         $project = Project::find($request->project_id);
-        $folder_name = $project->id ;
-        $folder_jalon_name = $jalon->designation ;
+        $folder_name = $project->id;
+        $folder_jalon_name = $jalon->designation;
 
         // $fichiers = [];
         // sauvegardages des fichiers
         if ($request->hasFile('file')) {
             $file = $request->file('file');
-            $namefile = $folder_jalon_name.''.date('ymdhis') . '.' . $file->extension();
-            $fichier = $file->storeAs('projets/' . $folder_name.'/'.$folder_jalon_name.'/demandes', $namefile);
+            $namefile = $folder_jalon_name . '' . date('ymdhis') . '.' . $file->extension();
+            $fichier = $file->storeAs('projets/' . $folder_name . '/' . $folder_jalon_name . '/demandes', $namefile);
 
-            $publicPath = public_path('storage/projets/'.$folder_name.'/'.$folder_jalon_name.'/demandes');
+            $publicPath = public_path('storage/projets/' . $folder_name . '/' . $folder_jalon_name . '/demandes');
             File::ensureDirectoryExists($publicPath);
             File::delete($publicPath . '/' . $namefile);
             File::link(storage_path('app/' . $fichier), $publicPath . '/' . $namefile);
+            $fichier_path = storage_path('app/demandes/') . '' . $namefile;
         }
         // dd($publicPath);
-        $fichier_path=storage_path('app/demandes/').''.$namefile;
+
         // $publicPath.''.$namefile;
         // dd($fichier);
 
@@ -176,24 +177,28 @@ class DemandeJalonController extends Controller
         if ($delai && $uniteDelai) {
             $datePrevue = Carbon::now()->add($delai, $uniteDelai);
         }
+        if (isset($request->demande)) {
+            $demandeJalon = new DemandeJalon();
+            $demandeJalon->demande_id = $request->input('demande');
+            $demandeJalon->description = $request->input('description');
+            $demandeJalon->pathTask = $fichier;
+            $demandeJalon->contributeur = $user->id;
+            $demandeJalon->deadLine = $deadlineCombinee;
+            $demandeJalon->date_prevue = $datePrevue;
+            $demandeJalon->status = env('demandeNonSoumise');
+            $demandeJalon->project_optionttm_jalon_id = $request->input('project_optionttm_jalon_id');
+            $demandeJalon->save();
 
-        $demandeJalon = new DemandeJalon();
-        $demandeJalon->demande_id = $request->input('demande');
-        $demandeJalon->description = $request->input('description');
-        $demandeJalon->pathTask = $fichier;
-        $demandeJalon->contributeur = $user->id;
-        $demandeJalon->deadLine = $deadlineCombinee;
-        $demandeJalon->date_prevue = $datePrevue;
-        $demandeJalon->status = env('demandeNonSoumise');
-        $demandeJalon->project_optionttm_jalon_id = $request->input('project_optionttm_jalon_id');
-        $demandeJalon->save();
-        $project_id = ProjectOptionttmJalon::where('id', $demandeJalon->project_optionttm_jalon_id)->get()->first()->project_id;
+            activity()
+                ->causedBy(auth()->user()->id)
+                ->performedOn($project)
+                ->event('createTask')
+                ->log(auth()->user()->name . ' a ajouté une demande ' . $fichier);
+        }
 
-        activity()
-            ->causedBy(auth()->user()->id)
-            ->performedOn($project)
-            ->event('createTask')
-            ->log(auth()->user()->name . ' a ajouté une demande ' . $fichier);
+        // $project_id = ProjectOptionttmJalon::where('id', $demandeJalon->project_optionttm_jalon_id)->get()->first()->project_id;
+
+
 
         $message = MessageMail::Where('code_name', 'add_member_to_project')->get()->first();
         // $user->notify(new EasyTtmNotification($message,route('home'), $fichiers));
