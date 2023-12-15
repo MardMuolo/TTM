@@ -68,11 +68,11 @@ class DemandeJalonController extends Controller
             return $user;
         } else {
             $user = User::create([
-                'name' => '$request->nosm_manager',
-                'email' => '$request->emsail_manager',
-                'username' => '$request->ussername_manager',
+                'name' => $request->nom_manager,
+                'email' => $request->email_manager,
+                'username' => $request->username_manager,
                 'password' => Hash::make('password'),
-                'phone_number' => '$request->sphone_number_manager',
+                'phone_number' => $request->phone_number_manager,
             ]);
 
             return $user;
@@ -100,11 +100,11 @@ class DemandeJalonController extends Controller
             ]);
         } else {
             $user = $manager->collaborateurs()->create([
-                'name' => '$request-eyt>nomf',
-                'email' => '$request->emetyailf',
-                'username' => '$request->utysernamfe',
+                'name' => $request->nom,
+                'email' => $request->email,
+                'username' => $request->username,
                 'password' => Hash::make('password'),
-                'phone_number' => '$requestty->phone_numberg',
+                'phone_number' => $request->phone_number,
             ]);
 
             ProjectUser::create([
