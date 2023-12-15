@@ -19,6 +19,9 @@
 .bg-blue, li>a>.active, strong>a{
     color: var(--orange) !important;
 }
+.active{
+    color: var(--orange) !important;
+}
 
 ol>li>a{
     text-decoration: none !important;
@@ -58,7 +61,7 @@ ol>li>a:hover{
 /* definition des couleurs de text */
 
 .text-black{
-    background-color: var(--dark) !important;
+    color: var(--dark) !important;
 }
 .text-orange{
     color: var(--orange) !important;

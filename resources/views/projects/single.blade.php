@@ -10,7 +10,7 @@
 @section('content')
     <div class="card card-orange card-outline p-4">
         <div class="card-body">
-            <ul class="nav nav-tabs" id="custom-content-below-tab" role="tablist">
+            <ol class="nav nav-tabs" id="custom-content-below-tab" role="tablist">
                 <li class="nav-item">
                     <a class="nav-link active" id="custom-content-below-home-tab" data-toggle="pill"
                         href="#custom-content-below-home" role="tab" aria-controls="custom-content-below-home"
@@ -43,7 +43,7 @@
                         href="#custom-content-below-settings" role="tab" aria-controls="custom-content-below-settings"
                         aria-selected="false">Gantt</a>
                 </li>
-            </ul>
+            </ol>
             <div class="tab-content" id="custom-content-below-tabContent">
                 <div class="tab-pane fade show active" id="custom-content-below-home" role="tabpanel"
                     aria-labelledby="custom-content-below-home-tab">
@@ -206,29 +206,29 @@
                 </div>
                 <div class="tab-pane fade row" id="custom-content-below-membre"
                     role="tabpanel"aria-labelledby="custom-content-below-membre-tab">
-                    <div class="row">
+                    <div class="row text-black">
                         @include('projects.membres.index')
                     </div>
                 </div>
                 <div class="tab-pane fade row" id="custom-content-below-task"
                     role="tabpanel"aria-labelledby="custom-content-below-task-tab">
-                    <div class="row">
+                    <div class="row text-black">
                         @include('projects.partials.demandes')
                     </div>
                 </div>
                 <div class="tab-pane fade" id="custom-content-below-jalon" role="tabpanel"
-                    aria-labelledby="custom-content-below-profile-tab">
+                    aria-labelledby="custom-content-below-profile-tab text-black">
                     @include('projects.partials.jalons')
                 </div>
                 <div class="tab-pane fade" id="custom-content-below-profile"
                     role="tabpanel"aria-labelledby="custom-content-below-profile-tab">
-                    <div class="row">
+                    <div class="row text-black">
                         @include('projects.partials.activity')
                     </div>
                 </div>
                 <div class="tab-pane fade" id="custom-content-below-settings" role="tabpanel"
                     aria-labelledby="custom-content-below-settings-tab">
-                    <div class="row">
+                    <div class="row text-black">
                         @include('projects.partials.gantt')
                     </div>
                 </div>
@@ -297,59 +297,6 @@
     </script>
 
     <script type="module">
-        $(document).ready(function() {
-            $.ajax({
-                url: 'http://10.143.41.70:8000/promo2/odcapi/?method=getUsers',
-                dataType: 'json',
-                success: function(response) {
-
-                    if (response.success) {
-                        var data = response.users;
-
-                        var formattedData = data.map(function(user) {
-                            return {
-                                id: user.id,
-                                username: user.username,
-                                text: user.last_name + ' ' + user.first_name,
-                                email: user.email,
-                                phone: user.phone,
-                                first_name: user.first_name,
-                                last_name: user.last_name,
-                            };
-                        });
-
-                        // Initialiser le champ de sélection avec les options
-                        $('#user').select2({
-                            data: formattedData,
-                            minimumInputLength: 1
-                        });
-
-
-                        // Événement de sélection d'utilisateur
-                        $('#user').on('select2:select', function(e) {
-                            var selectedUser = e.params.data;
-
-                            // Mettre à jour la valeur de l'input "Email" avec l'e-mail de l'utilisateur sélectionné
-                            // $('#user').val(selectedUser.username);
-                            $('#username').val(selectedUser.username);
-                            $('#inputEmail').val(selectedUser.email);
-                            $('#inputTel').val(selectedUser.phone);
-
-                            var fullName = selectedUser.first_name + ' ' + selectedUser
-                                .last_name;
-                            $('#name').val(fullName);
-                        });
-                    } else {
-                        console.log('Erreur: ' + response.message);
-                    }
-                },
-                error: function(xhr, status, error) {
-                    console.log('Erreur AJAX: ' + error);
-                }
-            });
-
-        });
-
         function supprimer(event) {
             event.preventDefault();
             a = event.target.closest('a');
