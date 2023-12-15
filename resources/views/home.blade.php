@@ -4,7 +4,7 @@
         <div class="row">
             <div class="col-lg-4 col-6">
 
-                <div class="small-box bg-secondary">
+                <div class="small-box bg-orange">
                     <div class="inner">
 
                         <h3>{{ $projetSoumis }}</h3>
@@ -20,7 +20,7 @@
 
             <div class="col-lg-4 col-6">
 
-                <div class="small-box bg-warning">
+                <div class="small-box bg-yellow">
                     <div class="inner">
                         <h3>{{ $projetEncours }}<sup style="font-size: 20px"></sup></h3>
                         <p>Projet {{ env('projetenCours') }}</p>
@@ -58,14 +58,14 @@
     </section>
 
     <section class="row">
-        <div class="col-md-12">
-            <div class="card">
-                <div class="card-header">
+        <div class="col-md-12 px-3">
+            <div class="card ">
+                <div class="card-header bg-black text-orange">
                     <h5 class="card-title">Rapport Recapitulatif Mensuel</h5>
 
                     <div class="card-tools">
                         <button type="button" class="btn btn-tool" data-card-widget="collapse">
-                            <i class="fas fa-minus"></i>
+                            <i class="fas fa-minus text-orange"></i>
                         </button>
                     </div>
                 </div>
@@ -90,25 +90,25 @@
                             </p>
 
                             <div class="progress-group ">
-                                Projet Soumis
+                                <b>Projet Soumis</b>
                                 <span class="float-right"><b>{{ $projetSoumis }}</b>/{{ $projets }}</span>
                                 <div class="progress progress-sm">
                                 <span class="float-right"></span>
-                                    <div class="progress-bar bg-secondary" style="width: {{($projetSoumis*100)/$projets}}%"></div>
+                                    <div class="progress-bar bg-orange" style="width: {{($projetSoumis*100)/$projets}}%"></div>
                                 </div>
                             </div>
                             <!-- /.progress-group -->
 
                             <div class="progress-group">
-                                Projet En cours
+                                <b>Projet En cours</b>
                                 <span class="float-right"><b>{{ $projetEncours }}</b>/{{ $projets }} </span>
                                 <div class="progress progress-sm">
-                                    <div class="progress-bar bg-warning" style="width: {{($projetEncours*100)/$projets}}%"></div>
+                                    <div class="progress-bar bg-yellow" style="width: {{($projetEncours*100)/$projets}}%"></div>
                                 </div>
                             </div>
                             <!-- /.progress-group -->
                             <div class="progress-group">
-                                Projet Cloturé
+                                <b>Projet Cloturé</b>
                                 <span class="float-right"><b>{{ $projetFinis }}</b>/{{ $projets }}</span>
                                 <div class="progress progress-sm">
                                     <div class="progress-bar bg-success" style="width: {{($projetFinis*100)/$projets}}%"></div>
@@ -139,7 +139,7 @@
                         <!-- /.col -->
                         <div class="col-sm-3 col-6">
                             <div class="description-block border-right">
-                                <span class="description-percentage text-warning"><i class="fas fa-caret-left"></i>
+                                <span class="description-percentage text-yellow"><i class="fas fa-caret-left"></i>
                                     {{($alljalon>0)? number_format(($jalonEnAttente * 100) / $alljalon, 1):0 }}%</span>
                                 <h5 class="description-header">{{ $jalonEnAttente }}</h5>
                                 <span class="description-text">{{ env('jalonEnAttente') }}</span>
@@ -271,13 +271,13 @@
         </div>
         <div class="col-7">
             <div class="card">
-                <div class="card-header">
+                <div class="card-header bg-black text-orange">
                     <h3 class="card-title">Statistique</h3>
                 </div>
                 <!-- /.card-header -->
                 <div class="card-body">
                     <table id="tableProjet" class="table table-bordered table-striped">
-                        <thead>
+                        <thead class="text-orange">
                             <th>N°</th>
                             <th>Directions</th>
                             <th>Total projets</th>

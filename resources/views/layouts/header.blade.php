@@ -1,14 +1,14 @@
-<nav class="main-header navbar navbar-expand navbar-white navbar-light">
+<nav class="main-header navbar navbar-expand bg-black navbar-light mb-2">
     <!-- Left navbar links -->
     <ul class="navbar-nav">
         <li class="nav-item">
-            <a class="nav-link" data-widget="pushmenu" href="#" role="button"><i class="fas fa-bars"></i></a>
+            <a class="nav-link border" data-widget="pushmenu" href="#" role="button"><i class="fas fa-bars text-orange"></i></a>
         </li>
     </ul>
 
     <ul class="navbar-nav ml-auto">
         <li class="nav-item dropdown user-menu">
-            <a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown">
+            <a href="#" class="nav-link dropdown-toggle text-orange" data-toggle="dropdown">
                 <img src="@if (Auth::user()?->profile_photo == null) {{ asset('/icone.jpg') }}
                 @else
                 {{ asset('storage/profiles/' . Auth::user()?->profile_photo) }} @endif"
@@ -17,7 +17,7 @@
             </a>
             <ul class="dropdown-menu dropdown-menu-lg dropdown-menu-right">
                 <!-- User image -->
-                <li class="user-header bg-primary">
+                <li class="user-header bg-orange">
                     <img src="@if (Auth::user()?->profile_photo == null) {{ asset('/icone.jpg') }}
                 @else
                 {{ asset('storage/profiles/' . Auth::user()?->profile_photo) }} @endif"
@@ -30,12 +30,12 @@
                     @endif
                 </li>
                 <!-- Menu Footer-->
-                <li class="user-footer">
+                <li class="user-footer bg-black">
                     @php
                         $id = Crypt::encrypt(Auth::user()->id);
                     @endphp
-                    <a href="{{ route('profile', $id) }}" class="btn btn-default btn-flat">Profile</a>
-                    <a href="#" class="btn btn-default btn-flat float-right"
+                    <a href="{{ route('profile', $id) }}" class="btn btn-default bg-yellow">Profile</a>
+                    <a href="#" class="btn btn-default btn-flat float-right bg-danger"
                         onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
                         Se deconnecter
                     </a>
