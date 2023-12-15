@@ -31,6 +31,7 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\File;
+use Illuminate\Support\Facades\Hash;
 use App\Models\ProjectOptionttmJalon;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Crypt;
@@ -208,8 +209,10 @@ class ProjectController extends Controller
     }
 
 
-    public function addStaff($user, $project, $role)
+    public function addStaff(User $user, Project $project, $role)
     {
+        // dd($user);
+        // $user = User::find($user->id);
         ProjectUser::create([
             'user_id' => $user->id,
             'project_id' => $project->id,
@@ -243,7 +246,20 @@ class ProjectController extends Controller
     {
         try {
             $owner = User::where('id', auth()->user()->id)->first();
-            $sponsor = User::where('id', $request->sponsor)->first();
+            $sponsor = User::where('username', $request->sponsor_username)->first();
+            // dd($sponsor);
+
+            if (!$sponsor) {
+                $sponsor = User::create([
+                    'name' => $request->sponsor_name,
+                    'username' => $request->sponsor_username,
+                    'email' => $request->sponsor_Email,
+                    'phone_number' => $request->sponsor_phone_number,
+                    'password' => Hash::make('password')
+                ]);
+            }
+            // dd($request->all());
+
 
             //Processus de création du projet
             $project = Project::create([
@@ -258,7 +274,7 @@ class ProjectController extends Controller
                 'projectOwner' => $owner['name'],
                 'sponsor' => $sponsor['name'],
             ]);
-
+            // dd($owner);
             // ajout et notification du premier membre qui est  l'initiateur du projet
             $this->addStaff($owner, $project, 'projectOwner');
             SendSmsController::to_projectOwner("0844297349");
@@ -269,7 +285,7 @@ class ProjectController extends Controller
             SendSmsController::to_sponsor("0844297349");
 
 
-            
+
 
             $folder_name = $project->id;
 
@@ -320,6 +336,7 @@ class ProjectController extends Controller
 
             // return redirect()->route('projects.show', $project->id)->with('score');
         } catch (\Throwable $th) {
+            return $th;
             Log::error($th->getMessage());
             return redirect()->back()->withErrors(['projet' => 'Echec de création du projet']);
         }

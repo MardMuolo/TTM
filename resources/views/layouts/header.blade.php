@@ -17,7 +17,7 @@
             </a>
             <ul class="dropdown-menu dropdown-menu-lg dropdown-menu-right">
                 <!-- User image -->
-                <li class="user-header bg-orange">
+                <li class="user-header bg-black">
                     <img src="@if (Auth::user()?->profile_photo == null) {{ asset('/icone.jpg') }}
                 @else
                 {{ asset('storage/profiles/' . Auth::user()?->profile_photo) }} @endif"
@@ -30,12 +30,12 @@
                     @endif
                 </li>
                 <!-- Menu Footer-->
-                <li class="user-footer bg-black">
+                <li class="user-footer bg-orange">
                     @php
                         $id = Crypt::encrypt(Auth::user()->id);
                     @endphp
-                    <a href="{{ route('profile', $id) }}" class="btn btn-default bg-yellow">Profile</a>
-                    <a href="#" class="btn btn-default btn-flat float-right bg-danger"
+                    <a href="{{ route('profile', $id) }}" class="btn text-black">Profile</a>
+                    <a href="#" class="btn  btn-flat float-right text-black"
                         onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
                         Se deconnecter
                     </a>

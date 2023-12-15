@@ -18,7 +18,7 @@
                         <div class="step" data-target="#information-part">
                             <button type="button" class="step-trigger" role="tab" aria-controls="information-part"
                                 id="information-part-trigger">
-                                <span class="bs-stepper-circle bg-orange text-black">1</span>
+                                <span class="bs-stepper-circle bg-black text-orange">1</span>
                                 <span class="bs-stepper-label text-black">Contributeur</span>
                             </button>
                         </div>
@@ -26,7 +26,7 @@
                         <div class="step" data-target="#logins-part">
                             <button type="button" class="step-trigger" role="tab" aria-controls="logins-part"
                                 id="logins-part-trigger">
-                                <span class="bs-stepper-circle bg-orange text-black">2</span>
+                                <span class="bs-stepper-circle bg-black text-orange">2</span>
                                 <span class="bs-stepper-label text-black">Demande</span>
                             </button>
                         </div>
@@ -308,10 +308,6 @@
                             minimumInputLength: 1
                         });
 
-                        $('#manager').select2({
-                            data: formattedData,
-                            minimumInputLength: 1
-                        });
 
 
                         // Événement de sélection d'utilisateur
@@ -321,30 +317,15 @@
 
                             // Mettre à jour la valeur de l'input "Email" avec l'e-mail de l'utilisateur sélectionné
                             // $('#user').val(selectedUser.username);
-                            $('#username').val(selectedUser.username);
-                            $('#inputEmail').val(selectedUser.email);
-                            $('#name').val(selectedUser.text);
-                            $('#phone_number').val(selectedUser.phone);
+                            $('#sponsor_username').val(selectedUser.username);
+                            $('#sponsor_Email').val(selectedUser.email);
+                            $('#sponsor_name').val(selectedUser.text);
+                            $('#sponsor_phone_number').val(selectedUser.phone);
 
-                            // var fullName = selectedUser.first_name + ' ' + selectedUser
-                            //     .last_name;
-                            // $('#name').val(fullName);
+                          
                         });
 
-                        // Événement de sélection d'utilisateur
-                        $('#manager').on('select2:select', function(e) {
-                            var selectedUser = e.params.data;
-                            // Mettre à jour la valeur de l'input "Email" avec l'e-mail de l'utilisateur sélectionné
-                            // $('#user').val(selectedUser.username);
-                            $('#username_manager').val(selectedUser.username);
-                            $('#inputEmail_manager').val(selectedUser.email);
-                            $('#name_manager').val(selectedUser.text);
-                            $('#phone_number_manager').val(selectedUser.phone);
-
-                            // var fullName = selectedUser.first_name + ' ' + selectedUser
-                            //     .last_name;
-                            // $('#name').val(name);
-                        });
+                    
 
                     } else {
                         console.log('Erreur: ' + response.message);

@@ -454,26 +454,6 @@
     <script>
         $(document).ready(function() {
             $('[data-mask]').inputmask()
-            // if (true) {
-            //     (async () => {
-
-            //         /* inputOptions can be an object or Promise */
-            //         const inputOptions = new Promise((resolve) => {
-            //             setTimeout(() => {
-            //                 resolve({
-            //                     'd': 2
-            //                 })
-            //             }, 800)
-            //         })
-            //         const {
-            //             value: sondage
-            //         } = await Swal.fire({
-            //             icon: 'success',
-            //             title: '<h2 class="text-success">Création avec Succès</h2> ',
-            //             html: 'Le score est de <span class="text-black-50 h6">{{ $score ?? 'N/A' }}</span> et le projet est retenu en mode <span class="text-black-50 h6">{{ $options->nom ?? 'N/A' }}</span><br> Veuillez préciser les dates des jalons du projet',
-            //         })
-            //     })()
-            // }
             $.ajax({
                 url: '{{ route('getUsers') }}',
                 type: 'Get',
