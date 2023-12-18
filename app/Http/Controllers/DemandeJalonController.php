@@ -68,7 +68,7 @@ class DemandeJalonController extends Controller
             return $user;
         } else {
             $user = User::create([
-                'name' => $request->nom_manager,
+                'name' => $request->name_manager,
                 'email' => $request->email_manager,
                 'username' => $request->username_manager,
                 'password' => Hash::make('password'),
