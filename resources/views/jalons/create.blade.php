@@ -336,7 +336,7 @@
                             // $('#user').val(selectedUser.username);
                             $('#manager_username').val(selectedUser.username);
                             $('#manager_Email').val(selectedUser.email);
-                            $('#manager_name').val(selectedUser.text);
+                            $('#name_manager').val(selectedUser.text);
                             $('#manager_phone_number').val(selectedUser.phone);
 
                           
