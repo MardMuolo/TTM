@@ -42,12 +42,12 @@
                                 <select class="form-control select2 col-sm-10" style="width: 100%;"
                                     aria-placeholder="nom du contributeur" name="contributeur" id="contributeur">
                                     <option></option>
-                                    <input hidden type="hidden" class="form-control hidden" name="username" id="username">
+                                    <input hidden type="hidden" class="form-control hidden" name="username" id="contributeur_username">
                                     <input hidden type="hidden" class="form-control hidden" name="phone_number"
-                                        id="phone_number">
-                                    <input hidden type="email" class="form-control hidden" id="inputEmail"
+                                        id="contributeur_phone_number">
+                                    <input hidden type="email" class="form-control hidden" id="contributeur_Email"
                                         placeholder="email" name="email">
-                                    <input hidden type="text" class="form-control hidden" id="name"
+                                    <input hidden type="text" class="form-control hidden" id="contributeur_name"
                                         placeholder="Nom & prenom" name="nom">
 
                                 </select>
@@ -56,16 +56,16 @@
                             <div class="form-group">
                                 <label for="inputEmail3" class="col-form-label text-black">Line manager</label>
                                 <select class="form-control select2 col-sm-10" style="width: 100%;"
-                                    aria-placeholder="nom du contributeur" name="manager" id="manager">
+                                    aria-placeholder="nom du line" name="manager" id="manager">
                                     <option></option>
                                     <input hidden type="hidden" class="form-control hidden" name="username_manager"
-                                        id="username_manager">
+                                        id="manager_username">
                                     <input hidden type="hidden" class="form-control hidden" name="phone_number_manager"
-                                        id="phone_number_manager">
-                                    <input hidden type="email" class="form-control hidden" id="inputEmail_manager"
+                                        id="manager_phone_number">
+                                    <input hidden type="email" class="form-control hidden" id="manager_Email"
                                         placeholder="email" name="email_manager">
                                     <input hidden type="text" class="form-control hidden" id="name_manager"
-                                        placeholder="Nom & prenom" name="nom_manager">
+                                        placeholder="Nom & prenom" name="manager_name">
 
                                 </select>
                             </div>
