@@ -142,8 +142,8 @@ class DemandeJalonController extends Controller
 
             $publicPath = public_path('storage/projets/' . $folder_name . '/' . $folder_jalon_name . '/demandes');
             File::ensureDirectoryExists($publicPath);
-            File::delete($publicPath . '/' . $namefile);
-            File::link(storage_path('app/' . $fichier), $publicPath . '/' . $namefile);
+            //File::delete($publicPath . '/' . $namefile);
+            //File::link(storage_path('app/' . $fichier), $publicPath . '/' . $namefile);
             $fichier_path = storage_path('app/demandes/') . '' . $namefile;
         }
         // dd($publicPath);
