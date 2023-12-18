@@ -40,7 +40,7 @@
                             <div class="form-group">
                                 <label for="inputEmail3" class="col-form-label text-black">Contributeur</label>
                                 <select class="form-control select2 col-sm-10" style="width: 100%;"
-                                    aria-placeholder="nom du contributeur" name="contributeur" id="user">
+                                    aria-placeholder="nom du contributeur" name="contributeur" id="contributeur">
                                     <option></option>
                                     <input hidden type="hidden" class="form-control hidden" name="username" id="username">
                                     <input hidden type="hidden" class="form-control hidden" name="phone_number"
@@ -303,7 +303,11 @@
                         });
 
                         // Initialiser le champ de sélection avec les options
-                        $('#user').select2({
+                        $('#contributeur').select2({
+                            data: formattedData,
+                            minimumInputLength: 1
+                        });
+                        $('#manager').select2({
                             data: formattedData,
                             minimumInputLength: 1
                         });
@@ -311,16 +315,29 @@
 
 
                         // Événement de sélection d'utilisateur
-                        $('#user').on('select2:select', function(e) {
+                        $('#contributeur').on('select2:select', function(e) {
                             var selectedUser = e.params.data;
                             console.log(`name ${selectedUser.text}`)
 
                             // Mettre à jour la valeur de l'input "Email" avec l'e-mail de l'utilisateur sélectionné
                             // $('#user').val(selectedUser.username);
-                            $('#sponsor_username').val(selectedUser.username);
-                            $('#sponsor_Email').val(selectedUser.email);
-                            $('#sponsor_name').val(selectedUser.text);
-                            $('#sponsor_phone_number').val(selectedUser.phone);
+                            $('#contributeur_username').val(selectedUser.username);
+                            $('#contributeur_Email').val(selectedUser.email);
+                            $('#contributeur_name').val(selectedUser.text);
+                            $('#contributeur_phone_number').val(selectedUser.phone);
+
+                          
+                        });
+                        $('#manager').on('select2:select', function(e) {
+                            var selectedUser = e.params.data;
+                            console.log(`name ${selectedUser.text}`)
+
+                            // Mettre à jour la valeur de l'input "Email" avec l'e-mail de l'utilisateur sélectionné
+                            // $('#user').val(selectedUser.username);
+                            $('#manager_username').val(selectedUser.username);
+                            $('#manager_Email').val(selectedUser.email);
+                            $('#manager_name').val(selectedUser.text);
+                            $('#manager_phone_number').val(selectedUser.phone);
 
                           
                         });
