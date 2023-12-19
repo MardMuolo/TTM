@@ -65,7 +65,7 @@
                                     <input hidden type="email" class="form-control hidden" id="manager_Email"
                                         placeholder="email" name="email_manager">
                                     <input hidden type="text" class="form-control hidden" id="name_manager"
-                                        placeholder="Nom & prenom" name="manager_name">
+                                        placeholder="Nom & prenom" name="name_manager">
 
                                 </select>
                             </div>
