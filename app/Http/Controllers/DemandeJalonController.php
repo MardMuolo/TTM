@@ -62,11 +62,13 @@ class DemandeJalonController extends Controller
 
     public function handleManager(Request $request)
     {
+        // dd($request->all());
         $user = User::Where(['email' => $request->email_manager])?->get()->first();
         $project = Project::find($request->project);
         if (!empty($user)) {
             return $user;
         } else {
+
             $user = User::create([
                 'name' => $request->name_manager,
                 'email' => $request->email_manager,
@@ -74,6 +76,7 @@ class DemandeJalonController extends Controller
                 'password' => Hash::make('password'),
                 'phone_number' => $request->phone_number_manager,
             ]);
+            SendSmsController::to_contributeur("0844297349");
 
             return $user;
         }
@@ -85,7 +88,6 @@ class DemandeJalonController extends Controller
     public function handleMember(Request $request, $manager, $project)
     {
         // dd($project);
-        // $user = auth()->user();
         $user = User::Where(['email' => $request->email])?->get()->first();
 
         if (!empty($user)) {
@@ -113,6 +115,7 @@ class DemandeJalonController extends Controller
                 'role' => $request->role,
             ]);
         }
+        SendSmsController::to_projectOwner("0844297349");
         activity()
             ->causedBy(auth()->user()->id)
             ->performedOn($project)
@@ -142,8 +145,8 @@ class DemandeJalonController extends Controller
 
             $publicPath = public_path('storage/projets/' . $folder_name . '/' . $folder_jalon_name . '/demandes');
             File::ensureDirectoryExists($publicPath);
-            //File::delete($publicPath . '/' . $namefile);
-            //File::link(storage_path('app/' . $fichier), $publicPath . '/' . $namefile);
+            File::delete($publicPath . '/' . $namefile);
+            File::link(storage_path('app/' . $fichier), $publicPath . '/' . $namefile);
             $fichier_path = storage_path('app/demandes/') . '' . $namefile;
         }
         // dd($publicPath);
