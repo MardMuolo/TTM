@@ -56,7 +56,7 @@
 
                         <div class="modal fade" id="modal-default-{{ $user->id }}">
                             <form
-                                action="{{ route('approuving.update', Crypt::encrypt($user->user_id)) }}?response={{ Crypt::encrypt(env('membreRefuser')) }}&project={{ Crypt::encrypt($user->project_id) }}"
+                                action="{{ route('approbationCollaborateur.update', Crypt::encrypt($user->user_id)) }}?response={{ Crypt::encrypt(env('membreRefuser')) }}&project={{ Crypt::encrypt($user->project_id) }}"
                                 method="post">
                                 @csrf
                                 @method('PUT')
@@ -88,7 +88,7 @@
                         </div>
                         <div class="modal fade" id="modal-default-{{ $user->id }}-accepter">
                             <form
-                                action="{{ route('approuving.update', Crypt::encrypt($user->user_id)) }}?response={{ Crypt::encrypt(env('membreApprouver')) }}&project={{ Crypt::encrypt($user->project_id) }}"
+                                action="{{ route('approbationCollaborateur.update', Crypt::encrypt($user->user_id)) }}?response={{ Crypt::encrypt(env('membreApprouver')) }}&project={{ Crypt::encrypt($user->project_id) }}"
                                 method="post">
                                 @csrf
                                 @method('PUT')
