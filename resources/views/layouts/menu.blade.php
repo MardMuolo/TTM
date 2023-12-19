@@ -34,9 +34,9 @@
         </a>
     </li>
 @endaccess
-@foreach (auth()->user()->roles as $user)
+{{-- @foreach (auth()->user()->roles as $user)
     @if ($user->name == env('Directeur'))
-        {{-- <li class="nav-item">
+        <li class="nav-item">
             <a href="#" class="nav-link">
                 <i class="nav-icon fa fa-bell" aria-hidden="true"></i>
                 <p>
@@ -60,9 +60,9 @@
                     </a>
                 </li>
             </ul>
-        </li> --}}
+        </li>
     @endif
-@endforeach
+@endforeach --}}
 
 @foreach (auth()->user()->roles as $user)
     @if ($user->name == env('AdminSys') or $user->name == env('RootAdmin'))
@@ -120,20 +120,20 @@
                         <p>Jalons</p>
                     </a>
                 </li>
-                <li class="nav-item">
+                {{-- <li class="nav-item">
                     <a href="{{ route('directions.index') }}"
                         class="nav-link {{ Request::is('directions') ? 'bg-orange' : '' }}">
-                        <i class="nav-icon fas fa-address-book"></i>
+                        <i class="nav-icon fas fa-address-book disabled"></i>
                         <p>Directions</p>
                     </a>
-                </li>
-                <li class="nav-item">
+                </li> --}}
+                {{-- <li class="nav-item">
                     <a href="{{ route('metiers.index') }}"
                         class="nav-link {{ Request::is('metiers') ? 'bg-orange' : '' }}">
                         <i class="nav-icon fas fa-address-book"></i>
                         <p>Métiers</p>
                     </a>
-                </li>
+                </li> --}}
                 <li class="nav-item">
                     <a href="{{ route('optionsttm.index') }}"
                         class="nav-link {{ Request::is('optionsttm') ? 'bg-orange' : '' }}">
