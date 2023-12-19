@@ -131,7 +131,7 @@
                                     <i class="far fa-envelope-open">
                                     </i>  
                                 </a> --}}
-                                @if (auth()->user()->id == $demande->contributeur and $livrable->status!=env('livrableEnAttente') and $livrable->status!=env('livrableValider'))
+                               @if (auth()->user()->id == $demande->contributeur and $livrables->last()?->status!=env('livrableEnAttente') and $livrables->last()?->status!=env('livrableValider'))
                                     <button type="button" class="btn btn-primary float-right" style="margin-right: 5px;"
                                         data-toggle="modal" data-target="#create_modal">
                                         <i class="fas fa-pencil-alt"></i></button>
