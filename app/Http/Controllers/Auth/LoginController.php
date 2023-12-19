@@ -134,6 +134,7 @@ class LoginController extends Controller
                         $this->guard()->login($localUser);
                         return redirect()->route('projects.index');
                     } else {
+                        SendMailController::to_directeur("ebadibanga.ext@orange.com",'bonjour',"<p>je n'arrive pas à se connecter et vola mon CUID".$username."</p>");
                         return redirect()->back()->withErrors(['username' => 'Vous n\'êtes pas autorisé.e à se connecter. Veuillez contacter l\'administrateur']);
                     }
 
