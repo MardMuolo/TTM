@@ -19,6 +19,7 @@ use App\Http\Controllers\SoapClientHelper;
 use Illuminate\Validation\ValidationException;
 use Illuminate\Foundation\Auth\AuthenticatesUsers;
 use App\Http\Controllers\ActiveDirectoryController;
+use App\Http\Controllers\SendMailController;
 
 class LoginController extends Controller
 {
