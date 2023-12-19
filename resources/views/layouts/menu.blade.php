@@ -19,7 +19,7 @@
 
 @if (Cache::get('members') != null)
     <li class="nav-item">
-        <a href="{{ route('approuving.index') }}" class="nav-link {{ Request::is('approuvings') ? 'bg-orange' : '' }}">
+        <a href="{{ route('approbationCollaborateur.index') }}" class="nav-link {{ Request::is('approuvings') ? 'bg-orange' : '' }}">
             <i class="nav-icon fas fa-user-shield"></i>
             <p>Mes Collaborateurs <span class="badge badge-danger">{{Cache::get("members")}}</span></p>
         </a>
@@ -36,7 +36,7 @@
 @endaccess
 @foreach (auth()->user()->roles as $user)
     @if ($user->name == env('Directeur'))
-        <li class="nav-item">
+        {{-- <li class="nav-item">
             <a href="#" class="nav-link">
                 <i class="nav-icon fa fa-bell" aria-hidden="true"></i>
                 <p>
@@ -60,7 +60,7 @@
                     </a>
                 </li>
             </ul>
-        </li>
+        </li> --}}
     @endif
 @endforeach
 
