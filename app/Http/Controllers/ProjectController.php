@@ -296,9 +296,9 @@ class ProjectController extends Controller
                     $namefile = $folder_name . '' . date('ymdhis') . '.' . $file->extension();
                     $path = $file->storeAs('projets/' . $folder_name . '/documents', $namefile);
                     $publicPath = public_path('storage/projets/' . $folder_name . '/documents');
-                    File::ensureDirectoryExists($publicPath);
-                    File::delete($publicPath . '/' . $namefile);
-                    File::link(storage_path('app/' . $path), $publicPath . '/' . $namefile);
+                    // File::ensureDirectoryExists($publicPath);
+                    // File::delete($publicPath . '/' . $namefile);
+                    // File::link(storage_path('app/' . $path), $publicPath . '/' . $namefile);
                     $project->projectFile()->create([
                         'filePath' => $path,
                     ]);
