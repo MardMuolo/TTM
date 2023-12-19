@@ -348,7 +348,7 @@ class JalonController extends Controller
         $dateEffective=$request->dateEffective;
 
         $folder_name = $project->id ;
-        $folder_jalon_name = $jalon->id ;
+        $folder_jalon_name = $jalon ;
         $projectOptionttmJalon = ProjectOptionttmJalon::where('jalon_id', $jalon)
             ->where('option_ttm_id', $option_ttm)
             ->where('project_id', $project->id)
