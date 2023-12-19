@@ -38,6 +38,8 @@ class ApprobationCollaboController extends Controller
 
     public function update(Request $request, $id)
     {
+        // dd($request->all());
+        $response=Crypt::decrypt($request->response);
         $id=Crypt::decrypt($id);
         $response=Crypt::decrypt($request->response);
         DB::table('project_users')
