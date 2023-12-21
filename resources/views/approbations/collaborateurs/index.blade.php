@@ -38,7 +38,7 @@
                             @endif
                             <td class="item-actions text-right">
                                 @php
-                                    $id=Crypt::encrypt(Auth::user()->id);
+                                    $id=Crypt::encrypt($user->id);
                                 @endphp
                                 @access('update', 'ProjectUser')
                                 <a class="btn btn-light btn-sm" href="{{ route('profile',$id) }}"
