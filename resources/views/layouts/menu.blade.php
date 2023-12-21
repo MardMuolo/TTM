@@ -17,14 +17,12 @@
     </li>
 @endaccess
 
-@if (Cache::get('members') != null)
-    <li class="nav-item">
-        <a href="{{ route('approbationCollaborateur.index') }}" class="nav-link {{ Request::is('approuvings') ? 'bg-orange' : '' }}">
-            <i class="nav-icon fas fa-user-shield"></i>
-            <p>Mes Collaborateurs <span class="badge badge-danger">{{Cache::get("members")}}</span></p>
-        </a>
-    </li>
-@endif
+<li class="nav-item">
+    <a href="{{ route('approbationCollaborateur.index') }}" class="nav-link {{ Request::is('approuvings') ? 'bg-orange' : '' }}">
+        <i class="nav-icon fas fa-user-shield"></i>
+        <p>Mes Collaborateurs <span class="badge badge-danger">{{Cache::get("members")}}</span></p>
+    </a>
+</li>
 
 @access('delete', 'Project')
     <li class="nav-item">

@@ -131,8 +131,21 @@
                                     <i class="far fa-envelope-open">
                                     </i>  
                                 </a> --}}
+                                @php
+                                    $test=DB::table('project_users')->where('project_id',$project->id)->where('user_id',auth()->user()->id)->get()->first();
+                                        // dd($test);
+                                @endphp
                                @if (auth()->user()->id == $demande->contributeur and $livrables->last()?->status!=env('livrableEnAttente') and $livrables->last()?->status!=env('livrableValider'))
-                                    <button type="button" class="btn btn-primary float-right" style="margin-right: 5px;"
+                                    <button type="button" class="btn btn-primary float-right
+                                    @if ($test->status==env('membreEnAttente'))
+                                        disabled
+                                    @endif
+                                    "
+                                    @if ($test->status==env('membreEnAttente'))
+                                        title="En attente de validation de votre LineManger"
+                                    @endif
+
+                                     style="margin-right: 5px;"
                                         data-toggle="modal" data-target="#create_modal">
                                         <i class="fas fa-pencil-alt"></i></button>
                                 @endif
