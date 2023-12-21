@@ -44,10 +44,10 @@
                                 <a class="btn btn-light btn-sm" href="{{ route('profile',$id) }}"
                                 title="voir"><i class="fas fa-eye"></i></a>
 
-                                    <a class="btn btn-light text-danger btn-sm" data-toggle="modal"
+                                    <a class="btn btn-light text-danger btn-sm {{$user->status!=env('membreEnAttente')?'disabled':''}}" data-toggle="modal"
                                         data-target="#modal-default-{{ $user->id }}"><i class="fas fa-user-times"></i></a>
 
-                                    <a class="btn btn-light text-success btn-sm" data-toggle="modal"
+                                    <a class="btn btn-light text-success btn-sm {{$user->status!=env('membreEnAttente')?'disabled':''}}" data-toggle="modal"
                                         data-target="#modal-default-{{ $user->id }}-accepter"><i
                                             class="fas fa-user-check"></i></a>
                                 @endaccess

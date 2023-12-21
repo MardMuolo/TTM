@@ -41,12 +41,14 @@ class ApprobationCollaboController extends Controller
         // dd($request->all());
         $response=Crypt::decrypt($request->response);
         $id=Crypt::decrypt($id);
-        $response=Crypt::decrypt($request->response);
+        $project=Crypt::decrypt($request->project);
+        // dd($project);
         DB::table('project_users')
         ->where('user_id', $id)
         ->update([
             'status' =>$response ,
             'user_id' => $id,
+            'project_id'=>$project
         ]);
         if ($request->response == env('membreApprouver')) {
             $this->getOwner($id, 'approuved_member_to_project');
