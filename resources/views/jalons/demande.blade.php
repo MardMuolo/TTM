@@ -34,11 +34,11 @@
                         <div class="row invoice-info">
                             <div class="col-sm-10 invoice-col">
                                 <b>Categorie</b>
-                                <p>{{ $demande->demande->title}}</p>
+                                <p>{{ $demande->demande->title }}</p>
                             </div>
                         </div>
                         <div class="row invoice-info">
-                            
+
                         </div>
                         <!-- /.row -->
 
@@ -56,7 +56,7 @@
                                     </thead>
                                     <tbody>
                                         @forelse ($livrables as $livrable)
-                                            <tr class="{{$livrable->status==env('livrableRejeter')?'bg-red':''}}">
+                                            <tr class="{{ $livrable->status == env('livrableRejeter') ? 'bg-red' : '' }}">
                                                 <td>{{ $i++ }}</td>
                                                 <td>{{ $livrable->nom }}</td>
                                                 <td>{{ $livrable->description }}
@@ -91,20 +91,30 @@
                                                             <i class="fas fa-archive"></i>
                                                         </a>
                                                     @endif
-
-                                                    @if (Auth()->user()->roles[0]->name == env('Directeur'))
-                                                        @php
-                                                            $id = Crypt::encrypt($livrable->id);
-                                                        @endphp
-                                                        <a class="btn btn-secondary btn-sm" title="validation"
-                                                            href="{{ route('valider_livrable', $id) }}"
-                                                            onclick="edit(event)" item = "{{ $livrable->nom }}"
-                                                            description="{{ $livrable->description }}" data-toggle="modal"
-                                                            data-target="#validate">
-                                                            <i class="far fa-envelope-open">
-                                                            </i>
-                                                        </a>
-                                                    @endif
+                                                    @php
+                                                        $is_member = DB::table('project_users')
+                                                            ->where('project_id', $project->id)
+                                                            ->where('user_id', auth()->user()->id)
+                                                            ->get()
+                                                            ->first();
+                                                        // dd($test);
+                                                    @endphp
+                                                    @foreach (Auth()->user()->roles as $role)
+                                                        @if (
+                                                            $role->name == env('Directeur') || ($is_member->status == env('membreApprouver') and $is_member->role == 'Validateur'))
+                                                            @php
+                                                                $id = Crypt::encrypt($livrable->id);
+                                                            @endphp
+                                                            <a class="btn btn-secondary btn-sm" title="validation"
+                                                                href="{{ route('valider_livrable', $id) }}"
+                                                                onclick="edit(event)" item = "{{ $livrable->nom }}"
+                                                                description="{{ $livrable->description }}"
+                                                                data-toggle="modal" data-target="#validate">
+                                                                <i class="far fa-envelope-open">
+                                                                </i>
+                                                            </a>
+                                                        @endif
+                                                    @endforeach
 
 
                                                 </td>
@@ -132,21 +142,22 @@
                                     </i>  
                                 </a> --}}
                                 @php
-                                    $test=DB::table('project_users')->where('project_id',$project->id)->where('user_id',auth()->user()->id)->get()->first();
-                                        // dd($test);
+                                    $is_member = DB::table('project_users')
+                                        ->where('project_id', $project->id)
+                                        ->where('user_id', auth()->user()->id)
+                                        ->get()
+                                        ->first();
+                                    // dd($test);
                                 @endphp
-                               @if (auth()->user()->id == $demande->contributeur and $livrables->last()?->status!=env('livrableEnAttente') and $livrables->last()?->status!=env('livrableValider'))
-                                    <button type="button" class="btn btn-primary float-right
-                                    @if ($test->status==env('membreEnAttente'))
-                                        disabled
-                                    @endif
+                                @if (auth()->user()->id == $demande->contributeur and
+                                        $livrables->last()?->status != env('livrableEnAttente') and
+                                        $livrables->last()?->status != env('livrableValider'))
+                                    <button type="button"
+                                        class="btn btn-primary float-right
+                                    @if ($is_member->status == env('membreEnAttente')) disabled @endif
                                     "
-                                    @if ($test->status==env('membreEnAttente'))
-                                        title="En attente de validation de votre LineManger"
-                                    @endif
-
-                                     style="margin-right: 5px;"
-                                        data-toggle="modal" data-target="#create_modal">
+                                        @if ($is_member->status == env('membreEnAttente')) title="En attente de validation de votre LineManger" @endif
+                                        style="margin-right: 5px;" data-toggle="modal" data-target="#create_modal">
                                         <i class="fas fa-pencil-alt"></i></button>
                                 @endif
                             </div>
