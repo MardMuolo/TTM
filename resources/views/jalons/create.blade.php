@@ -86,7 +86,7 @@
                                             class="text-danger">*</span></label>
                                     <div class="input-group">
                                         <input type="number" name="deadLine" class="form-control" min="1"
-                                            required>
+                                            required id="deadLine">
                                         <select class="form-control" name="deadline_unit">
                                             <option value="days">Jours</option>
                                             <option value="hours">Heures</option>
@@ -261,6 +261,7 @@
             if (e.target.value === "Validateur" || e.target.value === "Stream") {
                 $('#demande').css("display", "none").removeAttr('required')
                 $('#category').css("display", "none").removeAttr('required')
+                $('#deadLine').css("display", "none").removeAttr('required')
                 $('#delais').css("display", "none").removeAttr('required')
                 $('#model').css("display", "none").removeAttr('required')
                 $('#text_model').text('N/A')
@@ -270,6 +271,7 @@
             }else{
                 $('#demande').css("display", "initial").attr('required')
                 $('#category').css("display", "initial").attr('required')
+                $('#deadLine').css("display", "initial").attr('required')
                 $('#delais').css("display", "initial").css("padding-bottom","7px").attr('required')
                 $('#model').css("display", "initial").attr('required')
                 $('#text_model').text('')
