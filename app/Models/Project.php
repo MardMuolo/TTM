@@ -81,7 +81,7 @@ class Project extends Model
         if ($status) {
             $project = Project::with('users', 'optionsJalons')->get();
         } else {
-            $project = $user->projects()->with('users', 'optionsJalons')->get();
+            $project = $user->projects()->with('users', 'optionsJalons')->get()->unique('id');
         }
 
         return $project;
