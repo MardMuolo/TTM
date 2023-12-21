@@ -100,7 +100,7 @@ class UserController extends Controller
         ldap_set_option($ldapConn,LDAP_OPT_REFERRALS,0);
         $ldapBind 		= ldap_bind($ldapConn, $adUser, $adPass);
         // dd($ldapConn);
-        $person			= "*ma*";
+        $person			= "*ng*";
         $filter 		= "(&(objectCategory=person)(objectClass=user)(|(sn={$person})(displayname={$person})))";
         $attributes = array("sAMAccountName","cn", "mail");
         $ldapResult 	= ldap_search($ldapConn,"DC=ORANGERDC,DC=CD",$filter, $attributes);
