@@ -118,13 +118,13 @@
                         <p>Jalons</p>
                     </a>
                 </li>
-                {{-- <li class="nav-item">
+                <li class="nav-item">
                     <a href="{{ route('directions.index') }}"
                         class="nav-link {{ Request::is('directions') ? 'bg-orange' : '' }}">
                         <i class="nav-icon fas fa-address-book disabled"></i>
                         <p>Directions</p>
                     </a>
-                </li> --}}
+                </li>
                 {{-- <li class="nav-item">
                     <a href="{{ route('metiers.index') }}"
                         class="nav-link {{ Request::is('metiers') ? 'bg-orange' : '' }}">

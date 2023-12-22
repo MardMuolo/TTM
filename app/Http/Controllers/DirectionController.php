@@ -22,7 +22,6 @@ class DirectionController extends Controller
     {
         //Return the view index related to directions
         $directions = Direction::orderBy('name')->paginate(5);
-
         $users = User::all();
         return view("directions.index", ['directions' => $directions, 'users' => $users]);
     }
@@ -46,27 +45,30 @@ class DirectionController extends Controller
             $request->validate([
                 'name' => 'required|unique:directions|max:255',
             ]);
-            $user_in_db = User::Where(['username' => 'rootadmin'])?->get()->first();
-            // dd($user_in_db);
+            $user_in_db = User::Where(['username' => $request->username])?->get()->first();
             
-            // if (!$user_in_db) {
-            //     $user_in_db = User::create([
-            //         'name' => '$user',
-            //         'email' => '$user->emai',
-            //         'password' => 'test',
-            //         'phone_number' => ' $user->username',
-            //         'username' => ' $user->username',
-            //     ]);
-            // }
-            $test=Direction::create([
-                'name' => 'drh',
-                'user_id' => '1'
+            if (!$user_in_db) {
+                $user_in_db = User::create([
+                    'name' => $request->user_name,
+                    'email' => $request->Email,
+                    'password' =>Hash::make('password'),
+                    'phone_number' => $request->phone_number,
+                    'username' => $request->username,
+                ]);
+            }
+            $direction=Direction::create([
+                'name' => $request->direction_name,
+            ]);
+            DirectionUser::create([
+                'user_id'=>$user_in_db->id,
+                'direction_id'=>$direction->id,
+                'is_director'=>true,
             ]);
 
             return redirect()->back()->with('success','création de la direction avec success');
         } catch (\Throwable $th) {
             Log::error($th->getMessage());
-            return redirect()->back()->with('error','création de la direction a échouée');
+            return redirect()->back()->with('error','création de la direction a échouée! veuillez voir si la diretion existe déjà');
         }
 
     }

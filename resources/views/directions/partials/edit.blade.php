@@ -19,19 +19,20 @@
                             </div>
                         </div>
                         <div class="col-xm-6">
-                            <div class="form-group">
-                                <label for="directeur">Directeur</label>
-                                <select name="directeur" style="width:75%" class="form-control" id="user2">
-                                    <option value="" id="directeur_edit"></option>
-                                </select>
+                            <div class="col-xm-6">
+                                <div class="input-group mb-3">
+                                    <label for="directeur">Directeur</label>
+                                    <select name="user" class="form-control select2 w-100" id="directeur_edit" style="width: 100%;">
+                                       <option value=""></option>
+                                       <input type="hidden" id="username_edit" name="username">
+                                       <input type="hidden" id="Email_edit" name="Email">
+                                       <input type="hidden" id="name_edit" name="user_name">
+                                       <input type="hidden" id="phone_number_edit" name="phone_number">
+                                    </select>
+                                </div>
                             </div>
                         </div>
-                        <div class="col-xm-6">
-                            <div class="form-group">
-                                <label for="inputEmail"></label>
-                                <input type="hidden" class="form-control" id="inputEmail2" placeholder="email" name="email">
-                            </div>
-                        </div>
+                        
                     </div>
                     <div class="card-footer">
                         <button type="submit" class="btn btn-secondary"><i class="fa fa-check"></i></button>
@@ -48,9 +49,9 @@
     </div>    
 </div>
 
-<script src="{{ Vite::asset('node_modules/admin-lte/plugins/jquery/jquery.min.js') }}"></script>
+<script src="{{ Vite::asset('node_modules/admin-lte/plugins/jquery/jquery.min.js?commonjs-entry') }}"></script>
 <script src="{{ Vite::asset('resources/js/scripts.js') }}"></script>
-<script src="{{ Vite::asset('node_modules/admin-lte/plugins/select2/js/select2.full.min.js') }}"></script>
+<script src="{{ Vite::asset('node_modules/admin-lte/plugins/select2/js/select2.full.min.js?commonjs-entry') }}"></script>
 @vite('node_modules/admin-lte/plugins/select2/css/select2.min.css')
 
 <script>
