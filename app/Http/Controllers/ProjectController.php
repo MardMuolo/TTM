@@ -279,10 +279,12 @@ class ProjectController extends Controller
             $this->addStaff($owner, $project, 'projectOwner');
             SendSmsController::to_projectOwner("0844297349");
 
+            SendMailController::to_projectOwner($owner->email,$project);
 
             // ajout et notification du deuxieme membre qui est  le sponsor du projet
             $this->addStaff($sponsor, $project, 'sponsor');
             SendSmsController::to_sponsor("0844297349");
+            SendMailController::to_projectOwner($sponsor->email,$project);
 
 
 
@@ -296,9 +298,9 @@ class ProjectController extends Controller
                     $namefile = $folder_name . '' . date('ymdhis') . '.' . $file->extension();
                     $path = $file->storeAs('projets/' . $folder_name . '/documents', $namefile);
                     $publicPath = public_path('storage/projets/' . $folder_name . '/documents');
-                    // File::ensureDirectoryExists($publicPath);
-                    // File::delete($publicPath . '/' . $namefile);
-                    // File::link(storage_path('app/' . $path), $publicPath . '/' . $namefile);
+                    File::ensureDirectoryExists($publicPath);
+                    File::delete($publicPath . '/' . $namefile);
+                    File::link(storage_path('app/' . $path), $publicPath . '/' . $namefile);
                     $project->projectFile()->create([
                         'filePath' => $path,
                     ]);

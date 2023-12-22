@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\User;
+use App\Models\Project;
 use Illuminate\Http\Request;
 
 class SendMailController extends NotificationController
@@ -50,9 +51,17 @@ class SendMailController extends NotificationController
 
         return $response;
     }
-    public static function to_projectOwner($receiver, $text, $template)
+    public static function to_projectOwner($receiver, Project $text)
     {
-        $response = NotificationController::sendMail($receiver, $text, $template,env('sub_projectOwner'));
+        $msg="
+        <h2>nom du projet <br/>".$text->name."</h2><br/>
+        <h5>OptionTT du projet <br/>".$text->target." <span>".$text->score."</span></h5><br/>
+        <h5>type <br/>".$text->type."</h5><br/>
+        <p>Sponsor du projet <br/>".$text->nom."</p><br/><hr/>
+        <p>Descriptiom<br/> </p><br/>
+        $text->nom
+        ";
+        $response = NotificationController::sendMail($receiver, $text, $msg,env('sub_projectOwner'));
 
         return $response;
     }
