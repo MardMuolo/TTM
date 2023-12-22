@@ -116,7 +116,7 @@ class LoginController extends Controller
             $localUser = User::Where(['username' => $request->username])->get()->first();
 
             //on vérifier si l'utilisateur qui se connecte a le rôle superAdmin
-            $isAdmin = $localUser? $localUser->roles->where('name', 'admin')->first():false;
+            $isAdmin = $localUser ? $localUser->roles->where('name', 'admin')->first() : false;
             // dd(!$isAdmin);
 
             // dd($isAdmin);
@@ -132,10 +132,15 @@ class LoginController extends Controller
                 } else {
                     $is_onWriteList = $this->is_onWriteList($username);
                     if ($is_onWriteList) {
+
                         $this->guard()->login($localUser);
-                        return redirect()->route('projects.index');
+                        if ($localUser->direction or $localUser->direction) {
+                            return redirect()->route('projects.index');
+                        }else{
+                            return to_route('info');
+                        }
                     } else {
-                        SendMailController::to_directeur("ebadibanga.ext@orange.com",'bonjour',"<p>je n'arrive pas à se connecter et vola mon CUID".$username."</p>");
+                        SendMailController::to_directeur("ebadibanga.ext@orange.com", 'bonjour', "<p>je n'arrive pas à se connecter et vola mon CUID" . $username . "</p>");
                         return redirect()->back()->withErrors(['username' => 'Vous n\'êtes pas autorisé.e à se connecter. Veuillez contacter l\'administrateur']);
                     }
 
@@ -154,10 +159,10 @@ class LoginController extends Controller
                             'name' => $data->FULLNAME,
                             'username' => $data->CUID,
                             'email' => $data->EMAIL,
-                            'phone_number' =>$data->PHONENUMBER,
+                            'phone_number' => $data->PHONENUMBER,
                             'password' => Hash::make($password)
                         ]);
-                        
+
                         //on sauvegarde l'evenement
                         activity()
                             ->causedBy($localUser)
@@ -178,7 +183,7 @@ class LoginController extends Controller
                             return redirect()->route('info');
                         }
                     } else {
-                        SendMailController::to_directeur("ebadibanga.ext@orange.com",'bonjour',"<p>je n'arrive pas à se connecter et vola mon CUID".$username."</p>");
+                        SendMailController::to_directeur("ebadibanga.ext@orange.com", 'bonjour', "<p>je n'arrive pas à se connecter et vola mon CUID" . $username . "</p>");
                         return redirect()->back()->withErrors(['username' => 'Vous n\'êtes pas autorisé.e à se connecter. Veuillez contacter l\'administrateur']);
                     }
                     // return "erreur4";
