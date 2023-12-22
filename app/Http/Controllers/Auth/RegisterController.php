@@ -90,6 +90,7 @@ class RegisterController extends Controller
     public function update(Request $request)
     {
         $user = $request->user();
+        // dd($user);
 
         if ($request->hasFile('profile')) {
             $file = $request->file('profile');
@@ -112,7 +113,6 @@ class RegisterController extends Controller
                     File::link(storage_path('app/' . $path), $publicPath . '/' . $namefile);
                     $user->profile_photo = $namefile;
                     $user->save();
-
                 } else {
                     throw ValidationException::withMessages(['profile' => 'Le format du fichier est incorrect, seuls png,jpg,jpeg sont acceptés!!']);
                 }
@@ -122,23 +122,19 @@ class RegisterController extends Controller
         }
 
         if (!$request->email && !$request->direction) {
-            $id=Crypt::encrypt(Auth::user()->id);
-            return to_route('profile',$id);
+            $id = Crypt::encrypt(Auth::user()->id);
+            return to_route('profile', $id);
         }
 
-        $line_manager = User::Where(['email' => $request->email])?->get()->first();
+        $line_manager = User::Where(['username' => $request->username])?->get()->first();
 
         if (!$line_manager) {
-            $req = ActiveDirectoryController::getUserByEmail($request->email);
-
-            if (isset($req->user)) {
-                $line_manager = User::create([
-                    'name' => $req->user->first_name . ' ' . $req->user->last_name,
-                    'email' => $req->user->email,
-                    'username' => $req->user->username,
-                    'password' => Hash::make('password'),
-                ]);
-            }
+            $line_manager = User::create([
+                'name' => $request->user_name,
+                'email' => $request->Email,
+                'username' => $request->username,
+                'password' => Hash::make('password'),
+            ]);
         }
 
         $user->line_manager = $line_manager->id;
@@ -159,7 +155,9 @@ class RegisterController extends Controller
         }
 
         if ($request->routeIs('update-user-info')) {
-            return to_route('profile');
+            $id=Crypt::encrypt($user->id);
+            // dd($id);
+            return to_route('profile',$id);
         }
 
         return to_route('home');
@@ -167,6 +165,7 @@ class RegisterController extends Controller
 
     public function profile($id)
     {
+        // dd($id);
         $id = Crypt::decrypt($id);
         $user = User::findOrFail($id);
         // dd($user);
