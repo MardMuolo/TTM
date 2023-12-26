@@ -1,10 +1,11 @@
 <?php
 
-use App\Http\Controllers\DemandeJalonController;
-use App\Models\CategoryDemande;
 use App\Models\Demande;
-use Illuminate\Support\Facades\Request;
+use App\Models\CategoryDemande;
+use App\Http\Controllers\Approuving;
 use Illuminate\Support\Facades\Route;
+use Illuminate\Support\Facades\Request;
+use App\Http\Controllers\DemandeJalonController;
 
 Route::middleware(['auth'])->group(function () {
     Route::resource('projects', App\Http\Controllers\ProjectController::class);
@@ -27,7 +28,7 @@ Route::middleware(['auth'])->group(function () {
         return response()->json($categories);
     });
     Route::resource('contributeur', App\Http\Controllers\ProjectUserController::class);
-    Route::resource('approuving', App\Http\Controllers\Approuving::class);
+    Route::resource('approuving', Approuving::class);
     Route::resource('approbationCollaborateur', App\Http\Controllers\ApprobationCollaboController::class);
     Route::resource('approbationLivrable', App\Http\Controllers\ApprobationLivrableController::class);
     Route::get('projets/dates/{project}', [App\Http\Controllers\ProjectController::class, 'addDates'])->name('projects.dates');
