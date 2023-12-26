@@ -52,9 +52,9 @@ class LivrableController extends Controller
             $namefile = date('ymdhis') . '.' . $request->fichier->extension();
             $path = $request->fichier->storeAs('projets/' . $folder_project_name.'/'.$folder_jalon_name.'/livrables', $namefile);
             $publicPath = public_path('storage/projets/'.$folder_project_name.'/'.$folder_jalon_name.'/livrables');
-            // File::ensureDirectoryExists($publicPath);
-            // File::delete($publicPath . '/' . $namefile);
-            // File::link(storage_path('app/' . $path), $publicPath . '/' . $namefile);
+            File::ensureDirectoryExists($publicPath);
+            File::delete($publicPath . '/' . $namefile);
+            File::link(storage_path('app/' . $path), $publicPath . '/' . $namefile);
 
         }
 

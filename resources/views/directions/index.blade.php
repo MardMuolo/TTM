@@ -104,12 +104,104 @@
 
     </div>
 @endsection
+@push('third_party_scripts')
+    <script src="{{ Vite::asset('node_modules/admin-lte/plugins/jquery/jquery.min.js?commonjs-entry') }}"></script>
+    <script src="{{ Vite::asset('node_modules/admin-lte/plugins/bs-stepper/js/bs-stepper.min.js?commonjs-entry') }}"></script>
+    <script src="{{ Vite::asset('node_modules/admin-lte/plugins/select2/js/select2.full.min.js?commonjs-entry') }}"></script>
+    @vite('node_modules/admin-lte/plugins/select2/css/select2.min.css');
+    @vite('node_modules/admin-lte/plugins/bs-stepper/css/bs-stepper.min.css');
+@endpush
 
-@section('scripts')
-    <script src="{{ Vite::asset('node_modules/admin-lte/plugins/jquery/jquery.min.js') }}"></script>
+@push('page_scripts')
+    <script src="{{ Vite::asset('node_modules/admin-lte/plugins/jquery/jquery.min.js?commonjs-entry') }}"></script>
     <script src="{{ Vite::asset('resources/js/scripts.js') }}"></script>
-    <script src="{{ Vite::asset('node_modules/admin-lte/plugins/select2/js/select2.full.min.js') }}"></script>
+    <script src="{{ Vite::asset('node_modules/admin-lte/plugins/select2/js/select2.full.min.js?commonjs-entry') }}">
+    </script>
     @vite('node_modules/admin-lte/plugins/select2/css/select2.min.css')
+
+
+    <script type="module">
+        $(document).ready(function() {
+            // $('[data-mask]').inputmask()
+            $.ajax({
+                url: '{{ route('getUsers') }}',
+                type: 'Get',
+                dataType: 'json',
+                success: function(response) {
+                    console.log(response)
+
+                    if (response.status === 'success') {
+                        var data = response.body;
+                        console.log(data)
+
+                        var formattedData = data.map(function(user) {
+                            return {
+                                id: user.id,
+                                username: user.username,
+                                text: user.name,
+                                email: user.email,
+                                phone: user.phone,
+
+                            };
+                        });
+
+                        // Initialiser le champ de sélection avec les options
+                        $('#directeur').select2({
+                            data: formattedData,
+                            minimumInputLength: 1
+                        });
+                        $('#directeur_edit').select2({
+                            data: formattedData,
+                            minimumInputLength: 1
+                        });
+
+
+
+                        // Événement de sélection d'utilisateur
+                        $('#directeur').on('select2:select', function(e) {
+                            var selectedUser = e.params.data;
+                            console.log(`name ${selectedUser.text}`)
+
+                            // Mettre à jour la valeur de l'input "Email" avec l'e-mail de l'utilisateur sélectionné
+                            // $('#user').val(selectedUser.username);
+                            $('#username').val(selectedUser.username);
+                            $('#Email').val(selectedUser.email);
+                            $('#name').val(selectedUser.text);
+                            $('#phone_number').val(selectedUser.phone);
+
+                            // var fullName = selectedUser.first_name + ' ' + selectedUser
+                            //     .last_name;
+                            // $('#name').val(fullName);
+                        });
+                        $('#directeur_edit').on('select2:select', function(e) {
+                            var selectedUser = e.params.data;
+                            console.log(`name ${selectedUser.text}`)
+
+                            // Mettre à jour la valeur de l'input "Email" avec l'e-mail de l'utilisateur sélectionné
+                            // $('#user').val(selectedUser.username);
+                            $('#username_edit').val(selectedUser.username);
+                            $('#Email_edit').val(selectedUser.email);
+                            $('#name_edit').val(selectedUser.text);
+                            $('#phone_number_edit').val(selectedUser.phone);
+
+                            // var fullName = selectedUser.first_name + ' ' + selectedUser
+                            //     .last_name;
+                            // $('#name').val(fullName);
+                        });
+
+                    } else {
+                        console.log('Erreur: ' + response.message);
+                    }
+                },
+                error: function(xhr, status, error) {
+                    console.log('Erreur AJAX: ' + error);
+                }
+            });
+
+
+
+        });
+    </script>
     <script>
         function supprimer(event) {
             event.preventDefault();
@@ -147,4 +239,4 @@
 
         }
     </script>
-@endsection
+@endpush

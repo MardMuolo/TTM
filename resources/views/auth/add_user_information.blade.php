@@ -1,4 +1,5 @@
 <x-laravel-ui-adminlte::adminlte-layout>
+
     <body class="hold-transition login-page">
         <div class="box-profile">
             <div class="text-center">
@@ -25,8 +26,13 @@
 
                         <div class="input-group mb-3">
                             <label for="line_manager">Line Manager</label>
-                            <select name="line_manager" class="form-control select2 w-100" id="user">
-                                <option value=""></option>
+                            <select name="line_manager" class="form-control select2 w-100" id="user"
+                                style="width: 100%;">
+                                <option disabled selected>Veuillez choisir...</option>
+                                <input type="hidden" id="username" name="username">
+                                <input type="hidden" id="Email" name="Email">
+                                <input type="hidden" id="name" name="user_name">
+                                <input type="hidden" id="phone_number" name="phone_number">
                             </select>
                         </div>
                         @error('line')
@@ -34,8 +40,8 @@
                         @enderror
                         <div class="input-group mb-3">
                             <label for="direction">Direction</label>
-                            <select name="direction" class="form-control w-100 " required>
-                                <option></option>
+                            <select name="direction" class="form-control w-100 select " required>
+                                <option disabled selected>Veuillez choisir...</option>
                                 @foreach ($directions as $direction)
                                     <option value="{{ $direction->id }}">{{ $direction->name }}</option>
                                 @endforeach
@@ -64,67 +70,85 @@
             </div>
 
         </div>
-        <!-- /.login-box <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.0/jquery.min.js"></script> -->
-        
-        
-        
+        <!-- /.login-box <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.0/jquery.min.js?commonjs-entry"></script> -->
 
-        <script>
-
-        </script>
-
-        
         @push('page_scripts')
-            <script type="module" src="{{ Vite::asset('node_modules/admin-lte/plugins/jquery/jquery.min.js') }}"></script>
-            
-            <script src="{{ Vite::asset('resources/js/scripts.js') }}"></script>
-            <script type="module" src="{{ Vite::asset('node_modules/admin-lte/plugins/select2/js/select2.full.min.js') }}"></script>
-            @vite('node_modules/admin-lte/plugins/select2/css/select2.min.css')
+            <script type="module" src="{{ Vite::asset('node_modules/admin-lte/plugins/jquery/jquery.min.js?commonjs-entry') }}">
+            </script>
 
+            <script src="{{ Vite::asset('resources/js/scripts.js') }}"></script>
+            <script type="module"
+                src="{{ Vite::asset('node_modules/admin-lte/plugins/select2/js/select2.full.min.js?commonjs-entry') }}"></script>
+            @vite('node_modules/admin-lte/plugins/select2/css/select2.min.css')
             <script type="module">
-           
                 $(document).ready(function() {
-    
+                    // $('[data-mask]').inputmask()
                     $.ajax({
-                        url: 'http://10.143.41.70:8000/promo2/odcapi/?method=getUsers',
+                        url: '{{ route('getUsers') }}',
+                        type: 'Get',
                         dataType: 'json',
                         success: function(response) {
-    
-                            if (response.success) {
-                                var data = response.users;
-    
+                            console.log(response)
+
+                            if (response.status === 'success') {
+                                var data = response.body;
+                                console.log(data)
+
                                 var formattedData = data.map(function(user) {
                                     return {
                                         id: user.id,
                                         username: user.username,
-                                        text: user.last_name + " " + user.first_name,
+                                        text: user.name,
                                         email: user.email,
                                         phone: user.phone,
-                                        first_name: user.first_name,
-                                        last_name: user.last_name,
+
                                     };
                                 });
-    
+
                                 // Initialiser le champ de sélection avec les options
                                 $('#user').select2({
                                     data: formattedData,
                                     minimumInputLength: 1
                                 });
-    
+                                $('#directeur_edit').select2({
+                                    data: formattedData,
+                                    minimumInputLength: 1
+                                });
+
+
+
                                 // Événement de sélection d'utilisateur
                                 $('#user').on('select2:select', function(e) {
                                     var selectedUser = e.params.data;
-    
+                                    console.log(`name ${selectedUser.text}`)
+
                                     // Mettre à jour la valeur de l'input "Email" avec l'e-mail de l'utilisateur sélectionné
-                                    $('#user').val(selectedUser.email);
-                                    // $('#username').val(selectedUser.username);
-                                    $('#inputEmail').val(selectedUser.email);
-                                    // $('#inputTel').val(selectedUser.phone);
-    
+                                    // $('#user').val(selectedUser.username);
+                                    $('#username').val(selectedUser.username);
+                                    $('#Email').val(selectedUser.email);
+                                    $('#name').val(selectedUser.text);
+                                    $('#phone_number').val(selectedUser.phone);
+
                                     // var fullName = selectedUser.first_name + ' ' + selectedUser
                                     //     .last_name;
                                     // $('#name').val(fullName);
                                 });
+                                $('#directeur_edit').on('select2:select', function(e) {
+                                    var selectedUser = e.params.data;
+                                    console.log(`name ${selectedUser.text}`)
+
+                                    // Mettre à jour la valeur de l'input "Email" avec l'e-mail de l'utilisateur sélectionné
+                                    // $('#user').val(selectedUser.username);
+                                    $('#username_edit').val(selectedUser.username);
+                                    $('#Email_edit').val(selectedUser.email);
+                                    $('#name_edit').val(selectedUser.text);
+                                    $('#phone_number_edit').val(selectedUser.phone);
+
+                                    // var fullName = selectedUser.first_name + ' ' + selectedUser
+                                    //     .last_name;
+                                    // $('#name').val(fullName);
+                                });
+
                             } else {
                                 console.log('Erreur: ' + response.message);
                             }
@@ -133,6 +157,9 @@
                             console.log('Erreur AJAX: ' + error);
                         }
                     });
+
+
+
                 });
             </script>
         @endpush
