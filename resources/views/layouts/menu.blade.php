@@ -18,7 +18,7 @@
 @endaccess
 
 <li class="nav-item">
-    <a href="{{ route('approbationCollaborateur.index') }}" class="nav-link {{ Request::is('approuvings') ? 'bg-orange' : '' }}">
+    <a href="{{ route('approbationCollaborateur.index') }}" class="nav-link {{ Request::is('approuvings') ? 'bg-orange' : '' }} disabled">
         <i class="nav-icon fas fa-user-shield"></i>
         <p>Mes Collaborateurs <span class="badge badge-danger">{{Cache::get("members")}}</span></p>
     </a>
