@@ -279,17 +279,19 @@
                     <table id="tableProjet" class="table table-bordered table-striped">
                         <thead class="text-orange">
                             <th>N°</th>
-                            <th>Directions</th>
-                            <th>Total projets</th>
-                            <th>Projets finis</th>
+                            <th>Direction</th>
+                            <th>Projet Encour</th>
+                            <th>Projet fini</th>
+                            <th>Total projet</th>
                         </thead>
                         <tbody>
                             @foreach ($directions as $i => $projet)
                                 <tr>
                                     <td>{{ $i + 1 }}</td>
                                     <td>{{ $projet->name }}</td>
+                                    <td>{{ $projetEncours }}</td>
+                                    <td>{{ $projetFinis }}</td>
                                     <td>{{ $projet->nb_projet }}</td>
-                                    <td>{{ $projet->nb_projetFinis }}</td>
                                 </tr>
                             @endforeach
                         </tbody>

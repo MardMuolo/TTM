@@ -56,7 +56,7 @@
                     <thead class="thead-color">
                         <th style="width: 50%">Nom</th>
                         <th class="text-center" style="width: 20%">Statut</th>
-                        <th class="text-center" style="width: 20%"></th>
+                        <th class="text-center" style="width: 20%">Extraire</th>
                     </thead>
                     <tbody>
                         @forelse ($projets as $item)
