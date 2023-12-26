@@ -1,14 +1,14 @@
 <?php
 
 namespace App\Http\Controllers;
-
-use App\Models\MessageMail;
 use App\Models\User;
-use App\Notifications\EasyTtmNotification;
+use App\Models\MessageMail;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Cache;
-use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Crypt;
+use App\Notifications\EasyTtmNotification;
 
 class Approuving extends Controller
 {
@@ -25,25 +25,30 @@ class Approuving extends Controller
         $i = 1;
         Cache::forever('members', count($users));
         // dd(\Cache::get('members'));
-        return view('approuvings.index', compact('users', 'i'));
+        return view('approbations.collaborateurs.index', compact('users', 'i'));
     }
-
     public function getOwner($id, $code)
     {
         $owner = User::where('id', $id)->get()->first();
-        // if ($owner) {
-        //     $message1 = MessageMail::Where('code_name', $code)->first();
-        //     $owner->notify(new EasyTtmNotification($message1, route('home'), []));
-        // }
+        if ($owner) {
+            $message1 = MessageMail::Where('code_name', $code)->first();
+            $owner->notify(new EasyTtmNotification($message1, route('home'), []));
+        }
     }
 
-    public function update(Request $request, int $id)
+    public function update(Request $request, $id)
     {
+        // dd($request->all());
+        $response=Crypt::decrypt($request->response);
+        $id=Crypt::decrypt($id);
+        $project=Crypt::decrypt($request->project);
+        // dd($project);
         DB::table('project_users')
         ->where('user_id', $id)
         ->update([
-            'status' => $request->response,
+            'status' =>$response ,
             'user_id' => $id,
+            'project_id'=>$project
         ]);
         if ($request->response == env('membreApprouver')) {
             $this->getOwner($id, 'approuved_member_to_project');
@@ -54,4 +59,5 @@ class Approuving extends Controller
 
         return redirect()->back()->with('Validation avec success');
     }
+
 }
