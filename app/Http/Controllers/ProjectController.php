@@ -279,12 +279,12 @@ class ProjectController extends Controller
             $this->addStaff($owner, $project, 'projectOwner');
             SendSmsController::to_projectOwner("0844297349");
 
-            SendMailController::to_projectOwner($owner->email,$project);
+            SendMailController::to_projectOwner($owner->email, $project);
 
             // ajout et notification du deuxieme membre qui est  le sponsor du projet
             $this->addStaff($sponsor, $project, 'sponsor');
             SendSmsController::to_sponsor("0844297349");
-            SendMailController::to_projectOwner($sponsor->email,$project);
+            SendMailController::to_projectOwner($sponsor->email, $project);
 
 
 
@@ -338,7 +338,7 @@ class ProjectController extends Controller
 
             // return redirect()->route('projects.show', $project->id)->with('score');
         } catch (\Throwable $th) {
-            return $th;
+            // return $th;
             Log::error($th->getMessage());
             return redirect()->back()->withErrors(['projet' => 'Echec de création du projet']);
         }
@@ -531,6 +531,7 @@ class ProjectController extends Controller
 
             return redirect()->route('projects.show', $id)->with('score');
         } catch (\Throwable $th) {
+            Log::error($th->getMessage());
             return redirect()->back()->withErrors(['projet' => 'Echec de modification du projet']);
         }
     }
@@ -540,56 +541,68 @@ class ProjectController extends Controller
     public function telechargerProjet($id)
     {
         // dd($id);
-        $project = Project::findOrFail($id);
-        $name = substr(str_replace([' ', "'"], '', $project->name), 0, 10);
-        $repertoire = storage_path('app\projets\\' . $project->id);
-        // dd($repertoire);
-        $nomFichierZip = $name . 'EasyTTM.zip';
-        $cheminFichierZip =  storage_path($nomFichierZip);
-        // dd($cheminFichierZip);
+        try {
+            $project = Project::findOrFail($id);
+            $name = substr(str_replace([' ', "'"], '', $project->name), 0, 10);
+            $repertoire = storage_path('app/projets/' . $project->id);
+            // dd($repertoire);
+            $nomFichierZip = $name . 'EasyTTM.zip';
+            $cheminFichierZip =  storage_path($nomFichierZip);
+            // dd($cheminFichierZip);
 
-        // Créer une instance de la classe ZipArchive
-        $zip = new ZipArchive();
+            // Créer une instance de la classe ZipArchive
+            $zip = new ZipArchive();
 
-        // Ouvrir le fichier ZIP en mode création
-        if ($zip->open($cheminFichierZip, ZipArchive::CREATE | ZipArchive::OVERWRITE) === true) {
-            // Récupérer la liste des fichiers et dossiers dans le répertoire "storage"
-            $elements = new RecursiveIteratorIterator(
-                new RecursiveDirectoryIterator($repertoire, RecursiveDirectoryIterator::SKIP_DOTS),
-                RecursiveIteratorIterator::SELF_FIRST
-            );
-            // Parcourir les fichiers et dossiers et les ajouter au fichier ZIP
-            foreach ($elements as $element) {
-                if ($element->isFile()) {
-                    $chemin = $element->getPathName();
-
-                    $nom = $element->getBasename();
-                    // dd($element->getPath());
-                    $zip->addFile($chemin, $nom);
-                } elseif ($element->isDir()) {
-                    $chemin = $element->getPath();
-                    $nom = $element->getBasename();
-                    $zip->addEmptyDir($nom);
-                    // dd($chemin);
+            // Ouvrir le fichier ZIP en mode création
+            if ($zip->open($cheminFichierZip, ZipArchive::CREATE | ZipArchive::OVERWRITE) === true) {
+                // Récupérer la liste des fichiers et dossiers dans le répertoire "storage"
+                $elements = new RecursiveIteratorIterator(
+                    new RecursiveDirectoryIterator($repertoire, RecursiveDirectoryIterator::SKIP_DOTS),
+                    RecursiveIteratorIterator::SELF_FIRST
+                );
+                foreach ($elements as $file) {
+                    if ($file->isDir()) {
+                        $filePath = $file->getRealPath();
+                        $relativePath = $file->getRealPath();
+                        $zip->addFile($filePath, $relativePath);
+                    }
                 }
-            }
+                // Parcourir les fichiers et dossiers et les ajouter au fichier ZIP
+                // foreach ($elements as $element) {
+                //     if ($element->isFile()) {
+                //         $chemin = $element->getPathName();
 
-            // Fermer le fichier ZIP
-            $zip->close();
+                //         $nom = $element->getBasename();
+                //         // dd($element->getPath());
+                //         $zip->addFile($chemin, $nom);
+                //     } elseif ($element->isDir()) {
+                //         $chemin = $element->getPath();
+                //         $nom = $element->getBasename();
+                //         $zip->addEmptyDir($nom);
+                //         // dd($chemin);
+                //     }
+                // }
+
+                // Fermer le fichier ZIP
+                $zip->close();
 
 
-            // Obtenir le contenu du fichier ZIP
-            // Vérifier si le fichier ZIP a bien été créé
-            if (file_exists($cheminFichierZip)) {
-                // Retourner le fichier ZIP en tant que téléchargement
-                return response()->download($cheminFichierZip, $nomFichierZip)->deleteFileAfterSend(true);
+                // Obtenir le contenu du fichier ZIP
+                // Vérifier si le fichier ZIP a bien été créé
+                if (file_exists($cheminFichierZip)) {
+                    // Retourner le fichier ZIP en tant que téléchargement
+                    return response()->download($cheminFichierZip, $nomFichierZip)->deleteFileAfterSend(true);
+                } else {
+                    // En cas d'erreur lors de la création du fichier ZIP
+                    return response('Erreur lors de la création du fichier ZIP', 500);
+                }
             } else {
-                // En cas d'erreur lors de la création du fichier ZIP
-                return response('Erreur lors de la création du fichier ZIP', 500);
+                // En cas d'erreur lors de l'ouverture du fichier ZIP
+                return response('Erreur lors de l\'ouverture du fichier ZIP', 500);
             }
-        } else {
-            // En cas d'erreur lors de l'ouverture du fichier ZIP
-            return response('Erreur lors de l\'ouverture du fichier ZIP', 500);
+        } catch (\Throwable $th) {
+            Log::error($th->getMessage());
+            return redirect()->back()->with(['projet' => 'Echec de téléchargement du projet']);
         }
     }
 
