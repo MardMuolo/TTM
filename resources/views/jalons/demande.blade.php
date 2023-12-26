@@ -101,11 +101,12 @@
                                                     @endphp
                                                     @foreach (Auth()->user()->roles as $role)
                                                         @if (
-                                                            $role->name == env('Directeur') || ($is_member->status == env('membreApprouver') and $is_member->role == 'Validateur'))
+                                                            $role->name == env('Directeur') ||
+                                                                ($is_member->status == env('membreApprouver') and $is_member->role == 'Validateur'))
                                                             @php
                                                                 $id = Crypt::encrypt($livrable->id);
                                                             @endphp
-                                                            <a class="btn btn-secondary btn-sm" title="validation"
+                                                            <a class="btn btn-secondary btn-sm @if($livrable->status !=env('livrableEnAttente')) disabled @endif" title="validation"
                                                                 href="{{ route('valider_livrable', $id) }}"
                                                                 onclick="edit(event)" item = "{{ $livrable->nom }}"
                                                                 description="{{ $livrable->description }}"
