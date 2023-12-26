@@ -111,6 +111,7 @@ class HomeController extends Controller
         $projetSoumis = Project::where('status', env('projetSoumis'))->get()->count();
         $projetEncours = Project::where('status', env('projetenCours'))->get()->count();
         $projetFinis = Project::where('status', env('projetTerminer'))->get()->count();
+        // dd($projetFinis);
         $projets = Project::all()->count();
         // // $livrables=
 
@@ -206,6 +207,7 @@ class HomeController extends Controller
                 'directions',
                 'users',
                 'projetsEncours',
+                'projetFinis',
                 'projetsPrec',
                 'annee',
                 'annePrec'
