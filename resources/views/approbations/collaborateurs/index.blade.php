@@ -41,8 +41,8 @@
                                     $id=Crypt::encrypt($user->id);
                                 @endphp
                                 @access('update', 'ProjectUser')
-                                <a class="btn btn-light btn-sm" href="{{ route('profile',$id) }}"
-                                title="voir"><i class="fas fa-eye"></i></a>
+                                <!--<a class="btn btn-light btn-sm" href="{{ route('profile',$id) }}"-->
+                                <!--title="voir"><i class="fas fa-eye"></i></a>-->
 
                                     <a class="btn btn-light text-danger btn-sm {{$user->status!=env('membreEnAttente')?'disabled':''}}" data-toggle="modal"
                                         data-target="#modal-default-{{ $user->id }}"><i class="fas fa-user-times"></i></a>
