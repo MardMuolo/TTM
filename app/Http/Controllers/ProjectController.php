@@ -47,7 +47,7 @@ class ProjectController extends Controller
     public function index(Request $request)
     {
         $filter = $request->filter ?? null;
-        if (isset(Auth()->user()->direction_user->is_director)) {
+        if (!isset(Auth()->user()->direction_user->is_director)) {
             $projects = Project::isDirector();
         } else {
             // Variable project: nous permet de recuperer tous les projets selon le rôle de l'utilisateur connecté
