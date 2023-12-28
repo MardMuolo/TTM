@@ -289,7 +289,7 @@
                                 <tr>
                                     <td>{{ $i + 1 }}</td>
                                     <td>{{ $projet->name }}</td>
-                                    <td>{{ $projetEncours }}</td>
+                                    <td>{{ $projet->nb_projet }}</td>
                                     <td>{{ $projetFinis }}</td>
                                     <td>{{ $projet->nb_projet }}</td>
                                 </tr>
