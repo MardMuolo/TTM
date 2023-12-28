@@ -55,49 +55,75 @@
 <script src="{{ Vite::asset('node_modules/admin-lte/plugins/select2/js/select2.full.min.js') }}"></script>
 @vite('node_modules/admin-lte/plugins/select2/css/select2.min.css')
 
-<script>
+<script type="module">
     $(document).ready(function() {
-
+        // $('[data-mask]').inputmask()
         $.ajax({
-            url: 'http://10.143.41.70:8000/promo2/odcapi/?method=getUsers',
+            url: '{{ route('getUsers') }}',
+            type: 'Get',
             dataType: 'json',
             success: function(response) {
+                console.log(response)
 
-                if (response.success) {
-                    var data = response.users;
+                if (response.status === 'success') {
+                    var data = response.body;
+                    console.log(data)
 
                     var formattedData = data.map(function(user) {
                         return {
                             id: user.id,
                             username: user.username,
-                            text: user.last_name + " " + user.first_name,
+                            text: user.name,
                             email: user.email,
                             phone: user.phone,
-                            first_name: user.first_name,
-                            last_name: user.last_name,
+
                         };
                     });
 
                     // Initialiser le champ de sélection avec les options
-                    $('#user2').select2({
+                    $('#user').select2({
                         data: formattedData,
                         minimumInputLength: 1
                     });
 
+                    $('#manager').select2({
+                        data: formattedData,
+                        minimumInputLength: 1
+                    });
+
+
                     // Événement de sélection d'utilisateur
-                    $('#user2').on('select2:select', function(e) {
+                    $('#user').on('select2:select', function(e) {
                         var selectedUser = e.params.data;
+                        console.log(`name ${selectedUser.text}`)
 
                         // Mettre à jour la valeur de l'input "Email" avec l'e-mail de l'utilisateur sélectionné
-                        $('#user2').val(selectedUser.email);
-                        // $('#username').val(selectedUser.username);
-                        $('#inputEmail2').val(selectedUser.email);
-                        // $('#inputTel').val(selectedUser.phone);
+                        // $('#user').val(selectedUser.username);
+                        $('#sponsor_username').val(selectedUser.username);
+                        $('#sponsor_Email').val(selectedUser.email);
+                        $('#sponsor_name').val(selectedUser.text);
+                        $('#sponsor_phone_number').val(selectedUser.phone);
 
                         // var fullName = selectedUser.first_name + ' ' + selectedUser
                         //     .last_name;
                         // $('#name').val(fullName);
                     });
+
+                    // Événement de sélection d'utilisateur
+                    $('#manager').on('select2:select', function(e) {
+                        var selectedUser = e.params.data;
+                        // Mettre à jour la valeur de l'input "Email" avec l'e-mail de l'utilisateur sélectionné
+                        // $('#user').val(selectedUser.username);
+                        $('#username_manager').val(selectedUser.username);
+                        $('#inputEmail_manager').val(selectedUser.email);
+                        $('#name_manager').val(selectedUser.text);
+                        $('#phone_number_manager').val(selectedUser.phone);
+
+                        // var fullName = selectedUser.first_name + ' ' + selectedUser
+                        //     .last_name;
+                        // $('#name').val(name);
+                    });
+
                 } else {
                     console.log('Erreur: ' + response.message);
                 }
@@ -106,5 +132,23 @@
                 console.log('Erreur AJAX: ' + error);
             }
         });
+
+
+
     });
+   
+
+    function supprimer(event) {
+        event.preventDefault();
+        a = event.target.closest('a');
+
+        let deleteForm = document.getElementById('deleteForm');
+        deleteForm.setAttribute('action', a.getAttribute('href'));
+
+        let textDelete = document.getElementById('textDelete');
+        textDelete.innerHTML = a.getAttribute('item') + " ?";
+
+        let titleDelete = document.getElementById('titleDelete');
+        titleDelete.innerHTML = "Suppression";
+    }
 </script>
