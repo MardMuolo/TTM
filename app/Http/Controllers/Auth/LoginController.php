@@ -134,7 +134,7 @@ class LoginController extends Controller
                     if ($is_onWriteList) {
 
                         $this->guard()->login($localUser);
-                        if ($localUser->line_manager && $localUser->direction_user != nul) {
+                        if ($localUser->line_manager && $localUser->direction_user != null) {
                             // dd($localUser);
                             return redirect()->route('projects.index');
                         }else{
