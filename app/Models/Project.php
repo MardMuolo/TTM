@@ -63,8 +63,7 @@ class Project extends Model
     }
 
     public static function isDirector(){
-        if(isset(Auth()->user()->direction_user)){
-            $projects = Project::join('project_users', 'projects.id', '=', 'project_users.project_id')
+        $projects = Project::join('project_users', 'projects.id', '=', 'project_users.project_id')
         ->join('users', 'project_users.user_id', '=', 'users.id')
         ->join('direction_users', 'users.id', '=', 'direction_users.user_id')
         ->where('direction_users.direction_id', Auth()->user()->direction_user->direction->id) // Remplacez $directionXId par l'ID de la direction spécifique
@@ -73,7 +72,6 @@ class Project extends Model
         ->with('optionsJalons')
         ->get();
         return $projects;
-        }
     }
 
     // Méthode get: permet d'afficher les projects selon les roles de l'utilisateur connecté
@@ -81,7 +79,7 @@ class Project extends Model
     {
         $user = auth()->user();
         if ($status) {
-            $project = Project::with('users', 'optionsJalons')->get();
+            $project = Project::with('users', 'optionsJalons')->get()->unique('id');
         } else {
             $project = $user->projects()->with('users', 'optionsJalons')->get()->unique('id');
         }
