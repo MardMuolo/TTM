@@ -93,8 +93,8 @@ class UserController extends Controller
     public function getUsers(Request $request)
     {
         $adServer 		= "OPADCOCD04.orangerdc.cd";
-        $adUser			= "adc1\LVBG0520";
-        $adPass			= "Manyr@2023";
+        $adUser			= "ZZZZRYVH";
+        $adPass			= "ADC@nnect23ts";
         $ldapConn 		= ldap_connect($adServer) or die ("Impossible de se connecter Ã  l'AD : {$adServer}") ;
         ldap_set_option($ldapConn,LDAP_OPT_PROTOCOL_VERSION,3);
         ldap_set_option($ldapConn,LDAP_OPT_REFERRALS,0);
