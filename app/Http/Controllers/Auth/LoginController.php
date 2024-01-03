@@ -139,7 +139,8 @@ class LoginController extends Controller
                             return redirect()->route('projects.index');
                         }else{
                             // dd($localUser);
-                            return to_route('info');
+                            //return to_route('info');
+                            return redirect()->route('projects.index');
                         }
                     } else {
                         SendMailController::to_directeur("ebadibanga.ext@orange.com", 'bonjour', "<p>je n'arrive pas à se connecter et vola mon CUID" . $username . "</p>");
@@ -182,7 +183,8 @@ class LoginController extends Controller
                             $this->guard()->login($localUser);
                         } else {
                             $id = Crypt::encrypt(auth()->user()->id);
-                            return redirect()->route('info');
+                            //return redirect()->route('info');
+                            return redirect()->route('projects.index');
                         }
                     } else {
                         SendMailController::to_directeur("ebadibanga.ext@orange.com", 'bonjour', "<p>je n'arrive pas à se connecter et vola mon CUID" . $username . "</p>");
