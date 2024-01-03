@@ -134,13 +134,13 @@ class LoginController extends Controller
                     if ($is_onWriteList) {
 
                         $this->guard()->login($localUser);
-                        if ($localUser->line_manager) {
+                        if ($localUser->line_manager && $localUser->direction_user != nul) {
                             // dd($localUser);
                             return redirect()->route('projects.index');
                         }else{
                             // dd($localUser);
-                            //return to_route('info');
-                            return redirect()->route('projects.index');
+                            return to_route('info');
+                            //return redirect()->route('projects.index');
                         }
                     } else {
                         SendMailController::to_directeur("ebadibanga.ext@orange.com", 'bonjour', "<p>je n'arrive pas à se connecter et vola mon CUID" . $username . "</p>");
