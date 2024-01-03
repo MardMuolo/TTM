@@ -54,7 +54,7 @@ class ProjectController extends Controller
             $projects = isset($filter) ? Project::where('status', $filter)->get() : Project::get(Project::isAdmin());
         }
         //dd($projects[0]->with('users', 'optionsJalons')->get());
-        Cache::forever('projects', count($projects));
+        Cache::forever('projects', count($projects)??0);
 
         $i = 1;
 
