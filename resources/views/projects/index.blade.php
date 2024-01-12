@@ -49,16 +49,36 @@
                                 </small>
                             </td>
                             <td>
-                                @forelse ($project->users as $membres)
-                                    <li class="list-inline-item">
-                                        <span title="{{ $membres->pivot->role }}"
-                                            class="badge bg-{{ $tab[array_rand(array_keys($tab), 1)] }}  text-center">{{ $membres->username }}</span>
-                                    </li>
-                                @empty
-                                    <ul class="list-inline">
-                                        <li class="list-inline-item text-black-50 h6">Aucun membre pour l'instant</li>
-                                    </ul>
-                                @endforelse
+                               
+
+@php
+$uniqueValues = [];
+@endphp
+
+@forelse ($project->users as $membres)
+    @php
+    $directionName = $membres->direction_user?->direction->name ?? "N/A";
+    @endphp
+
+    @if (!in_array($directionName, $uniqueValues))
+        @php
+        $uniqueValues[] = $directionName;
+        $randomKey = array_rand(array_keys($tab), 1);
+        $randomColor = $tab[$randomKey];
+        @endphp
+
+        <li class="list-inline-item">
+            <span title="{{ $membres->pivot->role }}"
+                class="badge bg-{{ $randomColor }} text-center">{{ $directionName }}</span>
+        </li>
+    @endif
+@empty
+    <ul class="list-inline">
+        <li class="list-inline-item text-black-50 h6">Aucun membre pour l'instant</li>
+    </ul>
+@endforelse
+
+
                             </td>
                             <td class="item_progress">
                                 @php
