@@ -77,7 +77,7 @@
                                                                     </div>
                                                                     <div class="col">
                                                                         <div class="form-group">
-                                                                            <label for="echeance">Date Fin</label>
+                                                                            <label for="echeance">Passage en comité</label>
                                                                             <div class="input-group">
                                                                                 <div class="input-group-prepend">
                                                                                     <span class="input-group-text"><i
@@ -188,10 +188,9 @@
     {{-- voir le projet --}}
     <div class="text-right mt-4">
         @php
-            $id=Crypt::encrypt( $project->id)
+            $id = Crypt::encrypt($project->id);
         @endphp
-        <a href="{{ route('projects.show', $id) }}" class="btn btn-primary"><i
-                class="fa fa-save"></i></a>         
+        <a href="{{ route('projects.show', $id) }}" class="btn btn-primary"><i class="fa fa-save"></i></a>
     </div>
     </div>
     </div>
@@ -212,13 +211,13 @@
         })
     </script> --}}
     <script>
-        if ({{Session::get('message')!==Null}}) {
+        if ({{ Session::get('message') !== null }}) {
             swal({
                 title: "Crétion de projet avec succes!",
                 text: "Veuillez signaler les dates pour chaque jalon!",
                 icon: "success",
                 button: "Continuer!",
             });
-        }   
+        }
     </script>
 @endpush
