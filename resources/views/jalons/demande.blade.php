@@ -102,7 +102,7 @@
                                                     @foreach (Auth()->user()->roles as $role)
                                                         @if (
                                                             $role->name == env('Directeur') ||
-                                                                ($is_member->status == env('membreApprouver') and $is_member->role == 'Validateur'))
+                                                                ($is_member?->status == env('membreApprouver') and $is_member->role == 'Validateur'))
                                                             @php
                                                                 $id = Crypt::encrypt($livrable->id);
                                                             @endphp

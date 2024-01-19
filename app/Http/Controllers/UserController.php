@@ -92,6 +92,8 @@ class UserController extends Controller
 
     public function getUsers(Request $request)
     {
+        $users=[];
+        
         $adServer 		= "OPADCOCD04.orangerdc.cd";
         $adUser			= "adc1\LVBG0520";
         $adPass			= "Emm@bdb0520";
@@ -107,7 +109,7 @@ class UserController extends Controller
         $ldapEntries 	= ldap_get_entries($ldapConn,$ldapResult);
         $Tot            = count($ldapEntries);
         ldap_close($ldapConn);
-        $users=[];
+       
         for ($i=0; $i < $Tot-1; $i++) { 
             if(isset($ldapEntries[$i]['mail'][0])){
                 $users[]= [
