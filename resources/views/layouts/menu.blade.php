@@ -26,7 +26,7 @@
 
 @access('delete', 'Project')
     <li class="nav-item">
-        <a href="{{ route('rapport.index') }}" class="nav-link {{ Request::is('reporting') ? 'bg-orange' : '' }}">
+        <a href="{{ route('rapport.index') }}" class="nav-link {{ Request::is('rapport') ? 'bg-orange' : '' }}">
             <i class="nav-icon fa fa-table"></i>
             <p>Rapports</p>
         </a>
