@@ -6,6 +6,7 @@ use App\Http\Controllers\Approuving;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Request;
 use App\Http\Controllers\DemandeJalonController;
+use App\Http\Controllers\ApprobationCollaboController;
 
 Route::middleware(['auth'])->group(function () {
     Route::resource('projects', App\Http\Controllers\ProjectController::class);
@@ -29,10 +30,15 @@ Route::middleware(['auth'])->group(function () {
     });
     Route::resource('contributeur', App\Http\Controllers\ProjectUserController::class);
     Route::resource('approuving', Approuving::class);
-    Route::resource('approbationCollaborateur', App\Http\Controllers\ApprobationCollaboController::class);
+    // Route::resource('approbationCollaborateur', ApprobationCollaboController::class);
     Route::resource('approbationLivrable', App\Http\Controllers\ApprobationLivrableController::class);
     Route::get('projets/dates/{project}', [App\Http\Controllers\ProjectController::class, 'addDates'])->name('projects.dates');
     Route::get('project', [App\Http\Controllers\ProjectController::class, 'getProjectToRepport'])->name('projectReporting');
     Route::get('/telecharger-projet/{project}', [App\Http\Controllers\ProjectController::class,'telechargerProjet'])->name('telecharger');
+
+
+
+    Route::resource('archivage',App\Http\Controllers\AchivageController::class);
+
     Route::get('/getUser', [App\Http\Controllers\UserController::class,'getUsers'])->name('getUsers');
 });
