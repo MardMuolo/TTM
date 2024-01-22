@@ -146,7 +146,6 @@ class JalonController extends Controller
         $project = Crypt::decrypt($project);
         $project = Project::findOrFail($project);
 
-        // $allContributeur = Http::get('http://10.143.41.70:8000/promo2/odcapi/?method=getUsers');
         $allContributeurs = User::all();
         $categoryDemandes = CategoryDemande::all();
         $projetOptionJalon = ProjectOptionttmJalon::where("jalon_id", $jalon->id)
@@ -235,9 +234,9 @@ class JalonController extends Controller
             }
 
             // Mise à jour du statut du projet
-            $project->update([
-                'status' => env('projetenCours'),
-            ]);
+            // $project->update([
+            //     'status' => env('projetenCours'),
+            // ]);
 
             // Redirection vers la page précédente
             return redirect()->back()->with('dateJalon', "Date de jalo fixée avec success");
@@ -312,8 +311,10 @@ class JalonController extends Controller
 
                     foreach ($projectOptionttmJalons as $NextprojectOptionttmJalons) {
                         // Mise à jour des dates de début et d'échéance des jalons suivants en ajoutant la différence de jours
-                        $nouvelleDateDebut = Carbon::parse($NextprojectOptionttmJalons->debutDate)->addDays($joursDeDifference);
-                        $nouvelleDateEcheance = Carbon::parse($NextprojectOptionttmJalons->echeance)->addDays($joursDeDifference);
+                        $nouvelleDateDebut = Carbon::parse($NextprojectOptionttmJalons->debutDate)
+                            ->addDays($joursDeDifference);
+                        $nouvelleDateEcheance = Carbon::parse($NextprojectOptionttmJalons->echeance)
+                            ->addDays($joursDeDifference);
 
                         $NextprojectOptionttmJalons->debutDate = $nouvelleDateDebut;
                         $NextprojectOptionttmJalons->echeance = $nouvelleDateEcheance;
@@ -325,16 +326,26 @@ class JalonController extends Controller
             }
 
             // Redirection vers la route appropriée après la mise à jour de la date
-            return redirect()->route('jalons.single', ['jalon' => Crypt::encrypt($jalon->id), 'option_ttm' => Crypt::encrypt($option_ttm->id), 'project' => Crypt::encrypt($project->id)]);
+            return redirect()->route(
+                'jalons.single',
+                [
+                    'jalon' => Crypt::encrypt($jalon->id),
+                    'option_ttm' => Crypt::encrypt($option_ttm->id),
+                    'project' => Crypt::encrypt($project->id)
+                ]
+            );
         }
 
         // Redirection vers la route appropriée si aucun ProjectOptionttmJalon n'a été trouvé
-        return redirect()->route('jalons.single', ['jalon' => Crypt::encrypt($jalon->id), 'option_ttm' => Crypt::encrypt($option_ttm->id), 'project' => Crypt::encrypt($project->id)]);
+        return redirect()->route('jalons.single', [
+            'jalon' => Crypt::encrypt($jalon->id),
+            'option_ttm' => Crypt::encrypt($option_ttm->id), 'project' => Crypt::encrypt($project->id)
+        ]);
     }
 
     public function updateStatus(Request $request, $jalon, $option_ttm, $project)
     {
-        
+
 
         // dd($request->status);
         //Decryptage des Url
@@ -345,38 +356,47 @@ class JalonController extends Controller
         $project = Project::findOrFail($project_id);
         // $is_comite=$request->comite==true;
         // dd($request->dateEffective);
-        $dateEffective=$request->dateEffective;
+        $dateEffective = $request->dateEffective;
 
-        $folder_name = $project->id ;
-        $folder_jalon_name = $jalon ;
+        $folder_name = $project->id;
+        $folder_jalon_name = $jalon;
         $projectOptionttmJalon = ProjectOptionttmJalon::where('jalon_id', $jalon)
             ->where('option_ttm_id', $option_ttm)
             ->where('project_id', $project->id)
             ->first();
-            if ($request->hasFile('jalonPv')) {
-                $jalonPvFile = $request->file('jalonPv');
-                $jalonPvFileName = substr(str_replace([' ', "'"], '', $jalonPvFile->getClientOriginalName()), 0, 6) . date('ymdhis') . '.' . $jalonPvFile->extension();
-                $jalonPvFile->storeAs('storage/projets/' . $folder_name.'/'.$folder_jalon_name.'/PV', $jalonPvFileName);
-                // $jalonPvFile->storeAs($destinationPath, $jalonPvFileName, 'public');
 
-                // Enregistrement du nom du fichier dans la base de données
+        if ($request->hasFile('jalonPv')) {
+            $jalonPvFile = $request->file('jalonPv');
+            $jalonPvFileName = substr(str_replace([' ', "'"], '', $jalonPvFile->getClientOriginalName()), 0, 6) . date('ymdhis') . '.' . $jalonPvFile->extension();
+            $jalonPvFile->storeAs('storage/projets/' . $folder_name . '/' . $folder_jalon_name . '/PV', $jalonPvFileName);
+            // $jalonPvFile->storeAs($destinationPath, $jalonPvFileName, 'public');
 
-                if ($projectOptionttmJalon) {
+            // Enregistrement du nom du fichier dans la base de données
 
-                    //signaler si un projet est passé en comité
-                    //dd($request->comite);
-                    $projectOptionttmJalon->status = env('jalonCloturer');
-                    $projectOptionttmJalon->jalonPv = $jalonPvFileName;
-                    $projectOptionttmJalon->echeance = $dateEffective;
-                    // $projectOptionttmJalon->is_comite = $is_comite;
-                    $projectOptionttmJalon->save();
-                    activity()
-                        ->causedBy(auth()->user()->id)
-                        ->performedOn($project)
-                        ->event('endTask')
-                        ->log(auth()->user()->name . ' a déclaré le jalon ' . $jalon . ' comme cloturé');
+            if ($projectOptionttmJalon) {
+
+                //signaler si un projet est passé en comité
+                //dd($request->comite);
+                $projectOptionttmJalon->status = env('jalonCloturer');
+                if (($jalon->designation == "T0" && $project->optionttm->first()->nom=="Fast Track")||$jalon->designation == "T1" && $project->optionttm->first()->nom=="full Track") {
+                    $project->status=env('projetenCours');
+                    $project->save();
                 }
+                if($jalon->designation == "T3"){
+                    $project->status=env('projetCloturer');
+                    $project->save();
+                }
+                $projectOptionttmJalon->jalonPv = $jalonPvFileName;
+                $projectOptionttmJalon->echeance = $dateEffective;
+                // $projectOptionttmJalon->is_comite = $is_comite;
+                $projectOptionttmJalon->save();
+                activity()
+                    ->causedBy(auth()->user()->id)
+                    ->performedOn($project)
+                    ->event('endTask')
+                    ->log(auth()->user()->name . ' a déclaré le jalon ' . $jalon . ' comme cloturé');
             }
+        }
 
 
 
@@ -384,7 +404,6 @@ class JalonController extends Controller
     }
     public function passageComite(Request $request)
     {
-
     }
 
     /**
