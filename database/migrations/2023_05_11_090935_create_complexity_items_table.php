@@ -1,8 +1,9 @@
 <?php
 
-use Illuminate\Database\Migrations\Migration;
-use Illuminate\Database\Schema\Blueprint;
+use App\Models\ComplexityItem;
 use Illuminate\Support\Facades\Schema;
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Database\Migrations\Migration;
 
 return new class extends Migration
 {
@@ -18,6 +19,26 @@ return new class extends Migration
             $table->timestamps();
             $table->softDeletes();
         });
+
+        $items=[
+            'Terminaux',
+            'Réseaux',
+            'Platformes',
+            'Process Metiers & Si',
+            'Technologies',
+            'Canaux de distribution',
+            'Organisation',
+            'Integration',
+            'Reglementation',
+            'International',
+            'Partenaires',
+            'Contenus'
+        ];
+        foreach ($items as $item) {
+            ComplexityItem::create([
+                'name'=>$item
+            ]);
+        }
     }
 
     /**

@@ -1,8 +1,11 @@
 <?php
 
-use Illuminate\Database\Migrations\Migration;
-use Illuminate\Database\Schema\Blueprint;
+use App\Models\Jalon;
+use App\Models\Demande;
+use App\Models\CategoryDemande;
 use Illuminate\Support\Facades\Schema;
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Database\Migrations\Migration;
 
 return new class() extends Migration {
     /**
@@ -18,6 +21,26 @@ return new class() extends Migration {
             $table->timestamps();
             $table->softDeletes();
         });
+
+        $csvData = fopen(public_path('demandes.csv'), 'r');
+        $transRow = true;
+
+        while (($data = fgetcsv($csvData, 555, ';')) !== false) {
+            if (!$transRow && count($data) >= 3) {
+                $jalon = Jalon::where('id', $data[2])->first();
+                $category_demande = CategoryDemande::where('id', $data[1])->first();
+
+                if ($jalon && $category_demande) {
+                    $demande = new Demande();
+                    $demande->title = $data[0];
+                    $demande->jalon_id = $jalon->id;
+                    $demande->category_demande_id = $category_demande->id;
+                    $demande->save();
+                }
+            }
+            $transRow = false;
+        }
+        fclose($csvData);
     }
 
     /**

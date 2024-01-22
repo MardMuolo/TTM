@@ -1,8 +1,9 @@
 <?php
 
-use Illuminate\Database\Migrations\Migration;
-use Illuminate\Database\Schema\Blueprint;
+use App\Models\Role;
 use Illuminate\Support\Facades\Schema;
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Database\Migrations\Migration;
 
 return new class() extends Migration {
     /**
@@ -16,6 +17,13 @@ return new class() extends Migration {
             $table->timestamps();
             $table->softDeletes();
         });
+
+        $roles = [env('TtmOfficer'),env('Directeur'),env('AdminSys'),env('Pm'),env('User'), env('RootAdmin')];
+        foreach($roles as $role){
+            Role::create([
+                'name'=>$role
+            ]);
+        }
     }
 
     /**

@@ -1,8 +1,10 @@
 <?php
 
-use Illuminate\Database\Migrations\Migration;
-use Illuminate\Database\Schema\Blueprint;
+use App\Models\Role;
+use App\Models\User;
 use Illuminate\Support\Facades\Schema;
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Database\Migrations\Migration;
 
 return new class() extends Migration {
     /**
@@ -14,6 +16,13 @@ return new class() extends Migration {
             $table->foreignId('role_id')->onDelete('cascade');
             $table->foreignId('user_id')->onDelete('cascade');
         });
+
+        $role = Role::where('name', env('RootAdmin'))->first();
+        $admin = User::where('username', env('RootAdmin'))->first();
+
+        // Affect admin role to admin default user
+        $admin->roles()->sync($role->id);
+        $admin->save();
     }
 
     /**

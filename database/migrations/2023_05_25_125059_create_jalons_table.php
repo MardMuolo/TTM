@@ -1,8 +1,9 @@
 <?php
 
-use Illuminate\Database\Migrations\Migration;
-use Illuminate\Database\Schema\Blueprint;
+use App\Models\Jalon;
 use Illuminate\Support\Facades\Schema;
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Database\Migrations\Migration;
 
 return new class extends Migration
 {
@@ -17,6 +18,13 @@ return new class extends Migration
             $table->softDeletes();
             $table->timestamps();
         });
+
+        Jalon::create(['designation' => 'T-1']);
+        Jalon::create(['designation' => 'T0']);
+        Jalon::create(['designation' => 'T1']);
+        Jalon::create(['designation' => 'T2']);
+        Jalon::create(['designation' => 'T3']);
+        Jalon::create(['designation' => 'T4']);
     }
 
     /**

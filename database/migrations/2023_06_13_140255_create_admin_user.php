@@ -13,25 +13,22 @@ return new class() extends Migration {
     public function up()
     {
         // Création du rôle 'admin'
-        DB::table('roles')->insert([
-            'name' => 'admin',
-        ]);
 
         // Création de l'utilisateur admin
-        $admin = DB::table('users')->insertGetId([
-            'name' => 'rootadmin',
-            'email' => 'admin@example.com',
-            'username' => 'rootadmin',
-            'phone_number' => '0844297349',
-            'password' => Hash::make('password'),
-        ]);
+        // $admin = DB::table('users')->insertGetId([
+        //     'name' => env('RootAdmin'),
+        //     'email' => 'admin@example.com',
+        //     'username' => env('RootAdmin'),
+        //     'phone_number' => '0840000000',
+        //     'password' => Hash::make(env('ADMIN_PASS')),
+        // ]);
 
-        // Ajout du rôle 'admin' à l'utilisateur admin
-        $role = Role::where('name', 'admin')->first();
-        if ($role) {
-            $user = User::find($admin);
-            $user->roles()->attach($role);
-        }
+        // // Ajout du rôle 'admin' à l'utilisateur admin
+        // $role = Role::where('name', env('RootAdmin'))->first();
+        // if ($role) {
+        //     $user = User::find($admin);
+        //     $user->roles()->attach($role);
+        // }
     }
 
     /**
