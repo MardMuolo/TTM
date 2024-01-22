@@ -42,7 +42,8 @@
                                 <select class="form-control select2 col-sm-10" style="width: 100%;"
                                     aria-placeholder="nom du contributeur" name="contributeur" id="contributeur">
                                     <option></option>
-                                    <input hidden type="hidden" class="form-control hidden" name="username" id="contributeur_username">
+                                    <input hidden type="hidden" class="form-control hidden" name="username"
+                                        id="contributeur_username">
                                     <input hidden type="hidden" class="form-control hidden" name="phone_number"
                                         id="contributeur_phone_number">
                                     <input hidden type="email" class="form-control hidden" id="contributeur_Email"
@@ -105,7 +106,7 @@
                                 <div class="form-group">
                                     <label for="category" class="col-sm-12 col-form-label text-black">Catégorie <span
                                             class="text-danger">*</span></label>
-                                            <span id="text_categorie" class="text-sencandary px-4"></span>
+                                    <span id="text_categorie" class="text-sencandary px-4"></span>
                                     <select name="category" id="category" class="form-control" style="width: 100%;"
                                         required>
                                         <option value="">Sélectionnez une catégorie</option>
@@ -121,9 +122,9 @@
                                 <div class="form-group">
                                     <label for="demande" class="col-sm-12 col-form-label text-black">Demande <span
                                             class="text-danger">*</span></label>
-                                            <span id="text_demande" class="text-sencandary px-4"></span>
-                                    <select name="demande" id="demande" class="form-control" style="width: 100%;"
-                                        required>
+                                    <span id="text_demande" class="text-sencandary px-4"></span>
+                                    <select name="demande[]" id="demande" class="form-control" style="width: 100%;"
+                                        multiple required>
                                         <option value="" class="item">Sélectionnez une demande</option>
                                         @foreach ($allDemandes as $oneDemande)
                                             <option class="item_demande" value="{{ $oneDemande->id }}"
@@ -145,7 +146,7 @@
                                 <label for="exampleInputFile" class="col-sm-12 col-form-label text-black">Model</label>
                                 <span id="text_model" class="text-sencandary px-4"></span>
                                 <div class="custom-file">
-                                    <input type="file" class="form-control" id="model" name="file">
+                                    <input type="file" class="form-control" id="model" name="file[]" multiple>
                                 </div>
 
                             </div>
@@ -268,11 +269,11 @@
                 $('#text_demande').text('N/A')
                 $('#text_categorie').text('N/A')
                 console.log("ok")
-            }else{
+            } else {
                 $('#demande').css("display", "initial").attr('required')
                 $('#category').css("display", "initial").attr('required')
                 $('#deadLine').css("display", "initial").attr('required')
-                $('#delais').css("display", "initial").css("padding-bottom","7px").attr('required')
+                $('#delais').css("display", "initial").css("padding-bottom", "7px").attr('required')
                 $('#model').css("display", "initial").attr('required')
                 $('#text_model').text('')
                 $('#text_demande').text('')
@@ -328,7 +329,7 @@
                             $('#contributeur_name').val(selectedUser.text);
                             $('#contributeur_phone_number').val(selectedUser.phone);
 
-                          
+
                         });
                         $('#manager').on('select2:select', function(e) {
                             var selectedUser = e.params.data;
@@ -341,10 +342,10 @@
                             $('#name_manager').val(selectedUser.text);
                             $('#manager_phone_number').val(selectedUser.phone);
 
-                          
+
                         });
 
-                    
+
 
                     } else {
                         console.log('Erreur: ' + response.message);

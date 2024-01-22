@@ -128,6 +128,7 @@ class DemandeJalonController extends Controller
 
     public function store(Request $request)
     {
+        dd($request->input('demande'));
         $projectOption = ProjectOptionttmJalon::find($request->project_optionttm_jalon_id);
         $jalon_id = $projectOption->jalon_id;
 
