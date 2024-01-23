@@ -114,11 +114,17 @@
                                                                     <!-- Options du menu déroulant -->
                                                                     @foreach ($complexityTargets as $complexityTarget)
                                                                         @if ($complexityTarget->complexity_item_id == $item->complexity_item_id)
-                                                                            <option class="w-100"
-                                                                                value="{{ $complexityTarget->id }}"
-                                                                                data-value="{{ $complexityTarget->value }}"
-                                                                                selected>{{ $complexityTarget->value }} -
-                                                                                {{ $complexityTarget->name }}</option>
+                                                                            @foreach ($complexity_targets as $target)
+                                                                                @if ($target->complexity_target_id == $complexityTarget->id)
+                                                                                    <option class="w-100"
+                                                                                        value="{{ $complexityTarget->id }}"
+                                                                                        data-value="{{ $complexityTarget->value }}"
+                                                                                        selected>
+                                                                                        {{ $complexityTarget->value }} -
+                                                                                        {{ $complexityTarget->name }}
+                                                                                    </option>
+                                                                                @endif
+                                                                            @endforeach
                                                                         @endif
                                                                     @endforeach
                                                                 </select>
@@ -179,6 +185,20 @@
                                             {{ $options->nom ?? 'Veuillez définir les options ttm ainsi que les jalons pour afficher les jalons de ce projet' }}
                                         </b>
                                     </p>
+                                    <p class="text-sm">Jalons<b class="d-block">
+                                            @forelse ($jalonsProgress as $index => $jalon)
+                                                <strong>{{ $jalon['jalon']->designation }}</strong>,
+                                            @empty
+                                                <div class="col-lg-12">
+                                                    <p class="text-danger h6 fw-bold text-center">
+                                                        Erreur : Score non géré, veuillez contacter l'administrateur
+                                                        système.
+                                                    </p>
+                                                </div>
+                                            @endforelse
+
+                                        </b>
+                                    </p>
                                 </div>
                                 <div class="border-bottom">
                                     <h5 class="mt-5 text-muted">Document du projet</h5>
@@ -198,6 +218,14 @@
                                     <div class="col-lg-5 nav-item ">
                                         <button
                                             class=" btn btn-sm btn-gray nav-link border">{{ $project->status }}</button>
+                                        @php
+                                            $id = Crypt::encrypt($project->id);
+                                        @endphp
+                                        @if (auth()->user()->name == $project->projectOwner)
+                                            <a class="btn btn-light btn-sm ms-3"
+                                                href="{{ route('projects.edit', $id) }}"><i class="fas fa-pencil-alt"
+                                                    title="editer"> Modifier</i></a>
+                                        @endif
                                     </div>
                                 </div>
                             </div>
@@ -246,19 +274,24 @@
     @vite('node_modules/admin-lte/plugins/datatables-buttons/css/buttons.bootstrap4.min.css')
 @endpush
 @push('third_party_scripts')
-    <script type="module" src="{{ Vite::asset('node_modules/admin-lte/plugins/jquery/jquery.min.js?commonjs-entry') }}"></script>
+    <script type="module" src="{{ Vite::asset('node_modules/admin-lte/plugins/jquery/jquery.min.js?commonjs-entry') }}">
+    </script>
     <script type='module'
-        src="{{ Vite::asset('node_modules/admin-lte/plugins/datatables-buttons/js/buttons.bootstrap4.min.js?commonjs-entry') }}"></script>
-    <script type="module" src="{{ Vite::asset('node_modules/admin-lte/plugins/datatables/jquery.dataTables.min.js?commonjs-entry') }}">
-    </script>
-    <script type="module" src="{{ Vite::asset('node_modules/admin-lte/plugins/select2/js/select2.full.min.js?commonjs-entry') }}">
-    </script>
-    <script type="module" src="{{ Vite::asset('node_modules/admin-lte/plugins/sweetalert2/sweetalert2.min.js?commonjs-entry') }}">
+        src="{{ Vite::asset('node_modules/admin-lte/plugins/datatables-buttons/js/buttons.bootstrap4.min.js?commonjs-entry') }}">
     </script>
     <script type="module"
-        src="{{ Vite::asset('node_modules/admin-lte/plugins/datatables-buttons/js/dataTables.buttons.min.js?commonjs-entry') }}"></script>
+        src="{{ Vite::asset('node_modules/admin-lte/plugins/datatables/jquery.dataTables.min.js?commonjs-entry') }}">
+    </script>
     <script type="module"
-        src="{{ Vite::asset('node_modules/admin-lte/plugins/datatables-bs4/js/dataTables.bootstrap4.min.js?commonjs-entry') }}"></script>
+        src="{{ Vite::asset('node_modules/admin-lte/plugins/select2/js/select2.full.min.js?commonjs-entry') }}"></script>
+    <script type="module"
+        src="{{ Vite::asset('node_modules/admin-lte/plugins/sweetalert2/sweetalert2.min.js?commonjs-entry') }}"></script>
+    <script type="module"
+        src="{{ Vite::asset('node_modules/admin-lte/plugins/datatables-buttons/js/dataTables.buttons.min.js?commonjs-entry') }}">
+    </script>
+    <script type="module"
+        src="{{ Vite::asset('node_modules/admin-lte/plugins/datatables-bs4/js/dataTables.bootstrap4.min.js?commonjs-entry') }}">
+    </script>
     <script type="module" src="{{ vite::asset('node_modules/admin-lte/dist/js/demo.js') }}"></script>
 @endpush
 @push('page_scripts')

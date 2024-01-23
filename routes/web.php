@@ -28,7 +28,7 @@ Route::get('/', function () {
     ];
     if(isset(Auth::user()->roles[0]->name)){
 
-        return redirect()->$routes[Auth::user()->roles[0]->name];
+        return redirect()->route('projects.index');
     }
     return redirect()->route('login');   
     

@@ -195,7 +195,7 @@ class ProjectController extends Controller
 
         // $demandes_soumis=
 
-        return view('projects.single', compact('statusColor', 'project', 'optionTtm', 'projectOptionttmJalon', 'file', 'score', 'option_ttm', 'jalons', 'options', 'jalonsProgress', 'members', 'i', 'activity', 'exit', 'demandeByJalon', 'contributeurs', 'titleOfDemandes', 'demandesProject', 'today', 'directions', 'users', 'complexityTargets', 'complexity_items'));
+        return view('projects.single', compact('statusColor', 'project', 'optionTtm', 'projectOptionttmJalon', 'file', 'score', 'option_ttm', 'jalons', 'options', 'jalonsProgress', 'members', 'i', 'activity', 'exit', 'demandeByJalon', 'contributeurs', 'titleOfDemandes', 'demandesProject', 'today', 'directions', 'users', 'complexityTargets', 'complexity_items','complexity_targets'));
     }
 
     // cette methode permet la rediction au formulaire de création projet
@@ -334,9 +334,9 @@ class ProjectController extends Controller
                     auth()->user()->name . ' a crée le projet '
                 );
 
-            return redirect()->route('projects.dates', $project->id)->with('score')->with('message', 'création du projet avec success');
+            //return redirect()->route('projects.dates', $project->id)->with('score')->with('message', 'création du projet avec success');
 
-            // return redirect()->route('projects.show', $project->id)->with('score');
+            return redirect()->route('projects.show', $project->id)->with('score')->with('message', 'création du projet avec success');
         } catch (\Throwable $th) {
             // return $th;
             Log::error($th->getMessage());
@@ -456,8 +456,9 @@ class ProjectController extends Controller
         $project = Project::findOrFail($id);
         $users = User::all();
         $complexity_items = ComplexityItem::all();
+        $complexityTargets = ComplexityTarget::all();
 
-        return view('projects.edit', compact('project', 'complexity_items', 'users'));
+        return view('projects.edit', compact('project', 'complexity_items', 'complexityTargets', 'users'));
     }
 
     public function getProjectToRepport(Request $request)
@@ -480,13 +481,27 @@ class ProjectController extends Controller
         return response()->json($projects);
     }
 
+
     public function update(Request $request, $id)
     {
         $project_id = Crypt::decrypt($id);
         $project = Project::findOrFail($project_id);
 
+        $sponsor = User::where('username', $request->sponsor_username)->first();
+        
+            //$request->sponsor_username
+            if (!$sponsor) {
+                $sponsor = User::create([
+                    'name' => $request->sponsor_name,
+                    'username' => $request->sponsor_username,
+                    'email' => $request->sponsor_Email,
+                    'phone_number' => $request->sponsor_phone_number,
+                    'password' => Hash::make('password')
+                ]);
+            }
+
         try {
-            $owner = User::where('id', $request->owner)->first();
+            
             $project->update([
                 'name' => $request->name,
                 'description' => $request->description,
@@ -494,16 +509,12 @@ class ProjectController extends Controller
                 'type' => $request->type,
                 'startDate' => $request->startDate,
                 'endDate' => $request->endDate,
-                'score' => array_sum($request->score),
                 'coast' => $request->coast,
-                'projectOwner' => $owner['name'],
+                'sponsor' => $sponsor['name'],
             ]);
-            ProjectUser::where('project_id', $project->id)
-                ->update([
-                    'user_id' => $request->owner,
-                    'project_id' => $project->id,
-                    'role' => 'projectOwner',
-                ]);
+
+            
+            
             if ($request->file != null) {
                 foreach ($request->file as $file) {
                     if ($request->hasFile('file')) {
@@ -523,16 +534,62 @@ class ProjectController extends Controller
                 }
             }
 
+
+            $complexityTarget = $request->input('score');
+            
+            // $project->projectComplexityTargets()->delete();
+            $score = 0;
+            foreach($project->projectComplexityTargets()->get() as $target){
+
+                foreach ($complexityTarget as $target_id) {
+
+                    $targetFound = ComplexityTarget::find($target->complexity_target_id);
+                    $targetFoundFromForm = ComplexityTarget::find($target_id);
+
+                    // dd($targetFoundFromForm->complexityItem);
+                    if ($targetFound->complexityItem == $targetFoundFromForm->complexityItem){
+                        $target->complexity_target_id= $target_id;
+                        $target->save();
+
+                        $score += $targetFound->value;
+                    }
+                }
+                
+            }
+
+            $project->update(['score'=>$score]);
+
+            
+            
+            
+            // foreach($project->projectComplexityItems()->get() as $item){
+            //     foreach(ComplexityItem::all() as $item_id){
+            //         $itemFound = ComplexityItem::find($item->complexity_item_id);
+                    
+
+            //         if($itemFound == $itemFoundFromForm){
+            //             $item->update([
+            //                 'complexity_item_id'=> $item_id
+            //             ]);
+            //         }
+            //     }
+            // }
+            // $project->projectComplexityItems()->delete();
+
+            
+
             activity()
                 ->causedBy(auth()->user()->id)
                 ->performedOn($project)
                 ->event('edit')
                 ->log(auth()->user()->name . 'a modifié  le projet');
 
-            return redirect()->route('projects.show', $id)->with('score');
+                $id_crypted = Crypt::encrypt($project->id);
+            return redirect()->route('projects.show', $id_crypted)->with('score')->with('message', 'Modification du projet avec success');
+            
         } catch (\Throwable $th) {
             Log::error($th->getMessage());
-            return redirect()->back()->withErrors(['projet' => 'Echec de modification du projet']);
+            return redirect()->back()->withErrors(['projet' => $th->getMessage()]);
         }
     }
 
