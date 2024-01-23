@@ -27,7 +27,7 @@
                     <div class="icon">
                         <i class=""></i>
                     </div>
-                    <a href="{{ route('projects.index') }}?filter={{ env('projetSoumis') }}" class="small-box-footer">voir
+                    <a href="{{ route('projects.index') }}?filter={{ env('projetenCours') }}" class="small-box-footer">voir
                         plus <i class="fas fa-arrow-circle-right"></i></a>
                 </div>
             </div>
@@ -162,7 +162,7 @@
                                 <h5 class="description-header">{{ $jalonEnCours }}</h5>
                                 <span class="description-text">
                                     {{ env('jalonEnCours') }}
-                                    <a href="{{ route('filtrage.index') }}" class="small-box-footer">
+                                    <a href="{{ route('filtrage',env('jalonEnCours')) }}" class="small-box-footer">
                                         <i class="fas fa-arrow-circle-right text-black"></i>
                                     </a>
                                 </span>
@@ -178,7 +178,7 @@
                                 <h5 class="description-header">{{ $jalonEnAttente }}</h5>
                                 <span class="description-text">
                                     {{ env('jalonEnAttente') }}
-                                    <a href="{{ route('projects.index') }}" class="small-box-footer">
+                                    <a href="{{ route('filtrage',env('jalonEnAttente')) }}" class="small-box-footer">
                                         <i class="fas fa-arrow-circle-right text-black"></i>
                                     </a>
                                 </span>
@@ -194,7 +194,7 @@
                                 <h5 class="description-header">{{ $jalonCloturer }}</h5>
                                 <span class="description-text">
                                     {{ env('jalonCloturer') }}
-                                    <a href="{{ route('projects.index') }}" class="small-box-footer">
+                                    <a href="{{ route('filtrage',env('jalonCloturer')) }}" class="small-box-footer">
                                         <i class="fas fa-arrow-circle-right text-black"></i>
                                     </a>
                                 </span>
@@ -208,8 +208,8 @@
                                     {{ $alljalon > 0 ? number_format((count($jalonEnRetard) * 100) / $alljalon, 1) : 0 }}%</span>
                                 <h5 class="description-header">{{ count($jalonEnRetard) }}</h5>
                                 <span class="description-text">
-                                    en retard
-                                    <a href="{{ route('projects.index') }}?filter={{ env('projetenCours') }}"
+                                    {{env('jalonEnRetard')}}
+                                    <a href="{{ route('filtrage',env('jalonEnRetard')) }}"
                                         class="small-box-footer"><i class="fas fa-arrow-circle-right text-black"></i></a>
                                 </span>
                             </div>
@@ -219,6 +219,39 @@
                     <!-- /.row -->
                 </div>
                 <!-- /.card-footer -->
+            </div>
+            <div class="col-7">
+                <div class="card">
+                    <div class="card-header bg-black text-orange">
+                        <h3 class="card-title">Statistique</h3>
+                    </div>
+                    <!-- /.card-header -->
+                    <div class="card-body">
+                        <table id="tableProjet" class="table table-bordered table-striped">
+                            <thead class="text-orange">
+                                <th>N°</th>
+                                <th>Direction</th>
+                                <th>Projet Encour</th>
+                                <th>Projet fini</th>
+                                <th>Total projet</th>
+                            </thead>
+                            <tbody>
+                                @foreach ($directions as $i => $projet)
+                                    <tr>
+                                        <td>{{ $i + 1 }}</td>
+                                        <td>{{ $projet->name }}</td>
+                                        <td>{{ $projet->nb_projet }}</td>
+                                        <td>{{ $projetFinis }}</td>
+                                        <td>{{ $projet->nb_projet }}</td>
+                                    </tr>
+                                @endforeach
+                            </tbody>
+    
+                        </table>
+                    </div>
+                    <!-- /.card-body -->
+                </div>
+    
             </div>
             <!-- /.card -->
         </div>

@@ -48,7 +48,8 @@ Route::middleware(['auth'])->group(function () {
 
 
     Route::resource('archivage',AchivageController::class);
-    Route::resource('filtrage',ProjectFilterController::class);
-
+    Route::get('filtrage/{status}',[ProjectFilterController::class,'index'])->name('filtrage');
+    
     Route::get('/getUser', [UserController::class,'getUsers'])->name('getUsers');
+    Route::get('get_projectBy',[ProjectFilterController::class,'get_projectBy'])->name('get_projectBy');
 });

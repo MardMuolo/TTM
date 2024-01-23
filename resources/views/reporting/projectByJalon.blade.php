@@ -1,6 +1,8 @@
 @extends('layouts.app')
 @section('title')
-    Projets archivés
+    Projets au Jalon @if ($status)
+        <span class="text-red h-6!">/{{ $status }}</span>
+    @endif
 @endsection
 @section('filsAriane')
     <li class="breadcrumb-item"><a class="active text-orange" href="#">Projet</a></li>
@@ -8,7 +10,6 @@
 @section('content')
     <section class="content card card-orange card-outline p-4">
         <div class="card">
-
             <div class="card-header bg-black">
                 <h3 class="card-title text-orange">Total ({{ count($projects) }})</h3>
             </div>
@@ -20,7 +21,7 @@
                     <th style="width: 20%">Nom</th>
                     <th style="width: 30%">Equipe</th>
                     <th>Progression</th>
-                    <th style="width: 15%" class="text-center">Date d'Archivage</th>
+                    <th style="width: 8%" class="text-center">Statut</th>
                     <th style="width: 20%"></th>
                 </thead>
                 <tbody>
@@ -106,11 +107,11 @@
                                 </div>
                                 <small>{{ $moyenne_arrondie }}% Complete</small>
                             </td>
-                            <td class="item-state text-center">
+                            <td class="item-state">
                                 <span
-                                    class="badge  {{ $project->status == env('projetSoumis') ? 'bg-secondary' : $color }}">20023-12-06</span>
+                                    class="badge  {{ $project->status == env('projetSoumis') ? 'bg-secondary' : $color }}">{{ $project->status }}</span>
                             </td>
-                            <td class="item-actions text-center">
+                            <td class="item-actions text-right">
                                 @access('read', 'Project')
                                     @php
                                         $id = Crypt::encrypt($project->id);
@@ -118,6 +119,25 @@
 
                                     <a class="btn btn-light btn-sm" href="{{ route('projects.show', $id) }}" title="voir"><i
                                             class="fas fa-eye"></i></a>
+                                @endaccess
+
+                                @access('update', 'Project')
+                                    @php
+                                        $id = Crypt::encrypt($project->id);
+                                    @endphp
+                                    @if (auth()->user()->name == $project->projectOwner)
+                                        <a class="btn btn-light btn-sm" href="{{ route('projects.edit', $id) }}"><i
+                                                class="fas fa-pencil-alt" title="editer"></i></a>
+                                    @endif
+                                @endaccess
+
+                                @access('delete', 'Project')
+                                    <a class="btn btn-danger btn-sm" href="{{ route('projects.destroy', $project->id) }}"
+                                        onclick="supprimer(event)"
+                                        project="Voulez-vous supprimer le Projet {{ $project->name }}" data-toggle="modal"
+                                        data-target="#supprimer" title="archiver">
+                                        <i class="fas fa-archive"></i>
+                                    </a>
                                 @endaccess
                             </td>
                         </tr>
@@ -177,15 +197,12 @@
                 "data": "",
                 "buttons": [{
                     extend: 'csv',
-                    title: 'Projets Archivés',
 
                 }, "excel", {
                     extend: 'pdf',
-                    title: 'Projets Archivés',
 
                 }, {
                     extend: 'print',
-                    title: 'Projets Archivés'
                 }, "colvis"]
             }).buttons().container().appendTo('#tab_project_wrapper .col-md-6:eq(0)');
         });
