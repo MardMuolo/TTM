@@ -146,7 +146,7 @@
                                 <label for="exampleInputFile" class="col-sm-12 col-form-label text-black">Model</label>
                                 <span id="text_model" class="text-sencandary px-4"></span>
                                 <div class="custom-file">
-                                    <input type="file" class="form-control" id="model" name="file[]" multiple>
+                                    <input type="file" class="form-control" id="model" name="file">
                                 </div>
 
                             </div>

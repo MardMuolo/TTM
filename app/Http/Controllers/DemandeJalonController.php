@@ -128,7 +128,7 @@ class DemandeJalonController extends Controller
 
     public function store(Request $request)
     {
-        dd($request->input('demande'));
+        
         $projectOption = ProjectOptionttmJalon::find($request->project_optionttm_jalon_id);
         $jalon_id = $projectOption->jalon_id;
 
@@ -182,16 +182,20 @@ class DemandeJalonController extends Controller
             $datePrevue = Carbon::now()->add($delai, $uniteDelai);
         }
         if (isset($request->demande)) {
-            $demandeJalon = new DemandeJalon();
-            $demandeJalon->demande_id = $request->input('demande');
-            $demandeJalon->description = $request->input('description');
-            $demandeJalon->pathTask = $fichier;
-            $demandeJalon->contributeur = $user->id;
-            $demandeJalon->deadLine = $deadlineCombinee;
-            $demandeJalon->date_prevue = $datePrevue;
-            $demandeJalon->status = env('demandeNonSoumise');
-            $demandeJalon->project_optionttm_jalon_id = $request->input('project_optionttm_jalon_id');
-            $demandeJalon->save();
+
+            foreach($request->input('demande') as $demande):
+                $demandeJalon = new DemandeJalon();
+                $demandeJalon->demande_id = $demande;
+                $demandeJalon->description = $request->input('description');
+                $demandeJalon->pathTask = $fichier;
+                $demandeJalon->contributeur = $user->id;
+                $demandeJalon->deadLine = $deadlineCombinee;
+                $demandeJalon->date_prevue = $datePrevue;
+                $demandeJalon->status = env('demandeNonSoumise');
+                $demandeJalon->project_optionttm_jalon_id = $request->input('project_optionttm_jalon_id');
+                $demandeJalon->save();
+            endforeach;
+            
 
             activity()
                 ->causedBy(auth()->user()->id)
