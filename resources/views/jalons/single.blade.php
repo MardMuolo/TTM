@@ -27,9 +27,9 @@
                 <div class="col">
                     <div class="text-right mr-2">
                         @if (auth()->user()->name == $project->projectOwner)
-                            <button type="button" class="btn btn-primary bg-primary" data-toggle="modal" data-target="#modal-default">
+                            <a href="{{ route('projects.dates', $project->id) }}" class="btn btn-primary bg-primary">
                                 <i class="far fa-calendar-alt "></i>
-                            </button>
+                            </a>
                         @endif
 
                     </div>
@@ -159,8 +159,8 @@
                             </button>
                         @endif
                     @else
-                        <button class="btn btn-light m-2 bg-black text-orange" title="Ajouter une demande" data-toggle="modal"
-                            data-target="#create_modal">
+                        <button class="btn btn-light m-2 bg-black text-orange" title="Ajouter une demande"
+                            data-toggle="modal" data-target="#create_modal">
                             <i class="fas fa-plus-circle"></i>
                         </button>
                     @endif
@@ -195,8 +195,7 @@
                                     </div>
                                 </td>
 
-                                <td class="text-center"><a
-                                        href="{{ asset('storage/' . $item->pathTask) }}"
+                                <td class="text-center"><a href="{{ asset('storage/' . $item->pathTask) }}"
                                         download>Telecharger<i class="fas fa-download"></i></a>
                                 </td>
 
@@ -427,19 +426,25 @@
 
 @push('third_party_scripts')
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
-    <script type='module' src="{{ Vite::asset('node_modules/admin-lte/plugins/datatables/jquery.dataTables.min.js?commonjs-entry') }}">
+    <script type='module'
+        src="{{ Vite::asset('node_modules/admin-lte/plugins/datatables/jquery.dataTables.min.js?commonjs-entry') }}">
     </script>
     {{-- <script type='module' src="{{ Vite::asset('node_modules/admin-lte/plugins/inputmask/jquery.inputmask.min.js?commonjs-entry') }}">
     </script>
     <script type='module' src="{{ Vite::asset('node_modules/admin-lte/plugins/moment/moment.min.js?commonjs-entry') }}">
     </script> --}}
     <script type='module'
-        src="{{ Vite::asset('node_modules/admin-lte/plugins/datatables-buttons/js/buttons.bootstrap4.min.js?commonjs-entry') }}"></script>
-    <script type="module" src="{{ Vite::asset('node_modules/admin-lte/plugins/select2/js/select2.full.min.js?commonjs-entry') }}"></script>
-    <script type="module" src="{{ Vite::asset('node_modules/admin-lte/plugins/sweetalert2/sweetalert2.min.js?commonjs-entry') }}"></script>
-    <script type="module" src="{{ Vite::asset('node_modules/admin-lte/plugins/datatables-buttons/js/dataTables.buttons.min.js?commonjs-entry') }}">
+        src="{{ Vite::asset('node_modules/admin-lte/plugins/datatables-buttons/js/buttons.bootstrap4.min.js?commonjs-entry') }}">
     </script>
-    <script type="module" src="{{ Vite::asset('node_modules/admin-lte/plugins/datatables-bs4/js/dataTables.bootstrap4.min.js?commonjs-entry') }}">
+    <script type="module"
+        src="{{ Vite::asset('node_modules/admin-lte/plugins/select2/js/select2.full.min.js?commonjs-entry') }}"></script>
+    <script type="module"
+        src="{{ Vite::asset('node_modules/admin-lte/plugins/sweetalert2/sweetalert2.min.js?commonjs-entry') }}"></script>
+    <script type="module"
+        src="{{ Vite::asset('node_modules/admin-lte/plugins/datatables-buttons/js/dataTables.buttons.min.js?commonjs-entry') }}">
+    </script>
+    <script type="module"
+        src="{{ Vite::asset('node_modules/admin-lte/plugins/datatables-bs4/js/dataTables.bootstrap4.min.js?commonjs-entry') }}">
     </script>
 @endpush
 

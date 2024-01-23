@@ -2,6 +2,14 @@
 @section('title')
     {{ $project->name }}
 @endsection
+@section('filsAriane')
+    <li class="breadcrumb-item"><a href="{{ route('projects.index') }}">Projet</a></li>
+    @php
+        $id = Crypt::encrypt($project->id);
+    @endphp
+    <li class="breadcrumb-item"><a href="{{ route('projects.show', $id) }}" class="text-orange"
+            title="{{ $project->name }}">{{ substr(str_replace([' ', "'"], '', $project->name), 0, 10) }}...</a></li>
+@endsection
 @section('content')
     <div class="card card-outline p-4">
         <div class="card-body">

@@ -336,7 +336,8 @@ class ProjectController extends Controller
 
             //return redirect()->route('projects.dates', $project->id)->with('score')->with('message', 'création du projet avec success');
 
-            return redirect()->route('projects.show', $project->id)->with('score')->with('message', 'création du projet avec success');
+            $id = Crypt::encrypt($project->id);
+            return redirect()->route('projects.show', $id)->with('score')->with('message', 'création du projet avec success');
         } catch (\Throwable $th) {
             // return $th;
             Log::error($th->getMessage());
@@ -539,6 +540,14 @@ class ProjectController extends Controller
             
             // $project->projectComplexityTargets()->delete();
             $score = 0;
+
+            foreach(ComplexityTarget::all() as $target){
+                foreach($complexityTarget as $tr){
+                    if($target->id == $tr){
+                        $score += $target->value;
+                    }
+                }
+            }
             foreach($project->projectComplexityTargets()->get() as $target){
 
                 foreach ($complexityTarget as $target_id) {
@@ -550,14 +559,12 @@ class ProjectController extends Controller
                     if ($targetFound->complexityItem == $targetFoundFromForm->complexityItem){
                         $target->complexity_target_id= $target_id;
                         $target->save();
-
-                        $score += $targetFound->value;
                     }
                 }
-                
             }
-
-            $project->update(['score'=>$score]);
+            //dd($score);
+            $project->score = $score;
+            $project->save();
 
             
             

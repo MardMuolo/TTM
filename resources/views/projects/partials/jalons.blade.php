@@ -1,8 +1,24 @@
 <div class="card-body col-12">
     <div class="row">
+        @if (auth()->user()->name == $project->projectOwner)
+            <div class="col-lg-4 col-6">
+                <div class="text-center mr-2">
+                    <p>
+                        Définissez les dates des jalons du projet
+                    </p>
+
+                    <a href="{{ route('projects.dates', $project->id) }}" class="btn btn-lg btn-primary bg-primary">
+                        <i class="far fa-calendar-alt "></i>
+                    </a>
+
+
+                </div>
+            </div>
+        @endif
         @forelse ($jalonsProgress as $index => $jalon)
             <div class="col-lg-4 col-6">
                 <!-- small box -->
+
                 <div class="small-box bg-light">
                     <div class="inner">
                         <div class="d-flex">
@@ -20,7 +36,8 @@
                             @if ($joursRestants > 0)
                                 @if ($jalon['status'] === env('jalonEnCours'))
                                     <p class="{{ $joursRestants <= 3 ? 'text-danger' : '' }}">
-                                        <span class="font-weight-bold">{{ $joursRestants }}</span> <span class="text-orange">jour(s) restant(s)</span>
+                                        <span class="font-weight-bold">{{ $joursRestants }}</span> <span
+                                            class="text-orange">jour(s) restant(s)</span>
                                     </p>
                                     <p>
                                         <i class="far fa-calendar-alt text-orange"></i>
@@ -81,18 +98,21 @@
                     <div class="icon">
                         <i class="ion ion-pie-graph"></i>
                     </div>
-                    @access('read','Jalon')
-                    @if ($index === 0 || ($index > 0 && $jalonsProgress[$index - 1]['status'] === env('jalonCloturer')) || 
-                    (auth()->check() && auth()->user()->hasRoles(['admin', 'ttofficer', 'project_owner'])))
-
-                            <a href="{{ route('jalons.single',['jalon' => Crypt::encrypt($jalon['jalon']->id), 'option_ttm' => Crypt::encrypt($options->id), 'project' =>Crypt::encrypt( $project->id)]) }}"
+                    @access('read', 'Jalon')
+                        @if (
+                            $index === 0 ||
+                                ($index > 0 && $jalonsProgress[$index - 1]['status'] === env('jalonCloturer')) ||
+                                (auth()->check() &&
+                                    auth()->user()->hasRoles(['admin', 'ttofficer', 'project_owner'])))
+                            <a href="{{ route('jalons.single', ['jalon' => Crypt::encrypt($jalon['jalon']->id), 'option_ttm' => Crypt::encrypt($options->id), 'project' => Crypt::encrypt($project->id)]) }}"
                                 class="small-box-footer text-orange bg-black ">
-                                <span class="text-orange">Plus d'infos</span> <i class="fas fa-arrow-circle-right text-orange"></i>
+                                <span class="text-orange">Plus d'infos</span> <i
+                                    class="fas fa-arrow-circle-right text-orange"></i>
                             </a>
-                        
                         @else
                             <a href="#" class="small-box-footer bg-black disabled">
-                                <span class="text-orange">Plus d'infos</span> <i class="fas fa-arrow-circle-right text-orange"></i>
+                                <span class="text-orange">Plus d'infos</span> <i
+                                    class="fas fa-arrow-circle-right text-orange"></i>
                             </a>
                         @endif
                     @endaccess
@@ -107,5 +127,3 @@
         @endforelse
     </div>
 </div>
-
-
