@@ -591,6 +591,9 @@ class ProjectController extends Controller
                     ]);
                 }
             }
+
+            // $project->optionsJalons()->first()->pivot->debutDate= $project->startDate;
+            // dd($project->optionsJalons()->first()->pivot);
             
             
             // foreach($project->projectComplexityItems()->get() as $item){

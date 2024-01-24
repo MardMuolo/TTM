@@ -53,7 +53,7 @@ class Project extends Model
     // Methode isAdmin: permet de verifier si l'utilisateur connecté est le ttmOfficer
     public static function isAdmin()
     {
-        foreach (auth()->user()->roles as $user) {
+        foreach (auth()?->user()->roles as $user) {
             if ($user->name == env('TtmOfficer') or $user->name == 'Directeur' ) {
                 return true;
             } else {
@@ -66,7 +66,7 @@ class Project extends Model
         $projects = Project::join('project_users', 'projects.id', '=', 'project_users.project_id')
         ->join('users', 'project_users.user_id', '=', 'users.id')
         ->join('direction_users', 'users.id', '=', 'direction_users.user_id')
-        ->where('direction_users.direction_id', Auth()->user()->direction_user->direction->id) // Remplacez $directionXId par l'ID de la direction spécifique
+        ->where('direction_users.direction_id', Auth()?->user()->direction_user?->direction->id) // Remplacez $directionXId par l'ID de la direction spécifique
         ->where('project_users.role', 'projectOwner')
         ->select('projects.*')
         ->with('optionsJalons')
@@ -77,7 +77,7 @@ class Project extends Model
     // Méthode get: permet d'afficher les projects selon les roles de l'utilisateur connecté
     public static function get($status)
     {
-        $user = auth()->user();
+        $user = auth()?->user();
         if ($status) {
             $project = Project::with('users', 'optionsJalons')->get();
         } else {

@@ -141,7 +141,6 @@
                                         <span
                                             class="info-box-number">{{ \Carbon\Carbon::parse($debutDate)->format('d/m/Y') }}</span>
                                     </div>
-
                                 </div>
                             @endif
                         </div>
