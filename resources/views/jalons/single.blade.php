@@ -23,7 +23,7 @@
             </div>
         @endif
         <div class="row">
-            @if (empty($debutDate) && empty($echeance))
+            @if (empty($debutDate) || empty($echeance))
                 @php
                     $previousEndDate = null;
                 @endphp
@@ -39,6 +39,7 @@
                     </div>
                     <div class="mt-2">
                         <p>Veuillez planifier les dates pour ce jalon.</p>
+
                     </div>
                 </div>
                 <div class="modal fade" id="modal-default">
@@ -51,31 +52,57 @@
                                     <span aria-hidden="true">&times;</span>
                                 </button>
                             </div>
+
                             <div class="modal-body">
                                 <form method="POST"
                                     action="{{ route('jalons.addDate', ['jalon' => $jalon->id, 'option_ttm' => $optionTtm->id, 'project' => $project->id]) }}"
                                     enctype="multipart/form-data">
                                     @csrf
                                     <div class="col">
-                                        <div class="col">
-                                            <div class="form-group">
-                                                <label for="debutDate">Date Début</label>
-                                                <div class="input-group">
-                                                    <div class="input-group-prepend">
-                                                        <span class="input-group-text"><i
-                                                                class="far fa-calendar-alt"></i></span>
+                                        @if ($projetFirstJalon->designation == $jalon->designation)
+                                            <div class="col">
+                                                <div class="form-group">
+                                                    <label for="debutDate">Date Début</label>
+                                                    <div class="input-group">
+                                                        <div class="input-group-prepend">
+                                                            <span class="input-group-text"><i
+                                                                    class="far fa-calendar-alt"></i></span>
+                                                        </div>
+                                                        <input type="date" class="form-control" inputformat="mm/dd/yyyy"
+                                                            name="debutDate" id="debutDate"
+                                                            value="{{ $projetFirstJalon->pivot->debutDate }}"
+                                                            min="{{ $projetFirstJalon->pivot->debutDate }}"
+                                                            max="{{ $projetFirstJalon->pivot->debutDate }}">
                                                     </div>
-                                                    <input type="date" class="form-control" inputformat="mm/dd/yyyy"
-                                                        name="debutDate" id="debutDate" value="{{ $previousEndDate ?? '' }}"
-                                                        min="{{ $previousEndDate ?? '' }}">
+                                                    @if ($previousEndDate && $projetFirstJalon->pivot->dateDebut < $previousEndDate)
+                                                        <small class="text-danger">La date de début
+                                                            doit être postérieure à la date de fin
+                                                            du jalon précédent.</small>
+                                                    @endif
                                                 </div>
-                                                @if ($previousEndDate && $jalon->pivot->debutDate < $previousEndDate)
-                                                    <small class="text-danger">La date de début
-                                                        doit être postérieure à la date de fin
-                                                        du jalon précédent.</small>
-                                                @endif
                                             </div>
-                                        </div>
+                                        @else
+                                            <div class="col">
+                                                <div class="form-group">
+                                                    <label for="debutDate">Date Début</label>
+                                                    <div class="input-group">
+                                                        <div class="input-group-prepend">
+                                                            <span class="input-group-text"><i
+                                                                    class="far fa-calendar-alt"></i></span>
+                                                        </div>
+                                                        <input type="date" class="form-control" inputformat="mm/dd/yyyy"
+                                                            name="debutDate" id="debutDate"
+                                                            value="{{ $previousEndDate ?? '' }}"
+                                                            min="{{ $previousEndDate ?? '' }}">
+                                                    </div>
+                                                    @if ($previousEndDate && $jalon->pivot->debutDate < $previousEndDate)
+                                                        <small class="text-danger">La date de début
+                                                            doit être postérieure à la date de fin
+                                                            du jalon précédent.</small>
+                                                    @endif
+                                                </div>
+                                            </div>
+                                        @endif
                                         <div class="col">
                                             <div class="form-group">
                                                 <label for="echeance">Passage en comité</label>

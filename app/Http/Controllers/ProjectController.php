@@ -335,7 +335,11 @@ class ProjectController extends Controller
                 );
 
             //return redirect()->route('projects.dates', $project->id)->with('score')->with('message', 'création du projet avec success');
+            $jalons = $project->optionsJalons;
+            $jalons->first()->pivot->debutDate = $project->startDate;
+            $jalons->first()->pivot->save();
 
+            // dd($jalons->first()->pivot);
             $id = Crypt::encrypt($project->id);
             return redirect()->route('projects.show', $id)->with('score')->with('message', 'création du projet avec success');
         } catch (\Throwable $th) {
@@ -374,6 +378,9 @@ class ProjectController extends Controller
         $option_ttm = $project->optionttm()->get()->first();
         $projectOptionttmJalon = ProjectOptionttmJalon::where('jalon_id', $jalon->id)->where('option_ttm_id', $optionTtm->id)->where('project_id', $project->id)->first();
         $jalons = $project->optionsJalons;
+        $projetFirstJalon = $project->optionsJalons->first();
+        // dd($projetFirstJalon->designation);
+        // dd($jalons->first()->designation);
         $option_ttm = $project->optionttm()->get()->first();
         $options = $project->optionttm()->get()->first();
         $complexity_targets = ProjectComplexityTarget::all()->where('project_id', $project->id);
@@ -448,7 +455,7 @@ class ProjectController extends Controller
         $activity = Activity::orderBy('id', 'desc')->where('subject_id', $project->id)->get();
 
         // dd($exit);
-        return view('projects.dates', compact('project', 'echeance', 'optionTtm', 'score', 'option_ttm', 'jalons', 'options', 'jalonsProgress', 'i', 'exit', 'today', 'directions', 'projectOptionttmJalon', 'complexityTargets', 'complexity_items'));
+        return view('projects.dates', compact('project', 'echeance', 'optionTtm', 'score', 'projetFirstJalon','option_ttm', 'jalons', 'options', 'jalonsProgress', 'i', 'exit', 'today', 'directions', 'projectOptionttmJalon', 'complexityTargets', 'complexity_items'));
     }
 
     public function edit($id)

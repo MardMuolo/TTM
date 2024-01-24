@@ -91,9 +91,10 @@ class JalonController extends Controller
         // die($project->users[0]->pivot);
         $demande = DemandeJalon::find($demande);
         $livrables = $demande->livrables()->get();
+        $projetFirstJalon = $project->optionsJalons->first();
         $i = 1;
         $color = [env('livrableRevoquer') => 'bg-warning', env('livrableValider') => 'bg-success', env('livrableEnAttente') => 'bg-secondary', env('livrableRejeter') => 'bg-danger'];
-        return view('jalons.demande', compact('demande', 'livrables', 'i', 'color', 'project', 'optionTtm', 'jalon'));
+        return view('jalons.demande', compact('demande', 'livrables', 'i', 'color', 'project', 'optionTtm', 'jalon','projetFirstJalon'));
     }
 
 
@@ -164,6 +165,8 @@ class JalonController extends Controller
         $option_ttm = $project->optionttm()->get()->first();
         $projectOptionttmJalon = ProjectOptionttmJalon::where('jalon_id', $jalon->id)->where('option_ttm_id', $optionTtm->id)->where('project_id', $project->id)->first();
         $status = $projectOptionttmJalon->status;
+
+        $projetFirstJalon = $project->optionsJalons->first();
         if ($projectOptionttmJalon) {
             $demandes = $projectOptionttmJalon->demandeJalons()->get();
             $totalDemandes = $demandes->count();
@@ -188,11 +191,13 @@ class JalonController extends Controller
             }
             $pivotId = $projectOptionttmJalon->id;
             $debutDate = $projectOptionttmJalon->debutDate;
+            $finDate = $projectOptionttmJalon->finDate;
             $echeance = $projectOptionttmJalon->echeance;
+
         }
         $historiques = HistoriqueDate::where('project_optionttm_jalon_id', $projectOptionttmJalon->id)->orderBy('date_repouser', 'desc')->get();
         // dd($totalDemandes);
-        return view('jalons.single', compact('is_active', 'allContributeurs', 'categoryDemandes', 'allDemandes', 'jalon', 'optionTtm', 'project', 'demandes', 'users', 'option_ttm', 'debutDate', 'echeance', 'pivotId', 'historiques', 'totalDemandes', 'demandesSoumises', 'status', 'jalonDemande', 'i'));
+        return view('jalons.single', compact('is_active', 'allContributeurs', 'categoryDemandes', 'allDemandes', 'projetFirstJalon','jalon', 'optionTtm', 'project', 'demandes', 'users', 'option_ttm', 'debutDate', 'finDate','echeance', 'pivotId', 'historiques', 'totalDemandes', 'demandesSoumises', 'status', 'jalonDemande', 'i'));
     }
 
     public function addDate(Request $request, Jalon $jalon, $option_ttm, Project $project)
@@ -216,8 +221,15 @@ class JalonController extends Controller
             // Mise à jour des champs 'debutDate' et 'echeance' du ProjectOptionttmJalon avec les nouvelles dates
             $projectOptionttmJalon->debutDate = $request->debutDate;
             $projectOptionttmJalon->echeance = $request->echeance;
-
+            $dernierJalon = $project->optionsJalons()->orderBy('jalon_id', 'desc')->first();
+            $avantDernierJalon = $project->optionsJalons()->orderBy('jalon_id', 'desc')->get()[1];
+            
             if ($projectOptionttmJalon->save()) {
+                if($jalon->designation === $avantDernierJalon->designation){
+                    $dernierJalon->pivot->debutDate = Carbon::parse($projectOptionttmJalon->echeance)->addMonths(6);
+                    $dernierJalon->pivot->echeance = Carbon::parse($projectOptionttmJalon->echeance)->addMonths(6);
+                    $dernierJalon->pivot->save();
+                }
                 // Enregistrement d'une activité de journalisation pour suivre l'ajout de la date
                 activity()
                     ->causedBy(auth()->user()->id)
@@ -227,7 +239,7 @@ class JalonController extends Controller
             }
 
             // Mettre à jour la date de fin du projet avec la date de fin du dernier jalon
-            $dernierJalon = $project->optionsJalons()->orderBy('jalon_id', 'desc')->first();
+            
 
             if ($dernierJalon && $dernierJalon->pivot->echeance > $project->endDate) {
                 $project->endDate = $dernierJalon->pivot->echeance;
@@ -238,6 +250,8 @@ class JalonController extends Controller
             $project->update([
                 'status' => env('projetenCours'),
             ]);
+
+            
 
             // Redirection vers la page précédente
             return redirect()->back()->with('dateJalon', "Date de jalo fixée avec success");

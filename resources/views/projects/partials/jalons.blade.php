@@ -4,7 +4,7 @@
             <div class="col-lg-4 col-6">
                 <div class="text-center mr-2">
                     <p>
-                        Définissez les dates des jalons du projet
+                        Les dates des jalons du projet
                     </p>
 
                     <a href="{{ route('projects.dates', $project->id) }}" class="btn btn-lg btn-primary bg-primary">

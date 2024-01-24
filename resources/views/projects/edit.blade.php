@@ -1,7 +1,10 @@
 @extends('layouts.app')
 @section('filsAriane')
     <li class="breadcrumb-item"><a href="{{ route('projects.index') }}">Projects</a></li>
-    <li class="breadcrumb-item"><a href="{{ route('projects.show', $project->id) }}">{{ $project->name }}</a></li>
+    @php
+        $id = Crypt::encrypt($project->id);
+    @endphp
+    <li class="breadcrumb-item"><a href="{{ route('projects.show', $id) }}">{{ $project->name }}</a></li>
     <li class="breadcrumb-item"><a href="#">Editer</a></li>
 @endsection
 

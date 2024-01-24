@@ -33,17 +33,22 @@
                                     <!-- small box -->
                                     <div class="small-box bg-light">
                                         <div class="inner">
+
                                             <div class="d-flex">
                                                 <h3 class="w-75">{{ $jalon['jalon']->designation }}</h3>
-                                                <div class="text-right p-0 w-25">
-                                                    @if (auth()->user()->name == $project->projectOwner)
-                                                        <button type="button" class="btn btn-primary" data-toggle="modal"
-                                                            data-target="#modal-default-{{ $jalon['jalon']->id }}">
-                                                            <i class="far fa-calendar-alt"></i>
-                                                        </button>
-                                                    @endif
-                                                </div>
+                                                @if ($jalon['status'] !== env('jalonCloturer'))
+                                                    <div class="text-right p-0 w-25">
+                                                        @if (auth()->user()->name == $project->projectOwner)
+                                                            <button type="button" class="btn btn-primary"
+                                                                data-toggle="modal"
+                                                                data-target="#modal-default-{{ $jalon['jalon']->id }}">
+                                                                <i class="far fa-calendar-alt"></i>
+                                                            </button>
+                                                        @endif
+                                                    </div>
+                                                @endif
                                             </div>
+
                                             {{-- modal section  --}}
                                             <div class="modal fade" id="modal-default-{{ $jalon['jalon']->id }}">
                                                 <div class="modal-dialog">
@@ -62,27 +67,58 @@
                                                                 enctype="multipart/form-data">
                                                                 @csrf
                                                                 <div class="col">
-                                                                    <div class="col">
-                                                                        <div class="form-group">
-                                                                            <label for="debutDate">Date Début</label>
-                                                                            <div class="input-group">
-                                                                                <div class="input-group-prepend">
-                                                                                    <span class="input-group-text"><i
-                                                                                            class="far fa-calendar-alt"></i></span>
+                                                                    @if ($projetFirstJalon->designation == $jalon['jalon']->designation)
+                                                                        <div class="col">
+                                                                            <div class="form-group">
+                                                                                <label for="debutDate">Date Début</label>
+                                                                                <div class="input-group">
+                                                                                    <div class="input-group-prepend">
+                                                                                        <span class="input-group-text"><i
+                                                                                                class="far fa-calendar-alt"></i></span>
+                                                                                    </div>
+                                                                                    <input type="date"
+                                                                                        class="form-control"
+                                                                                        inputformat="mm/dd/yyyy"
+                                                                                        name="debutDate" id="debutDate"
+                                                                                        value="{{ $projetFirstJalon->pivot->debutDate }}"
+                                                                                        min="{{ $projetFirstJalon->pivot->debutDate }}"
+                                                                                        max="{{ $projetFirstJalon->pivot->debutDate }}">
                                                                                 </div>
-                                                                                <input type="date" class="form-control"
-                                                                                    inputformat="mm/dd/yyyy"
-                                                                                    name="debutDate" id="debutDate"
-                                                                                    value="{{ $previousEndDate ?? '' }}"
-                                                                                    min="{{ $previousEndDate ?? '' }}">
+                                                                                @if ($previousEndDate && $projetFirstJalon->pivot->dateDebut < $previousEndDate)
+                                                                                    <small class="text-danger">La date de
+                                                                                        début
+                                                                                        doit être postérieure à la date de
+                                                                                        fin
+                                                                                        du jalon précédent.</small>
+                                                                                @endif
                                                                             </div>
-                                                                            @if ($previousEndDate && $jalon['jalon']->pivot->debutDate < $previousEndDate)
-                                                                                <small class="text-danger">La date de début
-                                                                                    doit être postérieure à la date de fin
-                                                                                    du jalon précédent.</small>
-                                                                            @endif
                                                                         </div>
-                                                                    </div>
+                                                                    @else
+                                                                        <div class="col">
+                                                                            <div class="form-group">
+                                                                                <label for="debutDate">Date Début</label>
+                                                                                <div class="input-group">
+                                                                                    <div class="input-group-prepend">
+                                                                                        <span class="input-group-text"><i
+                                                                                                class="far fa-calendar-alt"></i></span>
+                                                                                    </div>
+                                                                                    <input type="date"
+                                                                                        class="form-control"
+                                                                                        inputformat="mm/dd/yyyy"
+                                                                                        name="debutDate" id="debutDate"
+                                                                                        value="{{ $previousEndDate ?? '' }}"
+                                                                                        min="{{ $previousEndDate ?? '' }}">
+                                                                                </div>
+                                                                                @if ($previousEndDate && $jalon['jalon']->pivot->debutDate < $previousEndDate)
+                                                                                    <small class="text-danger">La date de
+                                                                                        début
+                                                                                        doit être postérieure à la date de
+                                                                                        fin
+                                                                                        du jalon précédent.</small>
+                                                                                @endif
+                                                                            </div>
+                                                                        </div>
+                                                                    @endif
                                                                     <div class="col">
                                                                         <div class="form-group">
                                                                             <label for="echeance">Passage en comité</label>
@@ -93,6 +129,7 @@
                                                                                 </div>
                                                                                 <input type="date" class="form-control"
                                                                                     inputformat="mm/dd/yyyy" name="echeance"
+                                                                                    value="{{ $jalon['jalon']->pivot->echeance }}"
                                                                                     min="{{ $previousEndDate ?? '' }}"
                                                                                     id="echeance">
                                                                             </div>
@@ -102,7 +139,8 @@
                                                                 <div class="card-footer">
                                                                     <button type="submit" class="btn btn-secondary"><i
                                                                             class="fa fa-check"></i></button>
-                                                                    <button type="button" class="btn btn-outline-secondary"
+                                                                    <button type="button"
+                                                                        class="btn btn-outline-secondary"
                                                                         data-dismiss="modal">
                                                                         <i class="fa fa-times"></i>
                                                                     </button>
