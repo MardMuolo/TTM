@@ -24,10 +24,14 @@
         @endif
         <div class="row">
             @if (empty($debutDate) && empty($echeance))
+                @php
+                    $previousEndDate = null;
+                @endphp
                 <div class="col">
                     <div class="text-right mr-2">
                         @if (auth()->user()->name == $project->projectOwner)
-                            <a href="{{ route('projects.dates', $project->id) }}" class="btn btn-primary bg-primary">
+                            <a {{-- href="{{ route('projects.dates', $project->id) }}" --}} class="btn btn-primary bg-primary" data-toggle="modal"
+                                data-target="#modal-default">
                                 <i class="far fa-calendar-alt "></i>
                             </a>
                         @endif
@@ -35,6 +39,67 @@
                     </div>
                     <div class="mt-2">
                         <p>Veuillez planifier les dates pour ce jalon.</p>
+                    </div>
+                </div>
+                <div class="modal fade" id="modal-default">
+                    <div class="modal-dialog">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h3 class="modal-title" style="font-size: 20px;">Date pour le
+                                    Jalon {{ $jalon->designation }}</h3>
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                    <span aria-hidden="true">&times;</span>
+                                </button>
+                            </div>
+                            <div class="modal-body">
+                                <form method="POST"
+                                    action="{{ route('jalons.addDate', ['jalon' => $jalon->id, 'option_ttm' => $optionTtm->id, 'project' => $project->id]) }}"
+                                    enctype="multipart/form-data">
+                                    @csrf
+                                    <div class="col">
+                                        <div class="col">
+                                            <div class="form-group">
+                                                <label for="debutDate">Date Début</label>
+                                                <div class="input-group">
+                                                    <div class="input-group-prepend">
+                                                        <span class="input-group-text"><i
+                                                                class="far fa-calendar-alt"></i></span>
+                                                    </div>
+                                                    <input type="date" class="form-control" inputformat="mm/dd/yyyy"
+                                                        name="debutDate" id="debutDate" value="{{ $previousEndDate ?? '' }}"
+                                                        min="{{ $previousEndDate ?? '' }}">
+                                                </div>
+                                                @if ($previousEndDate && $jalon->pivot->debutDate < $previousEndDate)
+                                                    <small class="text-danger">La date de début
+                                                        doit être postérieure à la date de fin
+                                                        du jalon précédent.</small>
+                                                @endif
+                                            </div>
+                                        </div>
+                                        <div class="col">
+                                            <div class="form-group">
+                                                <label for="echeance">Passage en comité</label>
+                                                <div class="input-group">
+                                                    <div class="input-group-prepend">
+                                                        <span class="input-group-text"><i
+                                                                class="far fa-calendar-alt"></i></span>
+                                                    </div>
+                                                    <input type="date" class="form-control" inputformat="mm/dd/yyyy"
+                                                        name="echeance" min="{{ $previousEndDate ?? '' }}" id="echeance">
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="card-footer">
+                                        <button type="submit" class="btn btn-secondary"><i
+                                                class="fa fa-check"></i></button>
+                                        <button type="button" class="btn btn-outline-secondary" data-dismiss="modal">
+                                            <i class="fa fa-times"></i>
+                                        </button>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
                     </div>
                 </div>
             @else
