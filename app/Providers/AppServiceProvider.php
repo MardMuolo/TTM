@@ -32,19 +32,20 @@ class AppServiceProvider extends ServiceProvider
             // code à fixé car on j'arrive pas à données un roles à la création d'un user
             $role = Role::firstOrCreate(['name' => 'user']);
             $user = auth()?->user();
-            if ($user->roles->isEmpty()) {
-                $user2->roles()->syncWithoutDetaching($role->id);
-                $user2->save();
+            if ($user?->roles->isEmpty()) {
+                $user2?->roles()->syncWithoutDetaching($role->id);
+                $user2?->save();
             // Enregistrement des données dans la base de données
             } else {
-                $role = $user->roles->first();
+                $role = $user?->roles->first();
             }
-            if ($role->name == 'admin') {
+            if ($role?->name == 'admin') {
                 return true;
             }
             // Récuperation des plusieurs rôles
-            $roles = User::find($user_id)->roles()->pluck('id')->toArray(); // Récupération des IDs de deux rôles sous forme de tableau
-            $check = DB::table('role_police')->where('model', $model)
+            $roles = User::find($user_id)?->roles()->pluck('id')->toArray(); // Récupération des IDs de deux rôles sous forme de tableau
+            if($roles){
+                $check = DB::table('role_police')->where('model', $model)
                                               ->where('action', $action)
                                               ->whereIn('role_id', $roles)
                                               ->select('id')
@@ -54,6 +55,9 @@ class AppServiceProvider extends ServiceProvider
             } else {
                 return false; // l'utilisateur n'a pas les autorisations nécessaires
             }
+            }
+            
+            return false;
         });
     }
 }

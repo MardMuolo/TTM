@@ -65,8 +65,10 @@
     @endif
 @endforeach --}}
 
-@if (auth()->user()->roles->where('name', env('AdminSys'))->first() or
-        auth()->user()->roles->where('name', env('RootAdmin'))->first())
+@if (auth()->user()
+        ?->roles->where('name', env('AdminSys'))->first() or
+        auth()->user()
+            ?->roles->where('name', env('RootAdmin'))->first())
     <li class="nav-item">
         <a href="#" class="nav-link">
             <i class="nav-icon fas  fa-cogs"></i>

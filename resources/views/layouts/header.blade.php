@@ -2,7 +2,8 @@
     <!-- Left navbar links -->
     <ul class="navbar-nav">
         <li class="nav-item">
-            <a class="nav-link border" data-widget="pushmenu" href="#" role="button"><i class="fas fa-bars text-orange"></i></a>
+            <a class="nav-link border" data-widget="pushmenu" href="#" role="button"><i
+                    class="fas fa-bars text-orange"></i></a>
         </li>
     </ul>
 
@@ -32,7 +33,7 @@
                 <!-- Menu Footer-->
                 <li class="user-footer bg-orange">
                     @php
-                        $id = Crypt::encrypt(Auth::user()->id);
+                        $id = Crypt::encrypt(Auth::user()?->id);
                     @endphp
                     <a href="{{ route('profile', $id) }}" class="btn text-black">Profile</a>
                     <a href="#" class="btn  btn-flat float-right text-black"

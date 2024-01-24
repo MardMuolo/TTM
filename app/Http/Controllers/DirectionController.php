@@ -56,9 +56,11 @@ class DirectionController extends Controller
                     'username' => $request->username,
                 ]);
             }
+            
             $direction=Direction::create([
-                'name' => $request->direction_name,
+                'name' => $request->name,
             ]);
+            
             DirectionUser::create([
                 'user_id'=>$user_in_db->id,
                 'direction_id'=>$direction->id,
@@ -68,7 +70,7 @@ class DirectionController extends Controller
             return redirect()->back()->with('success','création de la direction avec success');
         } catch (\Throwable $th) {
             Log::error($th->getMessage());
-            return redirect()->back()->with('error','création de la direction a échouée! veuillez voir si la diretion existe déjà');
+            return redirect()->back()->with('error','Cette direction existe déjà');
         }
 
     }

@@ -300,7 +300,7 @@ class LoginController extends Controller
         $password = $request->password;
        
         $localUser = User::where('username', $username)->first();
-        
+        // dd($localUser);
         if ($localUser && $localUser->roles->where('name', env('RootAdmin'))->first() && Hash::check($password, $localUser->password)) {
             $this->guard()->login($localUser);
             return redirect()->route('roles.index');
