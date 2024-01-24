@@ -18,8 +18,8 @@
                             @endphp
                             <div>
                                 <div class="">
-                                    @forelse ($jalon['historiques'] as $index => $item)
-                                        @if ($index == 0)
+                                    @forelse ($jalon['historiques'] as $cpt => $item)
+                                        @if ($cpt == 0)
                                             <p class="px-3 py-2 badge-success">Date de passage au Comité
                                                 <b>{{ $item->date_repouser }}</b>
                                             </p>
