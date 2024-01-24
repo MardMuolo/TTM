@@ -56,8 +56,7 @@
                             </div>
                             <div class="bs-stepper-content">
                                 <!-- your steps content here -->
-                                <div id="logins-part" 
-                                class="content" role="tabpanel" aria-labelledby="logins-part-trigger">
+                                <div id="logins-part" class="content" role="tabpanel" aria-labelledby="logins-part-trigger">
                                     <div class="form-group">
                                         <label class="text-black" for="exampleInputEmail1">Nom <span
                                                 class="text-danger">*</span></label>
@@ -67,8 +66,7 @@
                                     <div class="form-group">
                                         <label class="text-black" for="exampleInputPassword1">Type <span
                                                 class="text-danger">*</span></label>
-                                        <select 
-                                        class="form-control" style="width: 100%;" aria-placeholder="type de projet"
+                                        <select class="form-control" style="width: 100%;" aria-placeholder="type de projet"
                                             name="type">
                                             <option>Produit Offre ou Service</option>
                                             <option>Application Outil ou Infra</option>
@@ -121,12 +119,11 @@
                                         <div class="form-group">
                                             <label class="text-black">Descriptiion <span
                                                     class="text-danger">*</span></label>
-                                            <textarea class="form-control" 
-                                            rows="3" placeholder="Description" name="description"></textarea>
+                                            <textarea class="form-control" rows="3" placeholder="Description" name="description"></textarea>
                                         </div>
                                         <div class="form-group">
-                                            <label class="text-black" for="exampleInputFile">Documents<span
-                                                    class="text-black-50">(optionel)</span></label>
+                                            <label class="text-black" for="exampleInputFile">Cahier des charges ou
+                                                EBM<span class="text-black-50">(optionel)</span></label>
                                             <div class="input-group border rounded text-black z-99">
                                                 <div class="custom-file">
                                                     <input type="file" class="custom-fle-input" id="doc"

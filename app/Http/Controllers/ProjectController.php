@@ -579,7 +579,18 @@ class ProjectController extends Controller
             $project->score = $score;
             $project->save();
 
-            
+            $optionTtm = OptionTtm::where('minComplexite', '<=', $score)->where('maxComplexite', '>', $score)->first();
+            $project->optionsJalons()->detach();
+            if ($optionTtm) {
+                $jalonsIds = $optionTtm->jalons->pluck('id')->toArray();
+                foreach ($jalonsIds as $jalonId) {
+                    $project->optionsJalons()->attach($optionTtm->id, [
+                        'option_ttm_id' => $optionTtm->id,
+                        'project_id' => $project->id,
+                        'jalon_id' => $jalonId,
+                    ]);
+                }
+            }
             
             
             // foreach($project->projectComplexityItems()->get() as $item){
