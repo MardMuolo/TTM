@@ -30,21 +30,45 @@
         </div>
         <!-- info row -->
         <div class="row invoice-info py-4">
-            <div class="col-sm-6 invoice-col">
-                <label for="debut co-1">Du</label>
+
+            <div class="col-sm invoice-col">
+                <label for="debut co-1">Debut</label>
                 <input type="date" class="form-control" name="debut" id="debut">
             </div>
             <!-- /.col -->
-            <div class="col-sm-6 invoice-col">
-                <label for="fin">AU</label>
-                <input type="date" class="form-control" name="fin" id="fin">
-                <div class="col-sm-3 py-3 float-right invoice-col">
-                    <input type="checkbox" name="comite" id="comite">
-                    <label for="comite">COMCOM</label>
-                </div>
-            </div>
-            <!-- /.col -->
 
+            <div class="col-sm invoice-col">
+                <label for="fin">Fin</label>
+                <input type="date" class="form-control" name="fin" id="fin">
+            </div>
+
+            <div class="col-sm invoice-col ">
+                <label for="">OptionTTM</label>
+                <select name="" id="" class="form-control">
+                    @forelse ($optionttms as $optionttm)
+                        <option value="{{ $optionttm->nom }}" class="">{{ $optionttm->nom }}</option>
+                    @empty
+                        <option value="">Aucune information</option>
+                    @endforelse
+
+                </select>
+            </div>
+            <div class="col-sm invoice-col ">
+                <label for="">Type</label>
+                <select name="type" id="" class="form-control">
+                    <option>Produit Offre ou Service</option>
+                    <option>Application Outil ou Infra</option>
+                </select>
+            </div>
+
+            <div class="col-sm-12 invoice-col mt-3 text-center d-flex justify-content-center">
+                @foreach ($jalons as $jalon)
+                    <div class="m-2">
+                        <label for="{{ $jalon->designation }}">{{ $jalon->designation }}</label>
+                        <input type="checkbox" name="{{ $jalon->designation }}" id="{{ $jalon->designation }}">
+                    </div>
+                @endforeach
+            </div>
             <!-- /.col -->
         </div>
         <!-- /.row -->

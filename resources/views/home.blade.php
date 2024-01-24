@@ -2,9 +2,8 @@
 @section('content')
     <section class="content">
         <div class="row">
-            <div class="col-lg-4 col-6">
-
-                <div class="small-box bg-orange">
+            <div class="col-lg-3 col-6">
+                <div class="small-box bg-gray">
                     <div class="inner">
 
                         <h3>{{ $projetSoumis }}</h3>
@@ -18,11 +17,11 @@
                 </div>
             </div>
 
-            <div class="col-lg-4 col-6">
-
-                <div class="small-box bg-yellow">
+            <div class="col-lg-3 col-6">
+                <div class="small-box bg-orange">
                     <div class="inner">
-                        <h3>{{ $projetEncours }}<sup style="font-size: 20px"></sup></h3>
+
+                        <h3>{{ $projetEncours }}</h3>
                         <p>Projet {{ env('projetenCours') }}</p>
                     </div>
                     <div class="icon">
@@ -33,7 +32,23 @@
                 </div>
             </div>
 
-            <div class="col-lg-4 col-6">
+            <div class="col-lg-3 col-6">
+
+                <div class="small-box bg-yellow">
+                    <div class="inner">
+                        <h3>{{ $projetEncours }}<sup style="font-size: 20px"></sup></h3>
+                        <p>Projet {{ env('projetCloturer') }}</p>
+                    </div>
+                    <div class="icon">
+                        <i class=""></i>
+                    </div>
+                    <a href="{{ route('projects.index') }}?filter={{ env('projetenCours') }}"
+                        class="small-box-footer">voir
+                        plus <i class="fas fa-arrow-circle-right"></i></a>
+                </div>
+            </div>
+
+            <div class="col-lg-3 col-6">
 
                 <div class="small-box bg-success">
                     <div class="inner">
@@ -90,11 +105,13 @@
                             </p>
 
                             <div class="progress-group ">
-                                <b>Projet Soumis</b>
+                                <b>Projet Prévu</b>
                                 <span class="float-right"><b>{{ $projetSoumis }}</b>/{{ $projets }}</span>
                                 <div class="progress progress-sm">
-                                <span class="float-right"></span>
-                                    <div class="progress-bar bg-orange" style="width: {{($projetSoumis*100)/$projets}}%"></div>
+                                    <span class="float-right"></span>
+                                    <div class="progress-bar bg-orange"
+                                        style="width: {{ ($projetSoumis * 100) / $projets }}%">
+                                    </div>
                                 </div>
                             </div>
                             <!-- /.progress-group -->
@@ -103,18 +120,28 @@
                                 <b>Projet En cours</b>
                                 <span class="float-right"><b>{{ $projetEncours }}</b>/{{ $projets }} </span>
                                 <div class="progress progress-sm">
-                                    <div class="progress-bar bg-yellow" style="width: {{($projetEncours*100)/$projets}}%"></div>
+                                    <div class="progress-bar bg-orange"
+                                        style="width: {{ ($projetEncours * 100) / $projets }}%"></div>
                                 </div>
                             </div>
-                            <!-- /.progress-group -->
                             <div class="progress-group">
                                 <b>Projet Cloturé</b>
-                                <span class="float-right"><b>{{ $projetFinis }}</b>/{{ $projets }}</span>
+                                <span class="float-right"><b>{{ $projetEncours }}</b>/{{ $projets }} </span>
                                 <div class="progress progress-sm">
-                                    <div class="progress-bar bg-success" style="width: {{($projetFinis*100)/$projets}}%"></div>
+                                    <div class="progress-bar bg-yellow"
+                                        style="width: {{ ($projetEncours * 100) / $projets }}%"></div>
                                 </div>
                             </div>
-                            <!-- /.progress-group -->
+                            <div class="progress-group">
+                                <b>Projet Terminé</b>
+                                <span class="float-right"><b>{{ $projetFinis }}</b>/{{ $projets }}</span>
+                                <div class="progress progress-sm">
+                                    <div class="progress-bar bg-success"
+                                        style="width: {{ ($projetFinis * 100) / $projets }}%">
+                                    </div>
+                                </div>
+                            </div>
+
                         </div>
                         <!-- /.col -->
                     </div>
@@ -129,30 +156,48 @@
                     <div class="row">
                         <div class="col-sm-3 col-6">
                             <div class="description-block border-right">
-                                <span class="description-percentage text-success"><i class="fas fa-caret-up"></i>
-                                   {{ ($alljalon>0)?number_format(($jalonEnCours * 100) / $alljalon, 1):0 }}%</span>
+                                <span class="description-percentage text-yellow"><i class="fas fa-caret-up"></i>
+                                    {{ $alljalon > 0 ? number_format(($jalonEnCours * 100) / $alljalon, 1) : 0 }}%
+                                </span>
                                 <h5 class="description-header">{{ $jalonEnCours }}</h5>
-                                <span class="description-text">{{ env('jalonEnCours') }}</span>
+                                <span class="description-text">
+                                    {{ env('jalonEnCours') }}
+                                    <a href="{{ route('filtrage',env('jalonEnCours')) }}" class="small-box-footer">
+                                        <i class="fas fa-arrow-circle-right text-black"></i>
+                                    </a>
+                                </span>
                             </div>
                             <!-- /.description-block -->
                         </div>
                         <!-- /.col -->
                         <div class="col-sm-3 col-6">
                             <div class="description-block border-right">
-                                <span class="description-percentage text-yellow"><i class="fas fa-caret-left"></i>
-                                    {{($alljalon>0)? number_format(($jalonEnAttente * 100) / $alljalon, 1):0 }}%</span>
+                                <span class="description-percentage text-orange"><i class="fas fa-caret-left"></i>
+                                    {{ $alljalon > 0 ? number_format(($jalonEnAttente * 100) / $alljalon, 1) : 0 }}%
+                                </span>
                                 <h5 class="description-header">{{ $jalonEnAttente }}</h5>
-                                <span class="description-text">{{ env('jalonEnAttente') }}</span>
+                                <span class="description-text">
+                                    {{ env('jalonEnAttente') }}
+                                    <a href="{{ route('filtrage',env('jalonEnAttente')) }}" class="small-box-footer">
+                                        <i class="fas fa-arrow-circle-right text-black"></i>
+                                    </a>
+                                </span>
                             </div>
                             <!-- /.description-block -->
                         </div>
                         <!-- /.col -->
                         <div class="col-sm-3 col-6">
                             <div class="description-block border-right">
-                                <span class="description-percentage text-success"><i class="fas fa-caret-up"></i>
-                                    {{($alljalon>0)? number_format(($jalonCloturer * 100) / $alljalon, 1):0 }}%</span>
+                                <span class="description-percentage"><i class="fas fa-caret-up"></i>
+                                    {{ $alljalon > 0 ? number_format(($jalonCloturer * 100) / $alljalon, 1) : 0 }}%
+                                </span>
                                 <h5 class="description-header">{{ $jalonCloturer }}</h5>
-                                <span class="description-text">{{ env('jalonCloturer') }}</span>
+                                <span class="description-text">
+                                    {{ env('jalonCloturer') }}
+                                    <a href="{{ route('filtrage',env('jalonCloturer')) }}" class="small-box-footer">
+                                        <i class="fas fa-arrow-circle-right text-black"></i>
+                                    </a>
+                                </span>
                             </div>
                             <!-- /.description-block -->
                         </div>
@@ -160,9 +205,13 @@
                         <div class="col-sm-3 col-6">
                             <div class="description-block">
                                 <span class="description-percentage text-danger"><i class="fas fa-caret-down"></i>
-                                    {{ ($alljalon>0)?number_format((count($jalonEnRetard) * 100) / $alljalon, 1):0 }}%</span>
+                                    {{ $alljalon > 0 ? number_format((count($jalonEnRetard) * 100) / $alljalon, 1) : 0 }}%</span>
                                 <h5 class="description-header">{{ count($jalonEnRetard) }}</h5>
-                                <span class="description-text">en retard</span>
+                                <span class="description-text">
+                                    {{env('jalonEnRetard')}}
+                                    <a href="{{ route('filtrage',env('jalonEnRetard')) }}"
+                                        class="small-box-footer"><i class="fas fa-arrow-circle-right text-black"></i></a>
+                                </span>
                             </div>
                             <!-- /.description-block -->
                         </div>
@@ -171,140 +220,44 @@
                 </div>
                 <!-- /.card-footer -->
             </div>
+            <div class="col-7">
+                <div class="card">
+                    <div class="card-header bg-black text-orange">
+                        <h3 class="card-title">Statistique</h3>
+                    </div>
+                    <!-- /.card-header -->
+                    <div class="card-body">
+                        <table id="tableProjet" class="table table-bordered table-striped">
+                            <thead class="text-orange">
+                                <th>N°</th>
+                                <th>Direction</th>
+                                <th>Projet Encour</th>
+                                <th>Projet fini</th>
+                                <th>Total projet</th>
+                            </thead>
+                            <tbody>
+                                @foreach ($directions as $i => $projet)
+                                    <tr>
+                                        <td>{{ $i + 1 }}</td>
+                                        <td>{{ $projet->name }}</td>
+                                        <td>{{ $projet->nb_projet }}</td>
+                                        <td>{{ $projetFinis }}</td>
+                                        <td>{{ $projet->nb_projet }}</td>
+                                    </tr>
+                                @endforeach
+                            </tbody>
+    
+                        </table>
+                    </div>
+                    <!-- /.card-body -->
+                </div>
+    
+            </div>
             <!-- /.card -->
         </div>
         <!-- /.col -->
     </section>
-    <section class="row">
-        <div class="col-5">
-            {{-- <p data-graphique="<?php echo $data; ?>" id="data-graphique"> </p>
-            <p data-graphique2="<?php echo $data2; ?>" id="data-graphique2"></p>
-            <input type="hidden" value="{{ $datadonut }}" id="data-donut">
-            <section class="connectedSortable ui-sortable">
-                <div class="card" style="position: relative; left: 0px; top: 0px;">
-                    <div class="card-header ui-sortable-handle" style="cursor: move;">
-                        <h3 class="card-title">
-                            <i class="fas fa-chart-pie mr-1"></i>
-                            Participation
-                        </h3>
-                        <div class="card-tools">
-                            <ul class="nav nav-pills ml-auto">
-                                <li class="nav-item">
-                                    <a class="nav-link active" href="#sales-chart" data-toggle="tab">Donut</a>
-                                </li>
-                            </ul>
-                        </div>
-                    </div>
-                    <div class="card-body">
-                        <div class="tab-content p-0">
-    
-                            <div class="chart tab-pane " id="revenue-chart" style="position: relative; height: 300px;">
-                                <div class="chartjs-size-monitor">
-                                    <div class="chartjs-size-monitor-expand">
-                                        <div class="" id="data"> </div>
-                                    </div>
-                                    <div class="chartjs-size-monitor-shrink">
-                                        <div class=""></div>
-                                    </div>
-                                </div>
-                                <canvas id="revenue-chart-canvas" height="300"
-                                    style="height: 300px; display: block; width: 211px;" width="211"
-                                    class="chartjs-render-monitor">
-                                </canvas>
-                            </div>
-    
-                            <div class="chart tab-pane active" id="sales-chart" style="position: relative; height: 300px;">
-                                <div class="chartjs-size-monitor">
-                                    <div class="chartjs-size-monitor-expand">
-                                        <div class=""></div>
-                                    </div>
-                                    <div class="chartjs-size-monitor-shrink">
-                                        <div class=""></div>
-                                    </div>
-                                </div>
-                                <canvas id="sales-chart-canvas" height="300"
-                                    style="height: 300px; display: block; width: 576px;" class="chartjs-render-monitor"
-                                    width="576">
-                                </canvas>
-    
-                            </div>
-                            <div class="row">
-                                <div class="col-md-3 col-sm-6 col-12">
-                                    <div class="info-box " style="background-color: rgba(60,141,188,0.9)">
-    
-                                        <div class="info-box-content">
-                                            <span class="info-box-text"></span>
-                                            <span class="info-box-number">{{ $projetsEncours }}</span>
-    
-                                            <span class="progress-description">
-                                                Homme
-                                            </span>
-                                        </div>
-    
-                                    </div>
-    
-                                </div>
-    
-                                <div class="col-md-3 col-sm-6 col-12">
-                                    <div class="info-box bg-secondary">
-    
-                                        <div class="info-box-content">
-                                            <span class="info-box-text"></span>
-                                            <span class="info-box-number">{{ $projetsPrec }}</span>
-    
-                                            <span class="progress-description">
-                                                Femme
-                                            </span>
-                                        </div>
-    
-                                    </div>
-    
-                                </div>
-                            </div>
-    
-                        </div>
-    
-                    </div>
-    
-            </section> --}}
-           
-        </div>
-        <div class="col-7">
-            <div class="card">
-                <div class="card-header bg-black text-orange">
-                    <h3 class="card-title">Statistique</h3>
-                </div>
-                <!-- /.card-header -->
-                <div class="card-body">
-                    <table id="tableProjet" class="table table-bordered table-striped">
-                        <thead class="text-orange">
-                            <th>N°</th>
-                            <th>Direction</th>
-                            <th>Projet Encour</th>
-                            <th>Projet fini</th>
-                            <th>Total projet</th>
-                        </thead>
-                        <tbody>
-                            @foreach ($directions as $i => $projet)
-                                <tr>
-                                    <td>{{ $i + 1 }}</td>
-                                    <td>{{ $projet->name }}</td>
-                                    <td>{{ $projet->nb_projet }}</td>
-                                    <td>{{ $projetFinis }}</td>
-                                    <td>{{ $projet->nb_projet }}</td>
-                                </tr>
-                            @endforeach
-                        </tbody>
 
-                    </table>
-                </div>
-                <!-- /.card-body -->
-            </div>
-
-        </div>
-        
-
-    </section>
 @endsection
 @push('third_party_scripts')
     <script src="{{ Vite::asset('node_modules/admin-lte/plugins/jquery/jquery.min.js?commonjs-entry') }}"></script>
@@ -315,17 +268,21 @@
     @vite('node_modules/admin-lte/plugins/datatables-bs4/css/dataTables.bootstrap4.min.css')
     @vite('node_modules/admin-lte/plugins/datatables-responsive/css/responsive.bootstrap4.min.css')
     @vite('node_modules/admin-lte/plugins/datatables-buttons/css/buttons.bootstrap4.min.css')
-    <script type="module" src={{ Vite::asset('node_modules/admin-lte/plugins/bootstrap/js/bootstrap.bundle.min.js?commonjs-entry') }}>
+    <script type="module"
+        src={{ Vite::asset('node_modules/admin-lte/plugins/bootstrap/js/bootstrap.bundle.min.js?commonjs-entry') }}>
     </script>
-    <script type="module" src={{ Vite::asset('node_modules/admin-lte/plugins/chart.js/Chart.min.js?commonjs-entry') }}></script>
+    <script type="module" src={{ Vite::asset('node_modules/admin-lte/plugins/chart.js/Chart.min.js?commonjs-entry') }}>
+    </script>
     {{-- <script type="module" src={{ Vite::asset('resources/js/dashboard.js?commonjs-entry') }}></script> --}}
-    <script type="module" src={{ Vite::asset('node_modules/admin-lte/plugins/summernote/summernote-bs4.min.js?commonjs-entry') }}>
-    </script>
+    <script type="module"
+        src={{ Vite::asset('node_modules/admin-lte/plugins/summernote/summernote-bs4.min.js?commonjs-entry') }}></script>
     <script type="module" src={{ Vite::asset('resources/js/graphique.js') }}></script>
-    <script type="module" src={{ Vite::asset('node_modules/admin-lte/plugins/datatables/jquery.dataTables.min.js?commonjs-entry') }}>
+    <script type="module"
+        src={{ Vite::asset('node_modules/admin-lte/plugins/datatables/jquery.dataTables.min.js?commonjs-entry') }}>
     </script>
     <script type="module"
-        src={{ Vite::asset('node_modules/admin-lte/plugins/datatables-bs4/js/dataTables.bootstrap4.min.js?commonjs-entry') }}></script>
+        src={{ Vite::asset('node_modules/admin-lte/plugins/datatables-bs4/js/dataTables.bootstrap4.min.js?commonjs-entry') }}>
+    </script>
     <script type="module"
         src={{ Vite::asset('node_modules/admin-lte/plugins/datatables-responsive/js/dataTables.responsive.min.js?commonjs-entry') }}>
     </script>
@@ -333,16 +290,22 @@
         src={{ Vite::asset('node_modules/admin-lte/plugins/datatables-responsive/js/responsive.bootstrap4.min.js?commonjs-entry') }}>
     </script>
     <script type="module"
-        src={{ Vite::asset('node_modules/admin-lte/plugins/datatables-buttons/js/dataTables.buttons.min.js?commonjs-entry') }}></script>
+        src={{ Vite::asset('node_modules/admin-lte/plugins/datatables-buttons/js/dataTables.buttons.min.js?commonjs-entry') }}>
+    </script>
     <script type="module"
-        src={{ Vite::asset('node_modules/admin-lte/plugins/datatables-buttons/js/buttons.bootstrap4.min.js?commonjs-entry') }}></script>
-    <script type="module" src={{ Vite::asset('node_modules/admin-lte/plugins/jszip/jszip.min.js?commonjs-entry') }}></script>
-    <script type="module" src={{ Vite::asset('node_modules/admin-lte/plugins/pdfmake/pdfmake.min.js?commonjs-entry') }}></script>
+        src={{ Vite::asset('node_modules/admin-lte/plugins/datatables-buttons/js/buttons.bootstrap4.min.js?commonjs-entry') }}>
+    </script>
+    <script type="module" src={{ Vite::asset('node_modules/admin-lte/plugins/jszip/jszip.min.js?commonjs-entry') }}>
+    </script>
+    <script type="module" src={{ Vite::asset('node_modules/admin-lte/plugins/pdfmake/pdfmake.min.js?commonjs-entry') }}>
+    </script>
     <script type="module" src={{ Vite::asset('node_modules/admin-lte/plugins/pdfmake/vfs_fonts.js') }}></script>
     <script type="module"
-        src={{ Vite::asset('node_modules/admin-lte/plugins/datatables-buttons/js/buttons.html5.min.js?commonjs-entry') }}></script>
+        src={{ Vite::asset('node_modules/admin-lte/plugins/datatables-buttons/js/buttons.html5.min.js?commonjs-entry') }}>
+    </script>
     <script type="module"
-        src={{ Vite::asset('node_modules/admin-lte/plugins/datatables-buttons/js/buttons.print.min.js?commonjs-entry') }}></script>
+        src={{ Vite::asset('node_modules/admin-lte/plugins/datatables-buttons/js/buttons.print.min.js?commonjs-entry') }}>
+    </script>
     <script type="module" src={{ Vite::asset('resources/js/tableau.js') }}></script>
 
     <script type="module">
@@ -351,7 +314,7 @@
             var salesChartData = {
                 labels: @json($labels),
                 datasets: [{
-                        label: 'Projets soumis',
+                        label: 'Projets prévu',
                         backgroundColor: 'rgba(169, 169, 169, 0.6)',
                         borderColor: 'rgba(169, 169, 169, 2)',
                         pointRadius: 3,
@@ -375,7 +338,7 @@
                         data: @json($ongoingProjects)
                     },
                     {
-                        label: 'Projets terminés',
+                        label: 'Projets lancés',
                         backgroundColor: 'rgba(2, 150, 2, 0.505)',
                         borderColor: 'rgb(2, 150, 2)',
                         pointRadius: 3,

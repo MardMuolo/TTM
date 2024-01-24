@@ -29,7 +29,7 @@
                 <li class="nav-item">
                     <a class="nav-link " id="custom-content-below-task-tab" data-toggle="pill"
                         href="#custom-content-below-task" role="tab" aria-controls="custom-content-below-task"
-                        aria-selected="false">Démandes ({{ count($demandesProject) }})</a>
+                        aria-selected="false">Livrables ({{ count($demandesProject) }})</a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link" id="custom-content-below-profile-tab" data-toggle="pill"

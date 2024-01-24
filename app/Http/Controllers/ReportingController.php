@@ -87,7 +87,6 @@ class ReportingController extends Controller
         $projetsEncours = Project::whereBetween('endDate',[$annee.'-01-01',$annee.'-12-31'])->get()->count(); 
         $projetsPrec = Project::whereBetween('endDate',[$annePrec.'-01-01',$annePrec.'-12-31'])->get()->count(); 
         
-        
         return view('reporting.index', compact('projetSoumis','projetEncours','projetFinis','data','data2','datadonut','directions','users','projetsEncours','projetsPrec','annee','annePrec')); 
     }
 
@@ -158,7 +157,11 @@ class ReportingController extends Controller
         // die($projectOwners);
         $i = 1;
         $tab=['yellow','orange','secondary'];
-        return view('reporting.rapport', compact('projets', 'i','directions','projectOwners','optionttms','statut','direction','user','optionttm','jalons','tab'));
+        return view('reporting.rapport',
+        compact('projets', 'i','directions',
+        'projectOwners','optionttms',
+        'statut','direction','user',
+        'optionttm','jalons','tab'));
   }
 
         

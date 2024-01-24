@@ -29,41 +29,21 @@
 
 @access('delete', 'Project')
     <li class="nav-item">
-        <a href="{{ route('rapport.index') }}" class="nav-link {{ Request::is('reporting') ? 'bg-orange' : '' }}">
+        <a href="{{ route('rapport.index') }}" class="nav-link {{ Request::is('rapport') ? 'bg-orange' : '' }}">
             <i class="nav-icon fa fa-table"></i>
             <p>Rapports</p>
         </a>
     </li>
 @endaccess
-{{-- @foreach (auth()->user()->roles as $user)
-    @if ($user->name == env('Directeur'))
-        <li class="nav-item">
-            <a href="#" class="nav-link">
-                <i class="nav-icon fa fa-bell" aria-hidden="true"></i>
-                <p>
-                    Notifications
-                    <i class="right fas fa-angle-left"></i>
-                </p>
-            </a>
-            <ul class="nav nav-treeview">
-                <li class="nav-item">
-                    <a href="{{ route('approbationCollaborateur.index') }}"
-                        class="nav-link {{ Request::is('approbations.collaborateurs') ? 'bg-orange' : '' }}">
-                        <i class="nav-icon fa fa-users" aria-hidden="true"></i>
-                        <p>Collaborateurs</p>
-                    </a>
-                </li>
-                <li class="nav-item">
-                    <a href="{{ route('approbationLivrable.index') }}"
-                        class="nav-link {{ Request::is('pprobations.collaborateurs') ? 'bg-orange' : '' }}">
-                        <i class="nav-icon fa fa-tasks" aria-hidden="true"></i>
-                        <p>Livrables</p>
-                    </a>
-                </li>
-            </ul>
-        </li>
-    @endif
-@endforeach --}}
+@access('delete', 'Project')
+    <li class="nav-item">
+        <a href="{{ route('archivage.index') }}" class="nav-link {{ Request::is('archivage') ? 'bg-orange' : '' }}">
+            <i class="nav-icon fas fa-bell-slash"></i>
+            <p>Archive <span class="badge badge-danger">{{Cache::get("members")}}</span></p></p>
+        </a>
+    </li>
+@endaccess
+
 
 @if (auth()->user()
         ?->roles->where('name', env('AdminSys'))->first() or

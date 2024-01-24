@@ -5,14 +5,24 @@ use App\Models\CategoryDemande;
 use App\Http\Controllers\Approuving;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Request;
+use App\Http\Controllers\UserController;
+use App\Http\Controllers\DemandeController;
+use App\Http\Controllers\ProjectController;
+use App\Http\Controllers\AchivageController;
+use App\Http\Controllers\ProjectUserController;
 use App\Http\Controllers\DemandeJalonController;
+use App\Http\Controllers\ProjectFilterControlle;
+use App\Http\Controllers\ProjectFilterController;
+use App\Http\Controllers\CategoryDemandeController;
+use App\Http\Controllers\ApprobationCollaboController;
+use App\Http\Controllers\ApprobationLivrableController;
 
 Route::middleware(['auth'])->group(function () {
-    Route::resource('projects', App\Http\Controllers\ProjectController::class);
-    Route::resource('projects/{id}/membres', App\Http\Controllers\ProjectUserController::class);
-    Route::resource('demande', App\Http\Controllers\DemandeController::class);
+    Route::resource('projects', ProjectController::class);
+    Route::resource('projects/{id}/membres', ProjectUserController::class);
+    Route::resource('demande', DemandeController::class);
     Route::resource('demandeJalon', DemandeJalonController::class);
-    Route::resource('categoryDemandes', App\Http\Controllers\CategoryDemandeController::class);
+    Route::resource('categoryDemandes', CategoryDemandeController::class);
     Route::get('/fetch-demandes', function (Request $request) {
         $term = $request->$request->input('term');
 
@@ -27,12 +37,19 @@ Route::middleware(['auth'])->group(function () {
 
         return response()->json($categories);
     });
-    Route::resource('contributeur', App\Http\Controllers\ProjectUserController::class);
+    Route::resource('contributeur', ProjectUserController::class);
     Route::resource('approuving', Approuving::class);
-    Route::resource('approbationCollaborateur', App\Http\Controllers\ApprobationCollaboController::class);
-    Route::resource('approbationLivrable', App\Http\Controllers\ApprobationLivrableController::class);
-    Route::get('projets/dates/{project}', [App\Http\Controllers\ProjectController::class, 'addDates'])->name('projects.dates');
-    Route::get('project', [App\Http\Controllers\ProjectController::class, 'getProjectToRepport'])->name('projectReporting');
-    Route::get('/telecharger-projet/{project}', [App\Http\Controllers\ProjectController::class,'telechargerProjet'])->name('telecharger');
-    Route::get('/getUser', [App\Http\Controllers\UserController::class,'getUsers'])->name('getUsers');
+    Route::resource('approbationCollaborateur', ApprobationCollaboController::class);
+    Route::resource('approbationLivrable', ApprobationLivrableController::class);
+    Route::get('projets/dates/{project}', [ProjectController::class, 'addDates'])->name('projects.dates');
+    Route::get('project', [ProjectController::class, 'getProjectToRepport'])->name('projectReporting');
+    Route::get('/telecharger-projet/{project}', [ProjectController::class,'telechargerProjet'])->name('telecharger');
+
+
+
+    Route::resource('archivage',AchivageController::class);
+    Route::get('filtrage/{status}',[ProjectFilterController::class,'index'])->name('filtrage');
+    
+    Route::get('/getUser', [UserController::class,'getUsers'])->name('getUsers');
+    Route::get('get_projectBy',[ProjectFilterController::class,'get_projectBy'])->name('get_projectBy');
 });

@@ -22,7 +22,7 @@
                 <div class="small-box bg-light">
                     <div class="inner">
                         <div class="d-flex">
-                            <h3 class="w-75">{{ $jalon['jalon']->designation }}</h3>
+                            <h3 class="w-75">{{ $jalon['jalon']->designation }} </h3>
                         </div>
 
                         @if ($jalon['jalon']->pivot->debutDate && $jalon['jalon']->pivot->echeance)
@@ -32,47 +32,70 @@
                                 $today = \Carbon\Carbon::today();
                                 $joursRestants = $today->diffInDays($echeance, false);
                             @endphp
+                            <div>
+                                <div class="">
+                                    @forelse ($jalon['historiques'] as $cpt => $item)
+                                        @if ($cpt == 0)
+                                            <p class="px-3 py-2 badge-success">Date de passage au Comité
+                                                <b>{{ $item->date_repouser }}</b>
+                                            </p>
+                                        @endif
+                                        <del class="px-3 badge-danger rounded ">{{ $item->date_initiale }}</del>
+                                    @empty
+                                        <p class="px-3 py-2 badge-success ">
+                                            Date de passage au Comité
+                                            <b>{{ \Carbon\Carbon::createFromFormat('Y-m-d H:i:s', $echeance)->format('Y-m-d') }}</b>
+                                        </p>
+                                    @endforelse
 
-                            @if ($joursRestants > 0)
-                                @if ($jalon['status'] === env('jalonEnCours'))
-                                    <p class="{{ $joursRestants <= 3 ? 'text-danger' : '' }}">
-                                        <span class="font-weight-bold">{{ $joursRestants }}</span> <span
-                                            class="text-orange">jour(s) restant(s)</span>
-                                    </p>
-                                    <p>
-                                        <i class="far fa-calendar-alt text-orange"></i>
-                                        <span class="font-weight-normal small">{{ $debutDate->format('d/m/Y') }} au
-                                            {{ $echeance->format('d/m/Y') }}</span>
-                                    </p>
-                                @elseif ($jalon['status'] === env('jalonCloturer'))
-                                    @if ($echeance->isPast())
-                                        <p>Livrable soumis avec retard de {{ abs($joursRestants) }} jour(s)</p>
+                                </div>
+
+                            </div>
+
+                            <div class="py-2">
+                                @if ($joursRestants > 0)
+                                    @if ($jalon['status'] === env('jalonEnCours'))
+                                        <p class="{{ $joursRestants <= 3 ? 'text-danger' : '' }}">
+                                            <span class="font-weight-bold">{{ $joursRestants }}</span> <span
+                                                class="text-orange">jour(s) restant(s)</span>
+                                        </p>
+                                        <p>
+                                            <i class="far fa-calendar-alt text-orange"></i>
+                                            <span class="font-weight-normal small">{{ $debutDate->format('d/m/Y') }} au
+                                                {{ $echeance->format('d/m/Y') }}</span>
+                                        </p>
+                                    @elseif ($jalon['status'] === env('jalonCloturer'))
+                                        @if ($echeance->isPast())
+                                            <p>Livrable soumis avec retard de {{ abs($joursRestants) }} jour(s)</p>
+                                        @else
+                                            <p>Livrable soumis à temps</p>
+                                        @endif
+                                        <p>
+                                            <i class="far fa-calendar-alt text-primary"></i>
+                                            <span
+                                                class="font-weight-normal small">{{ $echeance->format('d/m/Y') }}</span>
+                                        </p>
                                     @else
-                                        <p>Livrable soumis à temps</p>
+                                        @if ($echeance->isPast())
+                                            <p>Date dépassée, en retard de {{ abs($joursRestants) }} jour(s)</p>
+                                        @else
+                                            <p>Date définie </p>
+                                        @endif
+                                        <p>
+                                            <i class="far fa-calendar-alt text-primary"></i>
+                                            <span
+                                                class="font-weight-normal small">{{ $echeance->format('d/m/Y') }}</span>
+                                        </p>
                                     @endif
-                                    <p>
-                                        <i class="far fa-calendar-alt text-primary"></i>
-                                        <span class="font-weight-normal small">{{ $echeance->format('d/m/Y') }}</span>
-                                    </p>
                                 @else
-                                    @if ($echeance->isPast())
-                                        <p>Date dépassée, en retard de {{ abs($joursRestants) }} jour(s)</p>
-                                    @else
-                                        <p>Date définie </p>
-                                    @endif
+                                    <p>Date dépassée</p>
                                     <p>
                                         <i class="far fa-calendar-alt text-primary"></i>
-                                        <span class="font-weight-normal small">{{ $echeance->format('d/m/Y') }}</span>
+                                        <span class="font-weight-normal small">En retard de {{ abs($joursRestants) }}
+                                            jour(s)</span>
                                     </p>
                                 @endif
-                            @else
-                                <p>Date dépassée</p>
-                                <p>
-                                    <i class="far fa-calendar-alt text-primary"></i>
-                                    <span class="font-weight-normal small">En retard de {{ abs($joursRestants) }}
-                                        jour(s)</span>
-                                </p>
-                            @endif
+                            </div>
                         @else
                             <p>Dates non définies</p>
                             <p><i class="far fa-calendar-alt text-primary"></i> Dates non définies</p>
