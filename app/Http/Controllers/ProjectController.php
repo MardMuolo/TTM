@@ -27,6 +27,7 @@ use App\Models\ComplexityItem;
 use RecursiveIteratorIterator;
 use RecursiveDirectoryIterator;
 use App\Models\ComplexityTarget;
+use App\Models\HistoriqueDate;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Auth;
@@ -47,13 +48,13 @@ class ProjectController extends Controller
     public function index(Request $request)
     {
         $filter = $request->filter ?? null;
-        if (isset(Auth()->user()->direction_user->is_director)) {
+        if (!isset(Auth()->user()->direction_user->is_director)) {
             $projects = Project::isDirector();
         } else {
             // Variable project: nous permet de recuperer tous les projets selon le rôle de l'utilisateur connecté
             $projects = isset($filter) ? Project::where('status', $filter)->get() : Project::get(Project::isAdmin());
         }
-        //dd($projects[0]->with('users', 'optionsJalons')->get());
+        // dd(isset(Auth()->user()->direction_user->is_director));
         Cache::forever('projects', count($projects));
 
         $i = 1;
@@ -148,11 +149,15 @@ class ProjectController extends Controller
 
                 $projectOptionttmJalon->status = $status;
                 $projectOptionttmJalon->save();
+                $historiques=HistoriqueDate::where('project_optionttm_jalon_id',$projectOptionttmJalon->id)
+                ->orderBy('id', 'DESC')->get();
+
 
                 $jalonsProgress[] = [
                     'jalon' => $jalon,
                     'progression' => $progressionJalon,
                     'status' => $status,
+                    'historiques'=>$historiques
                 ];
 
                 $debutDate = $projectOptionttmJalon->debutDate;
@@ -176,26 +181,19 @@ class ProjectController extends Controller
 
         $activity = Activity::orderBy('id', 'desc')->where('subject_id', $project->id)->get();
 
-        $projectOptionttmJalon = ProjectOptionttmJalon::where('project_id', $project->id)->get();
+        $projectOptionttmJalon = ProjectOptionttmJalon::where('project_id', $project->id)->get()->first();
 
-        $demandeByJalon = DemandeJalon::join('project_optionttm_jalon', 'demande_jalons.project_optionttm_jalon_id', '=', 'project_optionttm_jalon.id')
+        $demandeByJalon = DemandeJalon::join('project_optionttm_jalon',
+         'demande_jalons.project_optionttm_jalon_id', '=', 'project_optionttm_jalon.id')
             ->get();
         $titleOfDemandes = Demande::join('demande_jalons', 'demande_jalons.demande_id', '=', 'demandes.id')->get();
 
+        // dd($historiques);
 
-
-
-        /*$demandeByJalon = DB::table('project_optionttm_jalon')
-                     ->join('demandes', 'demandes.project_optionttm_jalon_id', '=', 'project_optionttm_jalon.id')
-                     ->select('demandes.*','project_optionttm_jalon.jalon_id')
-                     ->get();*/
-
-        // dd($exit);
-        // dd($demandesSoumises);
-
-        // $demandes_soumis=
-
-        return view('projects.single', compact('statusColor', 'project', 'optionTtm', 'projectOptionttmJalon', 'file', 'score', 'option_ttm', 'jalons', 'options', 'jalonsProgress', 'members', 'i', 'activity', 'exit', 'demandeByJalon', 'contributeurs', 'titleOfDemandes', 'demandesProject', 'today', 'directions', 'users', 'complexityTargets', 'complexity_items'));
+        return view('projects.single', compact('statusColor', 'project', 'optionTtm', 'projectOptionttmJalon',
+         'file', 'score', 'option_ttm', 'jalons', 'options', 'jalonsProgress', 'members', 'i', 'activity', 'exit',
+          'demandeByJalon', 'contributeurs', 'titleOfDemandes', 'demandesProject', 'today', 'directions', 'users',
+           'complexityTargets', 'complexity_items'));
     }
 
     // cette methode permet la rediction au formulaire de création projet
@@ -544,8 +542,7 @@ class ProjectController extends Controller
         try {
             $project = Project::findOrFail($id);
             $name = substr(str_replace([' ', "'"], '', $project->name), 0, 10);
-            $repertoire = storage_path('app/projets/' . $project->id);
-            // dd($repertoire);
+            $repertoire = storage_path('app\projets\\' . $project->id);
             $nomFichierZip = $name . 'EasyTTM.zip';
             $cheminFichierZip =  storage_path($nomFichierZip);
             // dd($cheminFichierZip);
@@ -560,6 +557,7 @@ class ProjectController extends Controller
                     new RecursiveDirectoryIterator($repertoire, RecursiveDirectoryIterator::SKIP_DOTS),
                     RecursiveIteratorIterator::SELF_FIRST
                 );
+
                 foreach ($elements as $file) {
                     if ($file->isDir()) {
                         $filePath = $file->getRealPath();
@@ -584,7 +582,7 @@ class ProjectController extends Controller
                 // }
 
                 // Fermer le fichier ZIP
-                $zip->close();
+                $test = $zip->close();
 
 
                 // Obtenir le contenu du fichier ZIP
